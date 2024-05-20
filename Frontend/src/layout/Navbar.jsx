@@ -101,11 +101,19 @@ const Navbar = () => {
             <div className="relative flex items-center cursor-pointer">
               {user ? (
                 <div onClick={toggleDropdown} className="relative">
-                  <img
-                    src={user.profilePic || defaultImg}
-                    alt={user.username}
-                    className="w-10 h-10 rounded-full"
-                  />
+                  {user.profilePic ? (
+                    <img
+                      src={user.profilePic}
+                      alt={user.username}
+                      className="w-10 h-10 rounded-full"
+                    />
+                  ) : (
+                    <img
+                      src={defaultImg}
+                      alt="Default"
+                      className="w-10 h-10 rounded-full"
+                    />
+                  )}
                   {isDropdownOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-50">
                       <Link
@@ -114,12 +122,14 @@ const Navbar = () => {
                       >
                         Profile
                       </Link>
-                      <Link
-                        to="/admin-panel"
-                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                      >
-                        Admin Panel
-                      </Link>
+                      {user.role === "admin" && (
+                        <Link
+                          to="/admin-panel"
+                          className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                        >
+                          Admin Panel
+                        </Link>
+                      )}
                       <button
                         onClick={handleLogout}
                         className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
@@ -140,7 +150,7 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-
+              
         {/* Responsive Menu */}
         <div
           className={`md:hidden ${

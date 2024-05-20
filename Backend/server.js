@@ -5,8 +5,8 @@ const cors = require("cors");
 const connectDB = require("./db/connection");
 const errorHandler = require("./middleware/errorHandler");
 const commonRoutes = require("./routes/common");
-const adminRoutes = require("./routes/admin"); // Corrected variable name
-
+const adminRoutes = require("./routes/admin/admin");
+const categoryRoutes = require("./routes/admin/categoryRoutes");
 const app = express();
 
 // Middleware
@@ -16,7 +16,8 @@ app.use(express.json({ limit: "50mb" }));
 
 // Routes
 app.use("/api", commonRoutes);
-app.use("/api/admin", adminRoutes); // Corrected variable name
+app.use("/api/admin", adminRoutes);
+app.use("/api/admin", categoryRoutes);
 
 // Error Handler Middleware
 app.use(errorHandler);

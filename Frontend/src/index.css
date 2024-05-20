@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 @keyframes fadeInOut {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0;
   }
   50% {
@@ -13,4 +14,7 @@
 
 .animate-fadeIn {
   animation: fadeInOut 2s infinite;
+}
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
 }

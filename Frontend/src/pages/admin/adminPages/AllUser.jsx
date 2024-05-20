@@ -5,6 +5,8 @@ import Modal from "../../../component/modal";
 import summaryAPI from "../../../utils/summaryAPI";
 import defaultImg from "../../../default.jpg";
 import Preloader from "../../../component/Preloader";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AllUser = () => {
   const [userData, setUserData] = useState([]);
@@ -12,13 +14,11 @@ const AllUser = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [formData, setFormData] = useState({
-    name: "",
+    userName: "",
     email: "",
     password: "",
-    role: "",
   });
-  // eslint-disable-next-line no-unused-vars
-  const [error, setError] = useState(null); // Error state for handling API errors
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -43,7 +43,7 @@ const AllUser = () => {
   const openModal = (user) => {
     setCurrentUser(user);
     setFormData({
-      name: user.userName,
+      userName: user.userName,
       email: user.email,
       password: "",
       role: user.role,
@@ -55,11 +55,11 @@ const AllUser = () => {
     setIsModalOpen(false);
     setCurrentUser(null);
     setFormData({
-      name: "",
+      userName: "",
       email: "",
       password: "",
       role: "",
-    }); // Clear form data when closing modal
+    });
   };
 
   const handleChange = (e) => {
@@ -88,9 +88,26 @@ const AllUser = () => {
           user._id === currentUser._id ? response.data.data : user
         )
       );
+      toast.success("User updated successfully");
       closeModal();
     } catch (error) {
+      toast.error("Error updating user");
       setError("Error updating user");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${summaryAPI.deleteUser.url}/${id}`, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      setUserData((prevData) => prevData.filter((user) => user._id !== id));
+      toast.success("User deleted successfully");
+    } catch (error) {
+      toast.error("Error deleting user");
     }
   };
 
@@ -101,6 +118,7 @@ const AllUser = () => {
       ) : (
         <div className="overflow-x-auto">
           <h1 className="text-3xl font-semibold mb-4">All Users</h1>
+          {error && <p className="text-red-500">{error}</p>}
           <table className="min-w-full border border-gray-300 rounded-lg overflow-hidden">
             <thead className="bg-blue-200">
               <tr className="text-center">
@@ -141,7 +159,10 @@ const AllUser = () => {
                     >
                       <i className="fa-solid fa-user-pen"></i>
                     </button>
-                    <button className="text-red-600 bg-gray-200 p-2 rounded-2xl hover:text-red-900 hover:bg-red-300 focus:outline-none">
+                    <button
+                      className="text-red-600 bg-gray-200 p-2 rounded-2xl hover:text-red-900 hover:bg-red-300 focus:outline-none"
+                      onClick={() => handleDelete(user._id)}
+                    >
                       <i className="fa-solid fa-user-minus"></i>
                     </button>
                   </td>
@@ -151,19 +172,18 @@ const AllUser = () => {
           </table>
         </div>
       )}
-      {/* Modal component */}
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <div className="p-8">
           <h2 className="text-xl font-semibold mb-4">Edit User</h2>
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700">
-                Name
+                Username
               </label>
               <input
                 type="text"
-                name="name"
-                value={formData.name}
+                name="userName"
+                value={formData.userName}
                 onChange={handleChange}
                 className="mt-1 p-2 border border-gray-300 rounded-md w-full"
               />
@@ -192,18 +212,7 @@ const AllUser = () => {
                 className="mt-1 p-2 border border-gray-300 rounded-md w-full"
               />
             </div>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700">
-                Role
-              </label>
-              <input
-                type="text"
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-              />
-            </div>
+
             <div className="text-right">
               <button
                 type="submit"

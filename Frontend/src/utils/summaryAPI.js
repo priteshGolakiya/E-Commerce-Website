@@ -30,6 +30,10 @@ const summaryAPI = {
     method: "PUT",
     url: `${backendDomain}/admin/update-user`,
   },
+  deleteUser: {
+    method: "DELETE",
+    url: `${backendDomain}/admin/delete-user`,
+  },
 };
 
 export default summaryAPI;

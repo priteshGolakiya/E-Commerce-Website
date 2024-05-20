@@ -3,24 +3,60 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import {
   FaBars,
   FaUser,
-  FaUsers,
   FaBoxOpen,
   FaShoppingCart,
   FaChartBar,
   FaCogs,
   FaTimes,
+  FaChevronDown,
+  FaChevronUp,
+  FaUsers,
+  FaList,
+  FaPlus,
+  FaUserPlus,
+  FaInfo,
+  FaMapMarkerAlt,
+  FaTags,
+  FaUserShield, // Ensure FaTags is imported
 } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import defaultImg from "../../default.jpg";
 
 const AdminPanel = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const user = useSelector((state) => state.user.user);
+  const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
+  const [isCategoriesDropdownOpen, setIsCategoriesDropdownOpen] =
+    useState(false); // Define the missing state
+  const [isOrdersDropdownOpen, setIsOrdersDropdownOpen] = useState(false); // Define the missing state
+  const [isUsersDropdownOpen, setIsUsersDropdownOpen] = useState(false); // Define the missing state
 
+  const user = useSelector((state) => state.user.user);
   const location = useLocation();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+    if (!isSidebarOpen) {
+      setIsProductsDropdownOpen(false);
+      setIsCategoriesDropdownOpen(false); // Close dropdown when sidebar is opened
+      setIsOrdersDropdownOpen(false); // Close dropdown when sidebar is opened
+      setIsUsersDropdownOpen(false); // Close dropdown when sidebar is opened
+    }
+  };
+
+  const toggleProductsDropdown = () => {
+    setIsProductsDropdownOpen(!isProductsDropdownOpen);
+  };
+
+  const toggleCategoriesDropdown = () => {
+    setIsCategoriesDropdownOpen(!isCategoriesDropdownOpen); // Define the missing function
+  };
+
+  const toggleOrdersDropdown = () => {
+    setIsOrdersDropdownOpen(!isOrdersDropdownOpen); // Define the missing function
+  };
+
+  const toggleUsersDropdown = () => {
+    setIsUsersDropdownOpen(!isUsersDropdownOpen); // Define the missing function
   };
 
   const getLinkClass = (path) => {
@@ -36,9 +72,14 @@ const AdminPanel = () => {
         className={`bg-slate-800 text-gray-300 ${
           isSidebarOpen ? "w-64" : "w-20"
         } transition-all duration-300`}
+        aria-expanded={isSidebarOpen}
       >
         <div className="flex justify-between items-center p-4">
-          <button onClick={toggleSidebar} className="focus:outline-none">
+          <button
+            onClick={toggleSidebar}
+            className="focus:outline-none"
+            aria-label="Toggle sidebar"
+          >
             {isSidebarOpen ? (
               <FaTimes className="text-2xl" />
             ) : (
@@ -49,65 +90,222 @@ const AdminPanel = () => {
             <span className="text-xl font-semibold">Admin Panel</span>
           )}
         </div>
-        <nav className="mt-4">
-          <ul>
-            <li className="mb-2">
-              <Link to="/admin-panel" className={getLinkClass("/admin-panel")}>
-                <FaUser className="mr-2" /> {isSidebarOpen && "Dashboard"}
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                to="/admin-panel/all-users"
-                className={getLinkClass("/admin-panel/all-users")}
-              >
-                <FaUsers className="mr-2" /> {isSidebarOpen && "All Users"}
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                to="/admin-panel/all-products"
-                className={getLinkClass("/admin-panel/all-products")}
-              >
-                <FaBoxOpen className="mr-2" /> {isSidebarOpen && "All Products"}
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                to="/admin-panel/orders"
-                className={getLinkClass("/admin-panel/orders")}
-              >
-                <FaShoppingCart className="mr-2" /> {isSidebarOpen && "Orders"}
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                to="/admin-panel/customers"
-                className={getLinkClass("/admin-panel/customers")}
-              >
-                <FaUser className="mr-2" /> {isSidebarOpen && "Customers"}
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                to="/admin-panel/reports"
-                className={getLinkClass("/admin-panel/reports")}
-              >
-                <FaChartBar className="mr-2" /> {isSidebarOpen && "Reports"}
-              </Link>
-            </li>
-            <li className="mb-2">
-              <Link
-                to="/admin-panel/settings"
-                className={getLinkClass("/admin-panel/settings")}
-              >
-                <FaCogs className="mr-2" /> {isSidebarOpen && "Settings"}
-              </Link>
-            </li>
-          </ul>
-        </nav>
-      </aside>
+        <div className="overflow-y-auto h-[calc(100vh-90px)] scrollbar-hidden">
+          {/* Apply scrollable styles */}
+          <nav className="mt-4">
+            <ul>
+              <li className="mb-2">
+                <Link
+                  to="/admin-panel"
+                  className={getLinkClass("/admin-panel")}
+                >
+                  <FaUserShield className="mr-2" />
+                  {isSidebarOpen && "Dashboard"}
+                </Link>
+              </li>
 
+              <li className="mb-2">
+                <div
+                  className="flex items-center p-2 rounded cursor-pointer hover:bg-blue-600 hover:text-white transition-colors duration-300"
+                  onClick={isSidebarOpen ? toggleUsersDropdown : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={isUsersDropdownOpen}
+                >
+                  <FaUser className="mr-2" />
+                  {isSidebarOpen && <span>User</span>}
+                  {isSidebarOpen && (
+                    <span className="ml-auto">
+                      {isUsersDropdownOpen ? (
+                        <FaChevronUp />
+                      ) : (
+                        <FaChevronDown />
+                      )}
+                    </span>
+                  )}
+                </div>
+                {(isUsersDropdownOpen || !isSidebarOpen) && (
+                  <ul className={`${isSidebarOpen ? "ml-4" : "ml-0"}`}>
+                    <li>
+                      <Link
+                        to="/admin-panel/users/all-users"
+                        className={getLinkClass("/admin-panel/users/all-users")}
+                      >
+                        <FaUsers className="mr-2" />
+                        {isSidebarOpen && "All Users"}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/admin-panel/users/new"
+                        className={getLinkClass("/admin-panel/users/new")}
+                      >
+                        <FaUserPlus className="mr-2" />
+                        {isSidebarOpen && "Add New User"}
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
+              <li className="mb-2">
+                <div
+                  className="flex items-center p-2 rounded cursor-pointer hover:bg-blue-600 hover:text-white transition-colors duration-300"
+                  onClick={isSidebarOpen ? toggleProductsDropdown : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={isProductsDropdownOpen}
+                >
+                  <FaBoxOpen className="mr-2" />
+                  {isSidebarOpen && <span>Products</span>}
+                  {isSidebarOpen && (
+                    <span className="ml-auto">
+                      {isProductsDropdownOpen ? (
+                        <FaChevronUp />
+                      ) : (
+                        <FaChevronDown />
+                      )}
+                    </span>
+                  )}
+                </div>
+                {(isProductsDropdownOpen || !isSidebarOpen) && (
+                  <ul className={`${isSidebarOpen ? "ml-4" : "ml-0"}`}>
+                    <li>
+                      <Link
+                        to="/admin-panel/products/all-products"
+                        className={getLinkClass(
+                          "/admin-panel/products/all-products"
+                        )}
+                      >
+                        <FaList className="mr-2" />
+                        {isSidebarOpen && "All Products"}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/admin-panel/products/add"
+                        className={getLinkClass("/admin-panel/products/add")}
+                      >
+                        <FaPlus className="mr-2" />
+                        {isSidebarOpen && "Add Product"}
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
+              <li className="mb-2">
+                <div
+                  className="flex items-center p-2 rounded cursor-pointer hover:bg-blue-600 hover:text-white transition-colors duration-300"
+                  onClick={isSidebarOpen ? toggleCategoriesDropdown : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={isCategoriesDropdownOpen}
+                >
+                  <FaTags className="mr-2" />
+                  {isSidebarOpen && <span>Category</span>}
+                  {isSidebarOpen && (
+                    <span className="ml-auto">
+                      {isCategoriesDropdownOpen ? (
+                        <FaChevronUp />
+                      ) : (
+                        <FaChevronDown />
+                      )}
+                    </span>
+                  )}
+                </div>
+                {(isCategoriesDropdownOpen || !isSidebarOpen) && (
+                  <ul className={`${isSidebarOpen ? "ml-4" : "ml-0"}`}>
+                    <li>
+                      <Link
+                        to="/admin-panel/category/list"
+                        className={getLinkClass("/admin-panel/category/list")}
+                      >
+                        <FaList className="mr-2" />
+                        {isSidebarOpen && "Category List"}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/admin-panel/category/new"
+                        className={getLinkClass("/admin-panel/category/new")}
+                      >
+                        <FaPlus className="mr-2" />
+                        {isSidebarOpen && "New Category"}
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
+              <li className="mb-2">
+                <div
+                  className="flex items-center p-2 rounded cursor-pointer hover:bg-blue-600 hover:text-white transition-colors duration-300"
+                  onClick={isSidebarOpen ? toggleOrdersDropdown : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={isOrdersDropdownOpen}
+                >
+                  <FaShoppingCart className="mr-2" />
+                  {isSidebarOpen && <span>Order</span>}
+                  {isSidebarOpen && (
+                    <span className="ml-auto">
+                      {isOrdersDropdownOpen ? (
+                        <FaChevronUp />
+                      ) : (
+                        <FaChevronDown />
+                      )}
+                    </span>
+                  )}
+                </div>
+                {(isOrdersDropdownOpen || !isSidebarOpen) && (
+                  <ul className={`${isSidebarOpen ? "ml-4" : "ml-0"}`}>
+                    <li>
+                      <Link
+                        to="/admin-panel/orders/list"
+                        className={getLinkClass("/admin-panel/orders/list")}
+                      >
+                        <FaList className="mr-2" />
+                        {isSidebarOpen && "Order List"}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/admin-panel/orders/detail"
+                        className={getLinkClass("/admin-panel/orders/detail")}
+                      >
+                        <FaInfo className="mr-2" />
+                        {isSidebarOpen && "Order Detail"}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/admin-panel/orders/tracking"
+                        className={getLinkClass("/admin-panel/orders/tracking")}
+                      >
+                        <FaMapMarkerAlt className="mr-2" />
+                        {isSidebarOpen && "Order Tracking"}
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
+
+              <li className="mb-2">
+                <Link
+                  to="/admin-panel/reports"
+                  className={getLinkClass("/admin-panel/reports")}
+                >
+                  <FaChartBar className="mr-2" />
+                  {isSidebarOpen && "Reports"}
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link
+                  to="/admin-panel/settings"
+                  className={getLinkClass("/admin-panel/settings")}
+                >
+                  <FaCogs className="mr-2" />
+                  {isSidebarOpen && "Settings"}
+                </Link>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </aside>
       {/* Main content */}
       <div className="flex-1 flex flex-col">
         <header className="bg-white shadow p-4 flex justify-between items-center">
@@ -115,7 +313,7 @@ const AdminPanel = () => {
           <div className="flex items-center space-x-4">
             {user ? (
               <>
-                <span className="text-gray-600">welcome {user.username}</span>
+                <span className="text-gray-600">Welcome, {user.username}</span>
                 <img
                   src={user.profilePic || defaultImg}
                   alt={user.username}
@@ -128,7 +326,6 @@ const AdminPanel = () => {
           </div>
         </header>
         <main className="flex-1 p-6">
-          {/* Outlet for rendering nested routes */}
           <Outlet />
         </main>
       </div>
