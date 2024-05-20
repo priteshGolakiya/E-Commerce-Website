@@ -89,7 +89,8 @@ const signup = asyncHandler(async (req, res, next) => {
   });
 
   res.status(201).json({
-    status: true,
+    error: false,
+    success: true,
     message: "User created successfully!",
     data: { user, token },
   });

@@ -7,12 +7,16 @@ const errorHandler = require("./middleware/errorHandler");
 const commonRoutes = require("./routes/common");
 const adminRoutes = require("./routes/admin/admin");
 const categoryRoutes = require("./routes/admin/categoryRoutes");
+const adminAuthMiddleware = require("./middleware/adminAuthMiddleware");
 const app = express();
 
 // Middleware
 app.use(cookieParser());
 app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
 app.use(express.json({ limit: "50mb" }));
+
+// Apply adminAuthMiddleware to all /api/admin routes
+app.use("/api/admin", adminAuthMiddleware);
 
 // Routes
 app.use("/api", commonRoutes);

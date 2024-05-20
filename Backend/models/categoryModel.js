@@ -29,24 +29,29 @@ const validCategories = [
   "Vintage & Antiques",
 ];
 
-const categorySchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    validate: {
-      validator: function (value) {
-        return validCategories.includes(value);
+const categorySchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      validate: {
+        validator: function (value) {
+          return validCategories.includes(value);
+        },
+        message: (props) => `${props.value} is not a valid category`,
       },
-      message: (props) => `${props.value} is not a valid category`,
     },
+    subcategories: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Subcategory",
+      },
+    ],
   },
-  subcategories: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Subcategory",
-    },
-  ],
-});
+  {
+    timestamps: true,
+  }
+);
 
 const Category = mongoose.model("Category", categorySchema);
 
