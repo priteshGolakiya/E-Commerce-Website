@@ -3,64 +3,65 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import summaryAPI from "../../../../utils/summaryAPI";
 
-// Backend categories mapped to frontend categories and subcategories
-const subcategoryOptions = {
-  "Apparel & Accessories": [
-    "Men's Clothing",
-    "Women's Clothing",
-    "Shoes",
-    "Accessories",
-  ],
-  Electronics: ["Laptops", "Smartphones", "Tablets"],
-  "Home & Garden": ["Furniture", "Home Decor", "Kitchen Appliances"],
-  "Health & Beauty": ["Skincare", "Haircare", "Makeup", "Personal Care"],
-  "Toys & Games": [
-    "Board Games",
-    "Outdoor Toys",
-    "Educational Toys",
-    "Action Figures",
-  ],
-  "Books & Media": ["Fiction", "Non-fiction", "Mystery"],
-  "Sports & Outdoors": ["Fitness Equipment", "Outdoor Gear", "Sportswear"],
-  Automotive: ["Car Accessories", "Motorcycle Parts", "Tools"],
-  "Baby & Kids": ["Baby Clothing", "Toys", "Kids' Furniture"],
-  "Food & Grocery": ["Snacks", "Beverages", "Cooking Ingredients"],
-  "Pet Supplies": ["Dog Supplies", "Cat Supplies", "Pet Toys"],
-  "Office Supplies": ["Stationery", "Office Furniture", "Office Electronics"],
-  "Jewelry & Watches": ["Necklaces", "Bracelets", "Watches"],
-  "Crafts & DIY": ["Craft Kits", "Painting Supplies", "DIY Tools"],
-  "Art & Collectibles": ["Paintings", "Sculptures", "Antiques"],
-  "Travel & Luggage": ["Luggage", "Travel Accessories", "Backpacks"],
-  "Fitness & Wellness": [
-    "Vitamins & Supplements",
-    "Fitness Accessories",
-    "Wellness Products",
-  ],
-  "Home Improvement": ["Tools", "Building Materials", "Home Renovation"],
-  "Electronics Accessories": ["Phone Cases", "Chargers", "Cables"],
-  "Gifts & Occasions": ["Gift Baskets", "Cards", "Party Supplies"],
-  "Music & Instruments": ["Guitars", "Keyboards", "Music Accessories"],
-  "Party Supplies": ["Party Decorations", "Tableware", "Party Favors"],
-  "Software & Apps": [
-    "Productivity Software",
-    "Utility Apps",
-    "Gaming Software",
-  ],
-  Services: ["Cleaning Services", "Repair Services", "Consulting Services"],
-  "Subscription Boxes": ["Beauty Boxes", "Snack Boxes", "Book Subscriptions"],
-  "Vintage & Antiques": [
-    "Vintage Clothing",
-    "Antique Furniture",
-    "Collectible Items",
-  ],
-};
-
 const SubNewCategory = () => {
   const [name, setName] = useState("");
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSubcategory, setSelectedSubcategory] = useState("");
   const [loading, setLoading] = useState(false);
+  const [subcategoryOptions, setSubcategoryOptions] = useState([]); // Define subcategoryOptions state
+
+  // Move the subcategory options object outside the component
+  const subcategoryOptionsData = {
+    "Apparel & Accessories": [
+      "Men's Clothing",
+      "Women's Clothing",
+      "Shoes",
+      "Accessories",
+    ],
+    Electronics: ["Laptops", "Smartphones", "Tablets"],
+    "Home & Garden": ["Furniture", "Home Decor", "Kitchen Appliances"],
+    "Health & Beauty": ["Skincare", "Haircare", "Makeup", "Personal Care"],
+    "Toys & Games": [
+      "Board Games",
+      "Outdoor Toys",
+      "Educational Toys",
+      "Action Figures",
+    ],
+    "Books & Media": ["Fiction", "Non-fiction", "Mystery"],
+    "Sports & Outdoors": ["Fitness Equipment", "Outdoor Gear", "Sportswear"],
+    Automotive: ["Car Accessories", "Motorcycle Parts", "Tools"],
+    "Baby & Kids": ["Baby Clothing", "Toys", "Kids' Furniture"],
+    "Food & Grocery": ["Snacks", "Beverages", "Cooking Ingredients"],
+    "Pet Supplies": ["Dog Supplies", "Cat Supplies", "Pet Toys"],
+    "Office Supplies": ["Stationery", "Office Furniture", "Office Electronics"],
+    "Jewelry & Watches": ["Necklaces", "Bracelets", "Watches"],
+    "Crafts & DIY": ["Craft Kits", "Painting Supplies", "DIY Tools"],
+    "Art & Collectibles": ["Paintings", "Sculptures", "Antiques"],
+    "Travel & Luggage": ["Luggage", "Travel Accessories", "Backpacks"],
+    "Fitness & Wellness": [
+      "Vitamins & Supplements",
+      "Fitness Accessories",
+      "Wellness Products",
+    ],
+    "Home Improvement": ["Tools", "Building Materials", "Home Renovation"],
+    "Electronics Accessories": ["Phone Cases", "Chargers", "Cables"],
+    "Gifts & Occasions": ["Gift Baskets", "Cards", "Party Supplies"],
+    "Music & Instruments": ["Guitars", "Keyboards", "Music Accessories"],
+    "Party Supplies": ["Party Decorations", "Tableware", "Party Favors"],
+    "Software & Apps": [
+      "Productivity Software",
+      "Utility Apps",
+      "Gaming Software",
+    ],
+    Services: ["Cleaning Services", "Repair Services", "Consulting Services"],
+    "Subscription Boxes": ["Beauty Boxes", "Snack Boxes", "Book Subscriptions"],
+    "Vintage & Antiques": [
+      "Vintage Clothing",
+      "Antique Furniture",
+      "Collectible Items",
+    ],
+  };
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -90,11 +91,22 @@ const SubNewCategory = () => {
       (category) => category._id === selectedCategoryId
     );
     const selectedCategoryName = selectedCategory?.name;
-    const subcategories = subcategoryOptions[selectedCategoryName] || [];
+    const subcategories = subcategoryOptionsData[selectedCategoryName] || [];
+
     console.log("Selected category:", selectedCategoryName);
     setSelectedCategory(selectedCategoryId);
+
+    // Get all subcategory options
+    const subcategoryOptions = subcategories.map((subcategory) => (
+      <option key={subcategory} value={subcategory}>
+        {subcategory}
+      </option>
+    ));
+
     setSelectedSubcategory(subcategories[0] || "");
+    setSubcategoryOptions(subcategoryOptions);
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name || !selectedCategory || !selectedSubcategory) {
@@ -150,7 +162,7 @@ const SubNewCategory = () => {
             )}
           </select>
         </div>
-        {selectedCategory && subcategoryOptions[selectedCategory] && (
+        {selectedCategory && subcategoryOptions.length > 0 && (
           <div className="mb-4">
             <label htmlFor="subcategory" className="block mb-2">
               Select Subcategory:
@@ -163,34 +175,11 @@ const SubNewCategory = () => {
               required
             >
               <option value="">Select a subcategory</option>
-              {subcategoryOptions[selectedCategory].map(
-                (subcategory, index) => (
-                  <option key={index} value={subcategory}>
-                    {subcategory}
-                  </option>
-                )
-              )}
+              {subcategoryOptions}
             </select>
           </div>
         )}
 
-        <div className="mb-4">
-          <label htmlFor="name" className="block mb-2">
-            Subcategory Name:
-          </label>
-          <select
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="border border-gray-300 rounded p-2 w-full"
-            required
-          >
-            <option value="">Select a subcategory name</option>
-            {selectedSubcategory ? (
-              <option value={selectedSubcategory}>{selectedSubcategory}</option>
-            ) : null}
-          </select>
-        </div>
         <button
           type="submit"
           className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
