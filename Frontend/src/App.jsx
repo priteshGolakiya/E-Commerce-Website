@@ -4,11 +4,13 @@ import Layout from "./layout/Layout.jsx";
 import Login from "./pages/loginSingup/Login.jsx";
 import Signup from "./pages/loginSingup/Signup.jsx";
 import AdminPanel from "./pages/admin/AdminPanel.jsx";
-import AllUser from "./pages/admin/adminPages/AllUser.jsx";
-import AllProducts from "./pages/admin/adminPages/AllProducts.jsx";
+import AllUser from "./pages/admin/adminPages//users/AllUser.jsx";
+import AllProducts from "./pages/admin/adminPages/product/AllProducts.jsx";
 import AddProduct from "./pages/admin/adminPages/product/AddProduct.jsx";
 import CategoryList from "./pages/admin/adminPages/category/CategoryList.jsx";
 import NewCategory from "./pages/admin/adminPages/category/NewCategory.jsx";
+import SubCategoryList from "./pages/admin/adminPages/subCategory/SubCategoryList.jsx";
+import SubNewCategory from "./pages/admin/adminPages/subcategory/SubNewCategory.jsx";
 import OrdersList from "./pages/admin/adminPages/orders/OrdersList.jsx";
 import OrderDetail from "./pages/admin/adminPages/orders/OrderDetail.jsx";
 import OrderTracking from "./pages/admin/adminPages/orders/OrderTracking.jsx";
@@ -33,6 +35,8 @@ const App = () => {
             <Route path="products/add" element={<AddProduct />} />
             <Route path="category/list" element={<CategoryList />} />
             <Route path="category/new" element={<NewCategory />} />
+            <Route path="sub-category/list" element={<SubCategoryList />} />
+            <Route path="sub-category/new" element={<SubNewCategory />} />
             <Route path="orders/list" element={<OrdersList />} />
             <Route path="orders/detail" element={<OrderDetail />} />
             <Route path="orders/tracking" element={<OrderTracking />} />

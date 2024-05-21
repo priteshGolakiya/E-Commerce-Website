@@ -7,7 +7,7 @@ import {
 
 const initialState = {
   user: null,
-  error: null, // Add error state to manage errors
+  error: null,
 };
 
 export const userSlice = createSlice({

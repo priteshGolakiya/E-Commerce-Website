@@ -29,6 +29,8 @@ const AdminPanel = () => {
     useState(false); // Define the missing state
   const [isOrdersDropdownOpen, setIsOrdersDropdownOpen] = useState(false); // Define the missing state
   const [isUsersDropdownOpen, setIsUsersDropdownOpen] = useState(false); // Define the missing state
+  const [isSubCategoriesDropdownOpen, setIsSubCategoriesDropdownOpen] =
+    useState(false); // Define the missing state
 
   const user = useSelector((state) => state.user.user);
   const location = useLocation();
@@ -49,6 +51,9 @@ const AdminPanel = () => {
 
   const toggleCategoriesDropdown = () => {
     setIsCategoriesDropdownOpen(!isCategoriesDropdownOpen); // Define the missing function
+  };
+  const toggleSubCategoriesDropdown = () => {
+    setIsSubCategoriesDropdownOpen(!isSubCategoriesDropdownOpen); // Define the missing function
   };
 
   const toggleOrdersDropdown = () => {
@@ -103,7 +108,7 @@ const AdminPanel = () => {
                   {isSidebarOpen && "Dashboard"}
                 </Link>
               </li>
-
+              {/* ----------------------------------------------------------------- */}
               <li className="mb-2">
                 <div
                   className="flex items-center p-2 rounded cursor-pointer hover:bg-blue-600 hover:text-white transition-colors duration-300"
@@ -131,7 +136,7 @@ const AdminPanel = () => {
                         className={getLinkClass("/admin-panel/users/all-users")}
                       >
                         <FaUsers className="mr-2" />
-                        {isSidebarOpen && "All Users"}
+                        {isSidebarOpen && "Users List"}
                       </Link>
                     </li>
                     <li>
@@ -146,6 +151,7 @@ const AdminPanel = () => {
                   </ul>
                 )}
               </li>
+              {/* ----------------------------------------------------------------- */}
               <li className="mb-2">
                 <div
                   className="flex items-center p-2 rounded cursor-pointer hover:bg-blue-600 hover:text-white transition-colors duration-300"
@@ -175,7 +181,7 @@ const AdminPanel = () => {
                         )}
                       >
                         <FaList className="mr-2" />
-                        {isSidebarOpen && "All Products"}
+                        {isSidebarOpen && "Products List"}
                       </Link>
                     </li>
                     <li>
@@ -190,6 +196,7 @@ const AdminPanel = () => {
                   </ul>
                 )}
               </li>
+              {/* ----------------------------------------------------------------- */}
               <li className="mb-2">
                 <div
                   className="flex items-center p-2 rounded cursor-pointer hover:bg-blue-600 hover:text-white transition-colors duration-300"
@@ -232,6 +239,57 @@ const AdminPanel = () => {
                   </ul>
                 )}
               </li>
+              {/* ----------------------------------------------------------------- */}
+              <li className="mb-2">
+                {/* Subcategory dropdown */}
+                <div
+                  className="flex items-center p-2 rounded cursor-pointer hover:bg-blue-600 hover:text-white transition-colors duration-300"
+                  onClick={
+                    isSidebarOpen ? toggleSubCategoriesDropdown : undefined
+                  }
+                  aria-haspopup="true"
+                  aria-expanded={isSubCategoriesDropdownOpen}
+                >
+                  <FaTags className="mr-2" />
+                  {isSidebarOpen && <span>Sub Category</span>}
+                  {isSidebarOpen && (
+                    <span className="ml-auto">
+                      {isSubCategoriesDropdownOpen ? (
+                        <FaChevronUp />
+                      ) : (
+                        <FaChevronDown />
+                      )}
+                    </span>
+                  )}
+                </div>
+                {(isSubCategoriesDropdownOpen || !isSidebarOpen) && (
+                  <ul className={`${isSidebarOpen ? "ml-4" : "ml-0"}`}>
+                    <li>
+                      <Link
+                        to="/admin-panel/sub-category/list"
+                        className={getLinkClass(
+                          "/admin-panel/sub-category/list"
+                        )}
+                      >
+                        <FaList className="mr-2" />
+                        {isSidebarOpen && "Sub Category List"}
+                      </Link>
+                    </li>
+                    <li>
+                      <Link
+                        to="/admin-panel/sub-category/new"
+                        className={getLinkClass(
+                          "/admin-panel/sub-category/new"
+                        )}
+                      >
+                        <FaPlus className="mr-2" />
+                        {isSidebarOpen && "New Sub Category"}
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </li>
+              {/* ----------------------------------------------------------------- */}
               <li className="mb-2">
                 <div
                   className="flex items-center p-2 rounded cursor-pointer hover:bg-blue-600 hover:text-white transition-colors duration-300"
@@ -283,7 +341,7 @@ const AdminPanel = () => {
                   </ul>
                 )}
               </li>
-
+              {/* ----------------------------------------------------------------- */}
               <li className="mb-2">
                 <Link
                   to="/admin-panel/reports"
@@ -293,6 +351,7 @@ const AdminPanel = () => {
                   {isSidebarOpen && "Reports"}
                 </Link>
               </li>
+              {/* ----------------------------------------------------------------- */}
               <li className="mb-2">
                 <Link
                   to="/admin-panel/settings"
