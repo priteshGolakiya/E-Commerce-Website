@@ -26,10 +26,7 @@ const categories = [
   "Gifts & Occasions",
   "Music & Instruments",
   "Party Supplies",
-  "Software & Apps",
   "Services",
-  "Subscription Boxes",
-  "Vintage & Antiques",
 ];
 
 const NewCategory = () => {
@@ -70,7 +67,8 @@ const NewCategory = () => {
       toast.success("New Category Submitted: " + selectedCategory);
     } catch (error) {
       const errorMessage =
-        error.response?.data?.message || "Failed to create category. Please try again later.";
+        error.response?.data?.message ||
+        "Failed to create category. Please try again later.";
       console.error("Error creating category:", errorMessage);
       toast.error(errorMessage);
       setError(errorMessage);

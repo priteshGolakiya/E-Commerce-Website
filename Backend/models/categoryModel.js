@@ -23,10 +23,7 @@ const validCategories = [
   "Gifts & Occasions",
   "Music & Instruments",
   "Party Supplies",
-  "Software & Apps",
   "Services",
-  "Subscription Boxes",
-  "Vintage & Antiques",
 ];
 
 const categorySchema = new mongoose.Schema(

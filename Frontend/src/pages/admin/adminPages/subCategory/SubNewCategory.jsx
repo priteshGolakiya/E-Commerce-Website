@@ -2,58 +2,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import summaryAPI from "../../../../utils/summaryAPI";
+import subcategoryOptionsData from "../../../../utils/subcategoryOptionsData";
 
 // Move the subcategoryOptionsData object outside the component
-const subcategoryOptionsData = {
-  "Apparel & Accessories": [
-    "Men's Clothing",
-    "Women's Clothing",
-    "Shoes",
-    "Accessories",
-  ],
-  Electronics: ["Laptops", "Smartphones", "Tablets"],
-  "Home & Garden": ["Furniture", "Home Decor", "Kitchen Appliances"],
-  "Health & Beauty": ["Skincare", "Haircare", "Makeup", "Personal Care"],
-  "Toys & Games": [
-    "Board Games",
-    "Outdoor Toys",
-    "Educational Toys",
-    "Action Figures",
-  ],
-  "Books & Media": ["Fiction", "Non-fiction", "Mystery"],
-  "Sports & Outdoors": ["Fitness Equipment", "Outdoor Gear", "Sportswear"],
-  Automotive: ["Car Accessories", "Motorcycle Parts", "Tools"],
-  "Baby & Kids": ["Baby Clothing", "Toys", "Kids' Furniture"],
-  "Food & Grocery": ["Snacks", "Beverages", "Cooking Ingredients"],
-  "Pet Supplies": ["Dog Supplies", "Cat Supplies", "Pet Toys"],
-  "Office Supplies": ["Stationery", "Office Furniture", "Office Electronics"],
-  "Jewelry & Watches": ["Necklaces", "Bracelets", "Watches"],
-  "Crafts & DIY": ["Craft Kits", "Painting Supplies", "DIY Tools"],
-  "Art & Collectibles": ["Paintings", "Sculptures", "Antiques"],
-  "Travel & Luggage": ["Luggage", "Travel Accessories", "Backpacks"],
-  "Fitness & Wellness": [
-    "Vitamins & Supplements",
-    "Fitness Accessories",
-    "Wellness Products",
-  ],
-  "Home Improvement": ["Tools", "Building Materials", "Home Renovation"],
-  "Electronics Accessories": ["Phone Cases", "Chargers", "Cables"],
-  "Gifts & Occasions": ["Gift Baskets", "Cards", "Party Supplies"],
-  "Music & Instruments": ["Guitars", "Keyboards", "Music Accessories"],
-  "Party Supplies": ["Party Decorations", "Tableware", "Party Favors"],
-  "Software & Apps": [
-    "Productivity Software",
-    "Utility Apps",
-    "Gaming Software",
-  ],
-  Services: ["Cleaning Services", "Repair Services", "Consulting Services"],
-  "Subscription Boxes": ["Beauty Boxes", "Snack Boxes", "Book Subscriptions"],
-  "Vintage & Antiques": [
-    "Vintage Clothing",
-    "Antique Furniture",
-    "Collectible Items",
-  ],
-};
 
 const SubNewCategory = () => {
   const [name, setName] = useState("");
@@ -116,7 +67,9 @@ const SubNewCategory = () => {
         }
       );
 
-      setName(""); // Reset name after successful submission
+      setName("");
+      setSelectedCategory("");
+      setSelectedSubcategory("");
       toast.success(response.data.message);
     } catch (error) {
       const errorMessage =
