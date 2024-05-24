@@ -16,14 +16,16 @@ const AddProduct = () => {
     category: "",
     subcategory: "",
     features: "",
-    offers: "",
+    offers: [], // Changed to an array to store multiple offers
     deliveryOptions: "",
+    finalPrice: 0, // Added finalPrice field with default value
   });
 
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -53,20 +55,17 @@ const AddProduct = () => {
 
     if (type === "file") {
       const files = Array.from(e.target.files);
-      const previews = [...imagePreviews];
-      for (const file of files) {
-        previews.push(URL.createObjectURL(file));
-      }
-      setImagePreviews(previews);
-      setProductData({
-        ...productData,
-        [name]: [...productData.images, ...files],
-      });
+      const previews = files.map((file) => URL.createObjectURL(file));
+      setImagePreviews((prev) => [...prev, ...previews]);
+      setProductData((prevData) => ({
+        ...prevData,
+        [name]: [...prevData.images, ...files],
+      }));
     } else {
-      setProductData({
-        ...productData,
+      setProductData((prevData) => ({
+        ...prevData,
         [name]: value,
-      });
+      }));
     }
   };
 
@@ -77,23 +76,56 @@ const AddProduct = () => {
     );
     const subcategories = selectedCategory?.subcategories || [];
 
-    setProductData({
-      ...productData,
+    setProductData((prevData) => ({
+      ...prevData,
       category: selectedCategoryId,
       subcategory: "",
-    });
+    }));
     setSubcategories(subcategories);
   };
 
   const handleSubcategoryChange = (e) => {
-    setProductData({
-      ...productData,
+    setProductData((prevData) => ({
+      ...prevData,
       subcategory: e.target.value,
+    }));
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    if (!productData.name) errors.name = "Name is required";
+    if (!productData.price) errors.price = "Price is required";
+    if (!productData.stock) errors.stock = "Stock is required";
+    if (!productData.category) errors.category = "Category is required";
+    setErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const resetForm = () => {
+    setProductData({
+      name: "",
+      brand: "",
+      description: "",
+      price: "",
+      discountPrice: "",
+      stock: "",
+      images: [], // Clear images array
+      category: "",
+      subcategory: "",
+      features: "",
+      offers: [], // Clear offers array
+      deliveryOptions: "",
+      finalPrice: 0, // Reset finalPrice
     });
+    setImagePreviews([]);
+    setErrors({});
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
+    setLoading(true);
     try {
       const uploadedImages = await Promise.all(
         productData.images.map((image) => uploadImage(image))
@@ -104,6 +136,7 @@ const AddProduct = () => {
       const payload = {
         ...productData,
         images: imageURLs,
+        // Split offers by comma and trim each offer, then store in an array
         offers: productData.offers.split(",").map((offer) => offer.trim()),
         subcategory: productData.subcategory || null,
       };
@@ -117,64 +150,72 @@ const AddProduct = () => {
 
       console.log("Product added successfully:", response.data);
       toast.success("Product added successfully");
-      setProductData({
-        name: "",
-        brand: "",
-        description: "",
-        price: "",
-        discountPrice: "",
-        stock: "",
-        images: [],
-        category: "",
-        subcategory: "",
-        features: "",
-        offers: "",
-        deliveryOptions: "",
-      });
-      setImagePreviews([]);
+      resetForm();
     } catch (error) {
       console.error("Error adding product:", error);
       toast.error("Failed to add product. Please try again later.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="max-w-xl mx-auto p-5 bg-white shadow-md rounded-lg">
       <h1 className="text-2xl font-bold mb-4">Add Product</h1>
-      <form onSubmit={handleSubmit}>
-        {[
-          { label: "Name", name: "name", type: "text" },
-          { label: "Brand", name: "brand", type: "text" },
-          { label: "Description", name: "description", type: "textarea" },
-          { label: "Price", name: "price", type: "number" },
-          { label: "Discount Price", name: "discountPrice", type: "number" },
-          { label: "Stock", name: "stock", type: "number" },
-          { label: "Features", name: "features", type: "text" },
-          { label: "Offers", name: "offers", type: "text" },
-          { label: "Delivery Options", name: "deliveryOptions", type: "text" },
-        ].map(({ label, name, type }) => (
-          <div key={name} className="mb-4">
-            <label className="block text-gray-700">{label}</label>
-            {type === "textarea" ? (
-              <textarea
-                name={name}
-                value={productData[name]}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            ) : (
-              <input
-                type={type}
-                name={name}
-                value={type !== "file" ? productData[name] : undefined}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            )}
+      <form onSubmit={handleSubmit} noValidate>
+        <div className="mb-6">
+          <label className="block text-gray-700 mb-1">Basic Information</label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              { label: "Name", name: "name", type: "text" },
+              { label: "Brand", name: "brand", type: "text" },
+              { label: "Description", name: "description", type: "textarea" },
+              { label: "Price", name: "price", type: "number" },
+              {
+                label: "Discount Price",
+                name: "discountPrice",
+                type: "number",
+              },
+              { label: "Stock", name: "stock", type: "number" },
+              { label: "Features", name: "features", type: "text" },
+              { label: "Offers", name: "offers", type: "text" },
+              {
+                label: "Delivery Options",
+                name: "deliveryOptions",
+                type: "text",
+              },
+            ].map(({ label, name, type }) => (
+              <div key={name} className="mb-4">
+                <label className="block text-sm text-gray-600">{label}</label>
+                {type === "textarea" ? (
+                  <textarea
+                    name={name}
+                    value={productData[name]}
+                    onChange={handleChange}
+                    className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      errors[name] ? "border-red-500" : ""
+                    }`}
+                  />
+                ) : (
+                  <input
+                    type={type}
+                    name={name}
+                    value={type !== "file" ? productData[name] : undefined}
+                    onChange={handleChange}
+                    className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                      errors[name] ? "border-red-500" : ""
+                    }`}
+                  />
+                )}
+                {errors[name] && (
+                  <span className="text-red-500 text-sm">{errors[name]}</span>
+                )}
+              </div>
+            ))}
           </div>
-        ))}
-        <div className="mb-4">
-          <label className="block text-gray-700">Images</label>
+        </div>
+        <div className="mb-6">
+          <label className="block text-gray-700 mb-1">Images</label>
           <input
             type="file"
             name="images"
@@ -193,13 +234,15 @@ const AddProduct = () => {
             ))}
           </div>
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700">Category</label>
+        <div className="mb-6">
+          <label className="block text-gray-700 mb-1">Category</label>
           <select
             name="category"
             value={productData.category}
             onChange={handleCategoryChange}
-            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              errors.category ? "border-red-500" : ""
+            }`}
           >
             <option value="">Select a category</option>
             {loading ? (
@@ -212,10 +255,13 @@ const AddProduct = () => {
               ))
             )}
           </select>
+          {errors.category && (
+            <span className="text-red-500 text-sm">{errors.category}</span>
+          )}
         </div>
         {productData.category && subcategories.length > 0 && (
-          <div className="mb-4">
-            <label className="block text-gray-700">Subcategory</label>
+          <div className="mb-6">
+            <label className="block text-gray-700 mb-1">Subcategory</label>
             <select
               name="subcategory"
               value={productData.subcategory}
@@ -234,8 +280,9 @@ const AddProduct = () => {
         <button
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300"
+          disabled={loading}
         >
-          Add Product
+          {loading ? "Adding Product..." : "Add Product"}
         </button>
       </form>
     </div>

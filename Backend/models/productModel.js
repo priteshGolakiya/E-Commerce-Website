@@ -19,6 +19,7 @@ const productSchema = new mongoose.Schema(
       ref: "Subcategory",
       required: true,
     },
+    finalPrice: { type: String },
     offers: [{ type: String }],
     deliveryOptions: String,
   },
@@ -40,8 +41,8 @@ productSchema.virtual("reviews", {
   foreignField: "product",
 });
 
-productSchema.virtual("finalPrice").get(function () {
-  return this.discountPrice ? this.price - this.discountPrice : this.price;
-});
+// productSchema.virtual("finalPrice").get(function () {
+//   return this.discountPrice ? this.price - this.discountPrice : this.price;
+// });
 
 module.exports = mongoose.model("Product", productSchema);

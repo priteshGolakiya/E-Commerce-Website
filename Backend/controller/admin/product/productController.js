@@ -46,6 +46,9 @@ exports.createProduct = async (req, res) => {
   } = req.body;
 
   try {
+    // Calculate finalPrice based on discountPrice, if available
+    const finalPrice = discountPrice ? price - discountPrice : price;
+
     const newProduct = new Product({
       name,
       brand,
@@ -58,6 +61,7 @@ exports.createProduct = async (req, res) => {
       subcategory,
       offers,
       deliveryOptions,
+      finalPrice,
     });
 
     const savedProduct = await newProduct.save();
