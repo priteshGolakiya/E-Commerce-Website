@@ -23,6 +23,7 @@ const AddProduct = () => {
   const [categories, setCategories] = useState([]);
   const [subcategories, setSubcategories] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [imagePreviews, setImagePreviews] = useState([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -48,12 +49,25 @@ const AddProduct = () => {
 
   const handleChange = (e) => {
     const { name, type } = e.target;
-    const value = type === "file" ? Array.from(e.target.files) : e.target.value;
+    const value = type === "file" ? e.target.files : e.target.value;
 
-    setProductData({
-      ...productData,
-      [name]: value,
-    });
+    if (type === "file") {
+      const files = Array.from(e.target.files);
+      const previews = [...imagePreviews];
+      for (const file of files) {
+        previews.push(URL.createObjectURL(file));
+      }
+      setImagePreviews(previews);
+      setProductData({
+        ...productData,
+        [name]: [...productData.images, ...files],
+      });
+    } else {
+      setProductData({
+        ...productData,
+        [name]: value,
+      });
+    }
   };
 
   const handleCategoryChange = (e) => {
@@ -102,7 +116,7 @@ const AddProduct = () => {
       });
 
       console.log("Product added successfully:", response.data);
-      toast.success("Product added successfully:");
+      toast.success("Product added successfully");
       setProductData({
         name: "",
         brand: "",
@@ -117,6 +131,7 @@ const AddProduct = () => {
         offers: "",
         deliveryOptions: "",
       });
+      setImagePreviews([]);
     } catch (error) {
       console.error("Error adding product:", error);
       toast.error("Failed to add product. Please try again later.");
@@ -134,11 +149,10 @@ const AddProduct = () => {
           { label: "Price", name: "price", type: "number" },
           { label: "Discount Price", name: "discountPrice", type: "number" },
           { label: "Stock", name: "stock", type: "number" },
-          { label: "Images", name: "images", type: "file", multiple: true },
           { label: "Features", name: "features", type: "text" },
           { label: "Offers", name: "offers", type: "text" },
           { label: "Delivery Options", name: "deliveryOptions", type: "text" },
-        ].map(({ label, name, type, multiple }) => (
+        ].map(({ label, name, type }) => (
           <div key={name} className="mb-4">
             <label className="block text-gray-700">{label}</label>
             {type === "textarea" ? (
@@ -155,11 +169,30 @@ const AddProduct = () => {
                 value={type !== "file" ? productData[name] : undefined}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                multiple={multiple}
               />
             )}
           </div>
         ))}
+        <div className="mb-4">
+          <label className="block text-gray-700">Images</label>
+          <input
+            type="file"
+            name="images"
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            multiple
+          />
+          <div className="mt-2 grid grid-cols-3 gap-2">
+            {imagePreviews.map((src, index) => (
+              <img
+                key={index}
+                src={src}
+                alt={`Preview ${index}`}
+                className="h-24 w-24 object-cover border"
+              />
+            ))}
+          </div>
+        </div>
         <div className="mb-4">
           <label className="block text-gray-700">Category</label>
           <select
