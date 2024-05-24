@@ -84,6 +84,31 @@ const summaryAPI = {
     method: "PUT",
     url: `${backendDomain}/admin/Subcategory`,
   },
+
+  /*------
+    Admin Routes
+    products
+    ------ */
+  getAllProducts: {
+    method: "GET",
+    url: `${backendDomain}/admin/product`,
+  },
+  getProductById: {
+    method: "GET",
+    url: `${backendDomain}/admin/product/:id`,
+  },
+  createProduct: {
+    method: "POST",
+    url: `${backendDomain}/admin/product`,
+  },
+  updateProduct: {
+    method: "PUT",
+    url: `${backendDomain}/admin/product/:id`,
+  },
+  deleteProduct: {
+    method: "DELETE",
+    url: `${backendDomain}/admin/product/:id`,
+  },
 };
 
 export default summaryAPI;

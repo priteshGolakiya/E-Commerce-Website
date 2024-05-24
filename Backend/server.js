@@ -7,7 +7,10 @@ const errorHandler = require("./middleware/errorHandler");
 const commonRoutes = require("./routes/common");
 const adminRoutes = require("./routes/admin/admin");
 const categoryRoutes = require("./routes/admin/categoryRoutes");
+const productRoutes = require("./routes/admin/productRoutes");
+const reviewRoutes = require("./routes/admin//reviewRoutes");
 const adminAuthMiddleware = require("./middleware/adminAuthMiddleware");
+
 const app = express();
 
 // Middleware
@@ -20,6 +23,8 @@ app.use("/api/admin", adminAuthMiddleware);
 
 // Routes
 app.use("/api", commonRoutes);
+app.use("/api/admin", productRoutes);
+app.use("/api/admin", reviewRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/admin", categoryRoutes);
 

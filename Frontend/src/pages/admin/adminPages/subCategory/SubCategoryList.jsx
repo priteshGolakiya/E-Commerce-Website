@@ -34,14 +34,19 @@ const SubCategoryList = () => {
   const handleDelete = async (subcategoryId) => {
     if (window.confirm("Are you sure you want to delete this subcategory?")) {
       try {
-        await axios.delete(`${summaryAPI.deleteSubcategory.url}/${subcategoryId}`, {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        await axios.delete(
+          `${summaryAPI.deleteSubcategory.url}/${subcategoryId}`,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         setSubcategories((prevSubcategories) =>
-          prevSubcategories.filter((subcategory) => subcategory._id !== subcategoryId)
+          prevSubcategories.filter(
+            (subcategory) => subcategory._id !== subcategoryId
+          )
         );
         toast.success("Subcategory deleted successfully");
       } catch (err) {
@@ -74,19 +79,18 @@ const SubCategoryList = () => {
         {subcategories.map((subcategory) => (
           <div
             key={subcategory._id}
-            className="bg-white border border-gray-200 rounded-lg shadow-md transition-transform duration-300 transform hover:scale-105"
+            className="p-6 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg hover:scale-105 transform transition-transform duration-300"
           >
-            <div className="p-4">
-              <h2 className="text-lg font-semibold mb-2">{subcategory.name}</h2>
-              <p className="text-sm text-gray-500 mb-4">Parent Category: {subcategory.category.name}</p>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-semibold">{subcategory.name}</h2>
               <button
                 onClick={() => handleDelete(subcategory._id)}
-                className="text-red-600 hover:text-red-800 transition-colors duration-300 flex items-center"
+                className="text-red-600 hover:text-red-800 transition-colors duration-300"
               >
-                <i className="fas fa-trash-alt mr-1"></i>
-                Delete
+                <i className="fas fa-trash-alt"></i>
               </button>
             </div>
+            <p className="text-gray-500">{subcategory.category.name}</p>
           </div>
         ))}
       </div>

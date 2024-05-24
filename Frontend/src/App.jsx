@@ -4,13 +4,14 @@ import Layout from "./layout/Layout.jsx";
 import Login from "./pages/loginSingup/Login.jsx";
 import Signup from "./pages/loginSingup/Signup.jsx";
 import AdminPanel from "./pages/admin/AdminPanel.jsx";
+import AdminHome from "./pages/admin/AdminHome.jsx";
 import AllUser from "./pages/admin/adminPages//users/AllUser.jsx";
 import AllProducts from "./pages/admin/adminPages/product/AllProducts.jsx";
 import AddProduct from "./pages/admin/adminPages/product/AddProduct.jsx";
 import CategoryList from "./pages/admin/adminPages/category/CategoryList.jsx";
 import NewCategory from "./pages/admin/adminPages/category/NewCategory.jsx";
 import SubCategoryList from "./pages/admin/adminPages/subCategory/SubCategoryList.jsx";
-import SubNewCategory from "./pages/admin/adminPages/subcategory/SubNewCategory.jsx";
+import SubNewCategory from "./pages/admin/adminPages/subCategory/SubNewCategory.jsx";
 import OrdersList from "./pages/admin/adminPages/orders/OrdersList.jsx";
 import OrderDetail from "./pages/admin/adminPages/orders/OrderDetail.jsx";
 import OrderTracking from "./pages/admin/adminPages/orders/OrderTracking.jsx";
@@ -28,7 +29,7 @@ const App = () => {
         <Route path="forgot-password" element={<ForgotPassword />} />
         <Route element={<AdminRoute />}>
           <Route path="admin-panel" element={<AdminPanel />}>
-            <Route index element={<div>Welcome to the Admin Panel</div>} />
+            <Route index element={<AdminHome />} />
             <Route path="users/all-users" element={<AllUser />} />
             <Route path="users/new" element={<NewUser />} />
             <Route path="products/all-products" element={<AllProducts />} />
