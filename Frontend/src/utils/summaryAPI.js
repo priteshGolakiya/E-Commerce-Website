@@ -95,7 +95,7 @@ const summaryAPI = {
   },
   getProductById: {
     method: "GET",
-    url: `${backendDomain}/admin/product/:id`,
+    url: `${backendDomain}/admin/product`,
   },
   createProduct: {
     method: "POST",
@@ -103,11 +103,11 @@ const summaryAPI = {
   },
   updateProduct: {
     method: "PUT",
-    url: `${backendDomain}/admin/product/:id`,
+    url: `${backendDomain}/admin/product`,
   },
   deleteProduct: {
     method: "DELETE",
-    url: `${backendDomain}/admin/product/:id`,
+    url: `${backendDomain}/admin/product`,
   },
 };
 
