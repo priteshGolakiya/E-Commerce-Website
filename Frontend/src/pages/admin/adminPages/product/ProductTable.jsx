@@ -1,5 +1,8 @@
 /* eslint-disable react/prop-types */
 
+import { PhotoProvider, PhotoView } from "react-photo-view";
+import "react-photo-view/dist/react-photo-view.css";
+
 const ProductTable = ({ products, onEdit, onDelete }) => {
   return (
     <div className="overflow-x-auto">
@@ -36,18 +39,29 @@ const ProductTable = ({ products, onEdit, onDelete }) => {
                 ${product.finalPrice}
               </td>
               <td className="py-3 px-1.5 border-b">{product.stock}</td>
-              <td className="py-3 px-1.5 border-b max-w-xs flex flex-col">
+              <td className="py-3 px-1.5 border-b max-w-xs cursor-pointer">
                 {product.images && product.images.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {product.images.map((image, index) => (
-                      <img
-                        key={index}
-                        src={image}
-                        alt={`Product Image ${index + 1}`}
-                        className="w-16 h-16 object-cover rounded"
-                      />
+                  <PhotoProvider>
+                    <div className="flex flex-wrap gap-2">
+                      <PhotoView src={product.images[0]}>
+                        <img
+                          src={product.images[0]}
+                          alt={`Product Image 1`}
+                          className="w-16 h-16 object-cover rounded"
+                        />
+                      </PhotoView>
+                      {product.images.length > 1 && (
+                        <PhotoView src={product.images[1]}>
+                          <div className="w-16 h-16 flex items-center justify-center bg-gray-200 rounded text-gray-600">
+                            +{product.images.length - 1}
+                          </div>
+                        </PhotoView>
+                      )}
+                    </div>
+                    {product.images.slice(1).map((image, index) => (
+                      <PhotoView key={index + 1} src={image} />
                     ))}
-                  </div>
+                  </PhotoProvider>
                 )}
               </td>
               <td className="py-3 px-1.5 border-b">
