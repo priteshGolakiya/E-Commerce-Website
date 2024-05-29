@@ -17,7 +17,8 @@ import {
   FaInfo,
   FaMapMarkerAlt,
   FaTags,
-  FaUserShield, // Ensure FaTags is imported
+  FaUserShield,
+  FaStar,
 } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import defaultImg from "../../default.jpg";
@@ -347,7 +348,7 @@ const AdminPanel = () => {
                   to="/admin-panel/review"
                   className={getLinkClass("/admin-panel/review")}
                 >
-                  <FaChartBar className="mr-2" />
+                  <FaStar  className="mr-2" />
                   {isSidebarOpen && "review"}
                 </Link>
               </li>
