@@ -44,10 +44,7 @@ const Review = () => {
             <span className="mr-2 text-gray-500">User:</span>
             <span>{review.user.email}</span>
           </div>
-          <div className="flex items-center mb-4">
-            <span className="mr-2 text-gray-500">Product:</span>
-            <span>{review.product.name}</span>
-          </div>
+
           <p className="text-gray-700">{review.review}</p>
         </div>
       ))}
