@@ -18,6 +18,7 @@ import OrderTracking from "./pages/admin/adminPages/orders/OrderTracking.jsx";
 import NewUser from "./pages/admin/adminPages/users/NewUser.jsx";
 import ForgotPassword from "./pages/loginSingup/ForgotPasswod.jsx";
 import AdminRoute from "./AdminRoute.jsx";
+import Review from "./pages/admin/adminPages/review/Review.jsx";
 
 const App = () => {
   return (
@@ -41,6 +42,7 @@ const App = () => {
             <Route path="orders/list" element={<OrdersList />} />
             <Route path="orders/detail" element={<OrderDetail />} />
             <Route path="orders/tracking" element={<OrderTracking />} />
+            <Route path="review" element={<Review />} />
             <Route path="reports" element={<div>View Reports</div>} />
             <Route path="settings" element={<div>Settings</div>} />
           </Route>

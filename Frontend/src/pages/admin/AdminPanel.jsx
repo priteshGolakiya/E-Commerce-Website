@@ -344,6 +344,16 @@ const AdminPanel = () => {
               {/* ----------------------------------------------------------------- */}
               <li className="mb-2">
                 <Link
+                  to="/admin-panel/review"
+                  className={getLinkClass("/admin-panel/review")}
+                >
+                  <FaChartBar className="mr-2" />
+                  {isSidebarOpen && "review"}
+                </Link>
+              </li>
+              {/* ----------------------------------------------------------------- */}
+              <li className="mb-2">
+                <Link
                   to="/admin-panel/reports"
                   className={getLinkClass("/admin-panel/reports")}
                 >

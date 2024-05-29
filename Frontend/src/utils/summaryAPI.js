@@ -109,6 +109,28 @@ const summaryAPI = {
     method: "DELETE",
     url: `${backendDomain}/admin/product`,
   },
+
+  /*------Review Routes------ */
+  createReview: {
+    method: "POST",
+    url: `${backendDomain}/admin/reviews`,
+  },
+  getAllReviews: {
+    method: "GET",
+    url: `${backendDomain}/admin/reviews`,
+  },
+  getReviewsforProduct: {
+    method: "GET",
+    url: `${backendDomain}/admin/reviews/:productId`,
+  },
+  updateReview: {
+    method: "PUT",
+    url: `${backendDomain}/admin/reviews/:reviewId`,
+  },
+  deleteReview: {
+    method: "DELETE",
+    url: `${backendDomain}/admin/reviews/:reviewId`,
+  },
 };
 
 export default summaryAPI;
