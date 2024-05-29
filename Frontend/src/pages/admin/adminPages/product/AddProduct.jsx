@@ -16,9 +16,9 @@ const AddProduct = () => {
     category: "",
     subcategory: "",
     features: "",
-    offers: [], // Changed to an array to store multiple offers
+    offers: [],
     deliveryOptions: "",
-    finalPrice: 0, // Added finalPrice field with default value
+    finalPrice: 0,
   });
 
   const [categories, setCategories] = useState([]);
@@ -56,10 +56,14 @@ const AddProduct = () => {
     if (type === "file") {
       const files = Array.from(e.target.files);
       const previews = files.map((file) => URL.createObjectURL(file));
+      const imagesWithIds = files.map((file, index) => ({
+        id: Date.now() + index,
+        file,
+      }));
       setImagePreviews((prev) => [...prev, ...previews]);
       setProductData((prevData) => ({
         ...prevData,
-        [name]: [...prevData.images, ...files],
+        [name]: [...prevData.images, ...imagesWithIds],
       }));
     } else {
       setProductData((prevData) => ({
@@ -67,6 +71,16 @@ const AddProduct = () => {
         [name]: value,
       }));
     }
+  };
+
+  const handleRemoveImage = (id) => {
+    setImagePreviews((prevPreviews) =>
+      prevPreviews.filter((_, index) => productData.images[index].id !== id)
+    );
+    setProductData((prevData) => ({
+      ...prevData,
+      images: prevData.images.filter((image) => image.id !== id),
+    }));
   };
 
   const handleCategoryChange = (e) => {
@@ -109,13 +123,13 @@ const AddProduct = () => {
       price: "",
       discountPrice: "",
       stock: "",
-      images: [], // Clear images array
+      images: [],
       category: "",
       subcategory: "",
       features: "",
-      offers: [], // Clear offers array
+      offers: [],
       deliveryOptions: "",
-      finalPrice: 0, // Reset finalPrice
+      finalPrice: 0,
     });
     setImagePreviews([]);
     setErrors({});
@@ -128,7 +142,7 @@ const AddProduct = () => {
     setLoading(true);
     try {
       const uploadedImages = await Promise.all(
-        productData.images.map((image) => uploadImage(image))
+        productData.images.map((image) => uploadImage(image.file))
       );
 
       const imageURLs = uploadedImages.map((response) => response.secure_url);
@@ -223,14 +237,28 @@ const AddProduct = () => {
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             multiple
           />
-          <div className="mt-2 grid grid-cols-3 gap-2">
+          <div className="mt-2 grid grid-cols-3 gap-2 ">
             {imagePreviews.map((src, index) => (
-              <img
-                key={index}
-                src={src}
-                alt={`Preview ${index}`}
-                className="h-24 w-24 object-cover border"
-              />
+              <div
+                key={productData.images[index].id}
+                className="relative group"
+              >
+                <img
+                  src={src}
+                  alt={`Preview ${index}`}
+                  className="h-24 w-24 object-cover border rounded-lg shadow-md"
+                />
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleRemoveImage(productData.images[index].id)
+                  }
+                  className="absolute top-2 right-16 bg-red-600 cursor-pointer bg-opacity-70 text-white p-1 rounded-full focus:outline-none transition-opacity duration-300 ease-in-out opacity-0 group-hover:opacity-100"
+                  title="Remove image"
+                >
+                  <i className="fa-solid fa-trash text-sm"></i>
+                </button>
+              </div>
             ))}
           </div>
         </div>

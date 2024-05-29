@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Category = require("../../../models/categoryModel");
 const Subcategory = require("../../../models/subCategoryModel");
+const Product = require("../../../models/productModel");
 
 // Create a new category
 const createCategory = asyncHandler(async (req, res) => {
@@ -102,6 +103,9 @@ const deleteCategory = asyncHandler(async (req, res) => {
 
     // Delete all subcategories related to this category
     await Subcategory.deleteMany({ category: req.params.id });
+
+    // Delete all Product related to this category
+    await Product.deleteMany({ category: req.params.id });
 
     // Delete the category
     await Category.findByIdAndDelete(req.params.id);
