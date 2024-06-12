@@ -18,6 +18,7 @@ const Review = () => {
         setReviews(response.data.reviews);
       } catch (error) {
         console.error("Error fetching reviews:", error);
+        console.error("AxiosError:", error.toJSON());
         // Show an error message to the user
       }
     };

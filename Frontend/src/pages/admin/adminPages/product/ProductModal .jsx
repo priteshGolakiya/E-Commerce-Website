@@ -1,18 +1,16 @@
-/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import Modal from "../../../../component/modal";
 import { toast } from "react-toastify";
-
+import axios from "axios";
+import summaryAPI from "../../../../utils/summaryAPI";
 
 const ProductModal = ({
   isOpen,
   onClose,
   product,
   isEditMode,
-  onSubmit,
-  categories,
-  subcategories,
+  refreshProducts,
 }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -62,24 +60,37 @@ const ProductModal = ({
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    const imagesArray = formData.images.concat(files);
-    setFormData({ ...formData, images: imagesArray });
-  };
-
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // Submit form data to the server
-      await onSubmit(formData);
+      const apiConfig = isEditMode
+        ? summaryAPI.updateProduct
+        : summaryAPI.createProduct;
+
+      const url = isEditMode
+        ? `${apiConfig.url}/${product._id}`
+        : apiConfig.url;
+
+      const method = isEditMode ? "put" : "post";
+
+      await axios({
+        method: method,
+        url: url,
+        data: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
       toast.success(
         isEditMode
           ? "Product updated successfully"
           : "Product added successfully"
       );
       onClose();
+      refreshProducts(); // Call the refreshProducts function after successful form submission
     } catch (error) {
       console.error("Error submitting form:", error);
       toast.error("Error occurred while submitting the form");
@@ -134,5 +145,6 @@ const ProductModal = ({
     </Modal>
   );
 };
+
 
 export default ProductModal;

@@ -348,7 +348,7 @@ const AdminPanel = () => {
                   to="/admin-panel/review"
                   className={getLinkClass("/admin-panel/review")}
                 >
-                  <FaStar  className="mr-2" />
+                  <FaStar className="mr-2" />
                   {isSidebarOpen && "review"}
                 </Link>
               </li>
@@ -398,7 +398,7 @@ const AdminPanel = () => {
         <main className="flex-1 p-6">
           <Outlet />
         </main>
-      </div>
+      </div>  
     </div>
   );
 };

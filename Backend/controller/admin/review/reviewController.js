@@ -21,8 +21,8 @@ const addReview = async (req, res) => {
 
     // Create a new review
     const newReview = new Review({
-      userId,
-      productId,
+      user: userId,
+      product: productId,
       rating,
       review,
     });

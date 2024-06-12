@@ -32,7 +32,11 @@ const CategoryList = () => {
   }, []);
 
   const handleDelete = async (categoryId) => {
-    if (window.confirm("Are you sure you want to delete this category?")) {
+    if (
+      window.confirm(
+        "Are you sure you want to delete this category? This Will delete Sub-category and Related Products"
+      )
+    ) {
       try {
         await axios.delete(`${summaryAPI.deleteCategory.url}/${categoryId}`, {
           withCredentials: true,
