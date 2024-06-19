@@ -95,6 +95,7 @@ const createProduct = async (req, res) => {
 
 // Update an existing product
 const updateProduct = async (req, res) => {
+  console.log("Update Proudect accessed");
   const { id } = req.params;
   const {
     name,

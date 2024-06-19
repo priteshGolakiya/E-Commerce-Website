@@ -40,9 +40,9 @@ const AdminPanel = () => {
     setIsSidebarOpen(!isSidebarOpen);
     if (!isSidebarOpen) {
       setIsProductsDropdownOpen(false);
-      setIsCategoriesDropdownOpen(false); // Close dropdown when sidebar is opened
-      setIsOrdersDropdownOpen(false); // Close dropdown when sidebar is opened
-      setIsUsersDropdownOpen(false); // Close dropdown when sidebar is opened
+      setIsCategoriesDropdownOpen(false);
+      setIsOrdersDropdownOpen(false);
+      setIsUsersDropdownOpen(false);
     }
   };
 
@@ -51,18 +51,18 @@ const AdminPanel = () => {
   };
 
   const toggleCategoriesDropdown = () => {
-    setIsCategoriesDropdownOpen(!isCategoriesDropdownOpen); // Define the missing function
+    setIsCategoriesDropdownOpen(!isCategoriesDropdownOpen);
   };
   const toggleSubCategoriesDropdown = () => {
-    setIsSubCategoriesDropdownOpen(!isSubCategoriesDropdownOpen); // Define the missing function
+    setIsSubCategoriesDropdownOpen(!isSubCategoriesDropdownOpen);
   };
 
   const toggleOrdersDropdown = () => {
-    setIsOrdersDropdownOpen(!isOrdersDropdownOpen); // Define the missing function
+    setIsOrdersDropdownOpen(!isOrdersDropdownOpen);
   };
 
   const toggleUsersDropdown = () => {
-    setIsUsersDropdownOpen(!isUsersDropdownOpen); // Define the missing function
+    setIsUsersDropdownOpen(!isUsersDropdownOpen);
   };
 
   const getLinkClass = (path) => {
@@ -96,7 +96,7 @@ const AdminPanel = () => {
             <span className="text-xl font-semibold">Admin Panel</span>
           )}
         </div>
-        <div className="overflow-y-auto h-[calc(100vh-90px)] scrollbar-hidden">
+        <div className="overflow-y-auto h-[calc(100vh-50px)] scrollbar-hidden">
           {/* Apply scrollable styles */}
           <nav className="mt-4">
             <ul>
@@ -398,7 +398,7 @@ const AdminPanel = () => {
         <main className="flex-1 p-6">
           <Outlet />
         </main>
-      </div>  
+      </div>
     </div>
   );
 };

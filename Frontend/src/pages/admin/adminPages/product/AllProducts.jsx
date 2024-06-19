@@ -126,7 +126,7 @@ const AllProducts = () => {
         categories={categories}
         subcategories={subcategories}
         onSubmit={handleFormSubmit}
-        refreshProducts={fetchProducts} // Pass fetchProducts as a prop
+        refreshProducts={fetchProducts} 
       />
     </div>
   );

@@ -150,7 +150,6 @@ const AddProduct = () => {
       const payload = {
         ...productData,
         images: imageURLs,
-        // Split offers by comma and trim each offer, then store in an array
         offers: productData.offers.split(",").map((offer) => offer.trim()),
         subcategory: productData.subcategory || null,
       };

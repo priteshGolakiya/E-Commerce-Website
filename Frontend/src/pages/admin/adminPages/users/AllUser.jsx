@@ -133,44 +133,49 @@ const AllUser = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-300">
-              {userData.map((user) => (
-                <tr
-                  key={user._id}
-                  className="hover:bg-blue-100 hover:shadow-md transition duration-300"
-                >
-                  <td className="px-4 py-3">{user?._id}</td>
-                  <td className="px-4 py-3">{user?.userName}</td>
-                  <td className="px-4 py-3">{user?.email}</td>
-                  <td className="px-4 py-3">{user?.role}</td>
-                  <td className="px-4 py-3">
-                    {moment(user?.createdAt).format("LLL")}
-                  </td>
-                  <td className="px-4 py-3">
-                    {moment(user?.updatedAt).format("LLL")}
-                  </td>
-                  <td className="px-4 py-3">
-                    <img
-                      src={user.profilePic || defaultImg}
-                      alt="Profile Pic"
-                      className="w-14 h-14 border-2 border-gray-400 cursor-pointer rounded-full transform transition duration-300 hover:scale-110 hover:border-indigo-500"
-                    />
-                  </td>
-                  <td className="px-4 py-4 text-center space-x-2">
-                    <button
-                      className="text-indigo-600 bg-gray-200 p-2 rounded-2xl hover:text-white hover:bg-indigo-600 focus:outline-none transition duration-300"
-                      onClick={() => openModal(user)}
-                    >
-                      <i className="fa-solid fa-user-pen" title="Edit"></i>
-                    </button>
-                    <button
-                      className="text-red-600 bg-gray-200 p-2 rounded-2xl hover:text-white hover:bg-red-600 focus:outline-none transition duration-300"
-                      onClick={() => handleDelete(user._id)}
-                    >
-                      <i className="fa-solid fa-user-minus" title="Delete"></i>
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {userData
+                .filter((user) => user.role !== "admin")
+                .map((user) => (
+                  <tr
+                    key={user._id}
+                    className="hover:bg-blue-100 hover:shadow-md transition duration-300"
+                  >
+                    <td className="px-4 py-3">{user?._id}</td>
+                    <td className="px-4 py-3">{user?.userName}</td>
+                    <td className="px-4 py-3">{user?.email}</td>
+                    <td className="px-4 py-3">{user?.role}</td>
+                    <td className="px-4 py-3">
+                      {moment(user?.createdAt).format("LLL")}
+                    </td>
+                    <td className="px-4 py-3">
+                      {moment(user?.updatedAt).format("LLL")}
+                    </td>
+                    <td className="px-4 py-3">
+                      <img
+                        src={user.profilePic || defaultImg}
+                        alt="Profile Pic"
+                        className="w-14 h-14 border-2 border-gray-400 cursor-pointer rounded-full transform transition duration-300 hover:scale-110 hover:border-indigo-500"
+                      />
+                    </td>
+                    <td className="px-4 py-4 text-center space-x-2">
+                      <button
+                        className="text-indigo-600 bg-gray-200 p-2 rounded-2xl hover:text-white hover:bg-indigo-600 focus:outline-none transition duration-300"
+                        onClick={() => openModal(user)}
+                      >
+                        <i className="fa-solid fa-user-pen" title="Edit"></i>
+                      </button>
+                      <button
+                        className="text-red-600 bg-gray-200 p-2 rounded-2xl hover:text-white hover:bg-red-600 focus:outline-none transition duration-300"
+                        onClick={() => handleDelete(user._id)}
+                      >
+                        <i
+                          className="fa-solid fa-user-minus"
+                          title="Delete"
+                        ></i>
+                      </button>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
