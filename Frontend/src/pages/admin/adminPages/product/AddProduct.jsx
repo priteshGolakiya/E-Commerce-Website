@@ -31,7 +31,7 @@ const AddProduct = () => {
     const fetchCategories = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(summaryAPI.getAllCategory.url, {
+        const response = await axios.get(summaryAPI.admin.getAllCategory.url, {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
@@ -154,12 +154,16 @@ const AddProduct = () => {
         subcategory: productData.subcategory || null,
       };
 
-      const response = await axios.post(summaryAPI.createProduct.url, payload, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(
+        summaryAPI.admin.createProduct.url,
+        payload,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       console.log("Product added successfully:", response.data);
       toast.success("Product added successfully");

@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import loginIcon from "../../../../assets/signin.gif";
+import { Link, useNavigate } from "react-router-dom";
+import loginIcon from "../../assets/signin.gif";
+import imageTobase64 from "../../utils/imageTobase64";
 import axios from "axios";
-import summaryAPI from "../../../../utils/summaryAPI";
+import summaryAPI from "../../utils/summaryAPI";
 import { toast } from "react-toastify";
-import uploadImage from "../../../../utils/uploadImage";
-const NewUser = () => {
+
+const SignUpOld = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -16,8 +18,6 @@ const NewUser = () => {
     profilePic: "",
   });
   const [error, setError] = useState("");
-  const [uploading, setUploading] = useState(false);
-  const [imageSelected, setImageSelected] = useState(false);
 
   const handleOnChange = (e) => {
     const { name, value } = e.target;
@@ -37,43 +37,27 @@ const NewUser = () => {
 
   const handleUploadPic = async (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setImageSelected(true);
-      try {
-        setUploading(true);
-        const uploadResponse = await uploadImage(file);
-        setFormData((prev) => ({
-          ...prev,
-          profilePic: uploadResponse.secure_url,
-        }));
-        toast.success("Image uploaded successfully");
-      } catch (error) {
-        toast.error("Image upload failed");
-      } finally {
-        setUploading(false);
-      }
-    } else {
-      setImageSelected(false);
-    }
+    const imagePic = await imageTobase64(file);
+    setFormData((prev) => ({
+      ...prev,
+      profilePic: imagePic,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (uploading) {
-      setError("Please wait for the image to finish uploading");
-      toast.error("Please wait for the image to finish uploading");
-      return;
-    }
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match!");
       toast.error("Passwords do not match!");
+
       return;
     }
-
     try {
       const response = await axios.post(summaryAPI.admin.signUP.url, formData);
       toast.success(response.data.message);
+      console.log(response);
       setError("");
+      navigate("/login");
     } catch (error) {
       setError(error.response?.data?.error || "An error occurred");
       toast.error(
@@ -99,7 +83,7 @@ const NewUser = () => {
               htmlFor="profilePic"
               className="text-xs bg-slate-200 bg-opacity-80 pb-4 pt-3 py-4 cursor-pointer text-center absolute bottom-0 w-full"
             >
-              {uploading ? "Uploading..." : "Upload Photo"}
+              Upload Photo
             </label>
             <input
               type="file"
@@ -107,7 +91,6 @@ const NewUser = () => {
               name="profilePic"
               className="hidden"
               onChange={handleUploadPic}
-              disabled={uploading}
             />
           </form>
         </div>
@@ -222,7 +205,6 @@ const NewUser = () => {
           <button
             type="submit"
             className="w-full bg-indigo-600 text-white rounded-md py-2 px-4 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
-            disabled={uploading || (imageSelected && !formData.profilePic)}
           >
             Sign Up
           </button>
@@ -235,4 +217,4 @@ const NewUser = () => {
   );
 };
 
-export default NewUser;
+export default SignUpOld;

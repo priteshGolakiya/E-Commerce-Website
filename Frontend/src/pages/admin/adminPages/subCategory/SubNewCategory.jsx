@@ -17,7 +17,7 @@ const SubNewCategory = () => {
     const fetchCategories = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(summaryAPI.getAllCategory.url, {
+        const response = await axios.get(summaryAPI.admin.getAllCategory.url, {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
@@ -59,7 +59,7 @@ const SubNewCategory = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        `${summaryAPI.createSubcategory.url}/${selectedCategory}/subcategory`,
+        `${summaryAPI.admin.createSubcategory.url}/${selectedCategory}/subcategory`,
         { name },
         {
           withCredentials: true,

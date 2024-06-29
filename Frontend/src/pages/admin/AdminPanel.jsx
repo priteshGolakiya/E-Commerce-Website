@@ -27,11 +27,11 @@ const AdminPanel = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
   const [isCategoriesDropdownOpen, setIsCategoriesDropdownOpen] =
-    useState(false); // Define the missing state
-  const [isOrdersDropdownOpen, setIsOrdersDropdownOpen] = useState(false); // Define the missing state
-  const [isUsersDropdownOpen, setIsUsersDropdownOpen] = useState(false); // Define the missing state
+    useState(false);
+  const [isOrdersDropdownOpen, setIsOrdersDropdownOpen] = useState(false);
+  const [isUsersDropdownOpen, setIsUsersDropdownOpen] = useState(false);
   const [isSubCategoriesDropdownOpen, setIsSubCategoriesDropdownOpen] =
-    useState(false); // Define the missing state
+    useState(false);
 
   const user = useSelector((state) => state.user.user);
   const location = useLocation();

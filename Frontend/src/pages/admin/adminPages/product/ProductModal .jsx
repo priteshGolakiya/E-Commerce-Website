@@ -118,7 +118,7 @@ const ProductModal = ({ isOpen, onClose, product, refreshProducts }) => {
         subcategory: formData.subcategory || null,
       };
 
-      const url = `${summaryAPI.updateProduct.url}/${product._id}`;
+      const url = `${summaryAPI.admin.updateProduct.url}/${product._id}`;
 
       const response = await axios.put(url, payload, {
         withCredentials: true,

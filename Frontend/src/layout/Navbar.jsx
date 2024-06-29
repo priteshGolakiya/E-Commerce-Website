@@ -13,21 +13,21 @@ import {
 } from "../redux/slices/userSlice";
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const response = await axios.get(summaryAPI.userDetails.url, {
+        const response = await axios.get(summaryAPI.admin.userDetails.url, {
           withCredentials: true,
         });
         dispatch(setUserDetails(response.data.data));
       } catch (err) {
-        dispatch(setUserDetails(null)); // Clear user details on error
+        dispatch(setUserDetails(null));
         dispatch(setError("Error fetching user details"));
       }
     };
@@ -39,12 +39,11 @@ const Navbar = () => {
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
   const handleLogout = async () => {
-    dispatch(clearUserDetails());
-    navigate("/login");
-
     try {
-      await axios.get(summaryAPI.logout.url, { withCredentials: true });
+      await axios.get(summaryAPI.admin.logout.url, { withCredentials: true });
+      dispatch(clearUserDetails());
       toast.success("Logged out successfully");
+      navigate("/login");
     } catch (error) {
       console.error("Logout error:", error);
       toast.error("Logout failed. Please try again.");
@@ -101,19 +100,11 @@ const Navbar = () => {
             <div className="relative flex items-center cursor-pointer">
               {user ? (
                 <div onClick={toggleDropdown} className="relative">
-                  {user.profilePic ? (
-                    <img
-                      src={user.profilePic}
-                      alt={user.username}
-                      className="w-10 h-10 rounded-full"
-                    />
-                  ) : (
-                    <img
-                      src={defaultImg}
-                      alt="Default"
-                      className="w-10 h-10 rounded-full"
-                    />
-                  )}
+                  <img
+                    src={user.profilePic || defaultImg}
+                    alt={user.username || "User"}
+                    className="w-10 h-10 rounded-full"
+                  />
                   {isDropdownOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-2 z-50">
                       <Link
@@ -150,7 +141,7 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-              
+
         {/* Responsive Menu */}
         <div
           className={`md:hidden ${

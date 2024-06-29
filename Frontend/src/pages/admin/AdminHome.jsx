@@ -18,19 +18,19 @@ const AdminHome = () => {
       try {
         const [usersResponse, categoriesResponse, subcategoriesResponse] =
           await Promise.all([
-            axios.get(summaryAPI.getAllUser.url, {
+            axios.get(summaryAPI.admin.getAllUser.url, {
               withCredentials: true,
               headers: {
                 "Content-Type": "application/json",
               },
             }),
-            axios.get(summaryAPI.getAllCategory.url, {
+            axios.get(summaryAPI.admin.getAllCategory.url, {
               withCredentials: true,
               headers: {
                 "Content-Type": "application/json",
               },
             }),
-            axios.get(summaryAPI.getAllSubcategories.url, {
+            axios.get(summaryAPI.admin.getAllSubcategories.url, {
               withCredentials: true,
               headers: {
                 "Content-Type": "application/json",

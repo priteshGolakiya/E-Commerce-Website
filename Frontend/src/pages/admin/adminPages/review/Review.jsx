@@ -9,7 +9,7 @@ const Review = () => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await axios.get(summaryAPI.getAllReviews.url, {
+        const response = await axios.get(summaryAPI.admin.getAllReviews.url, {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
@@ -32,7 +32,7 @@ const Review = () => {
       {reviews.map((review, index) => (
         <div key={index} className="bg-white shadow-lg rounded-lg p-6 mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-lg font-semibold">{review.product.name}</h3>
+            <h3 className="text-lg font-semibold">{review.product?.name}</h3>
             <span className="text-gray-500 text-sm">
               {moment(review.date).format("LLL")}
             </span>
@@ -43,10 +43,10 @@ const Review = () => {
           </div>
           <div className="flex items-center mb-4">
             <span className="mr-2 text-gray-500">User:</span>
-            <span>{review.user.email}</span>
+            <span>{review.user?.email}</span>
           </div>
 
-          <p className="text-gray-700">{review.review}</p>
+          <p className="text-gray-700">{review?.review}</p>
         </div>
       ))}
     </div>

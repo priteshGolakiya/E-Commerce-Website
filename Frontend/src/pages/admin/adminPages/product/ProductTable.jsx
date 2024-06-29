@@ -32,12 +32,13 @@ const ProductTable = ({ products, onEdit, onDelete }) => {
                   {product.images.length > 1 && (
                     <PhotoView src={product.images[1]}>
                       <div className="w-16 h-16 flex items-center justify-center bg-gray-200 rounded text-gray-600">
-                        +{product.images.length}
+                        +{product.images.length -1}
                       </div>
                     </PhotoView>
                   )}
                 </div>
-                {product.images.slice(1).map((image, index) => (
+                {console.log('product.images.slice(2)', product.images.slice(2))}
+                {product.images.slice(2).map((image, index) => (
                   <PhotoView key={index + 1} src={image} />
                 ))}
               </PhotoProvider>

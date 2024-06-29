@@ -2,6 +2,8 @@ const backendDomain = "http://localhost:5000/api";
 
 const summaryAPI = {
   /*------Common Routes------*/
+admin:{
+
 
   signUP: {
     method: "POST",
@@ -131,6 +133,7 @@ const summaryAPI = {
     method: "DELETE",
     url: `${backendDomain}/admin/reviews/:reviewId`,
   },
+}
 };
 
 export default summaryAPI;

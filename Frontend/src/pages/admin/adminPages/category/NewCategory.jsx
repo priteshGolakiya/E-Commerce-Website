@@ -45,7 +45,7 @@ const NewCategory = () => {
 
     try {
       const response = await axios.post(
-        summaryAPI.createCategory.url,
+        summaryAPI.admin.createCategory.url,
         {
           name: selectedCategory,
         },

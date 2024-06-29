@@ -26,7 +26,7 @@ const AllProducts = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get(summaryAPI.getAllProducts.url, {
+      const response = await axios.get(summaryAPI.admin.getAllProducts.url, {
         withCredentials: true,
       });
       setProducts(response.data);
@@ -39,7 +39,7 @@ const AllProducts = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(summaryAPI.getAllCategory.url, {
+      const response = await axios.get(summaryAPI.admin.getAllCategory.url, {
         withCredentials: true,
       });
       setCategories(response.data.categories);
@@ -63,16 +63,16 @@ const AllProducts = () => {
     try {
       if (isEditMode && selectedProduct) {
         await axios.put(
-          `${summaryAPI.updateProduct.url}/${selectedProduct._id}`,
+          `${summaryAPI.admin.updateProduct.url}/${selectedProduct._id}`,
           formData,
           { withCredentials: true }
         );
       } else {
-        await axios.post(summaryAPI.createProduct.url, formData, {
+        await axios.post(summaryAPI.admin.createProduct.url, formData, {
           withCredentials: true,
         });
       }
-      fetchProducts(); // Refresh product table
+      fetchProducts();
       handleCloseModal();
     } catch (err) {
       console.error("Error creating/updating product", err.message);
@@ -81,7 +81,7 @@ const AllProducts = () => {
 
   const handleDeleteProduct = async (productId) => {
     try {
-      await axios.delete(`${summaryAPI.deleteProduct.url}/${productId}`, {
+      await axios.delete(`${summaryAPI.admin.deleteProduct.url}/${productId}`, {
         withCredentials: true,
       });
       toast.success("Product deleted successfully", { autoClose: 3000 });
@@ -126,7 +126,7 @@ const AllProducts = () => {
         categories={categories}
         subcategories={subcategories}
         onSubmit={handleFormSubmit}
-        refreshProducts={fetchProducts} 
+        refreshProducts={fetchProducts}
       />
     </div>
   );

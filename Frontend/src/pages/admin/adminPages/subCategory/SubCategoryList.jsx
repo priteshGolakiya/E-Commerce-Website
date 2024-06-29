@@ -13,12 +13,15 @@ const SubCategoryList = () => {
   useEffect(() => {
     const fetchSubcategories = async () => {
       try {
-        const response = await axios.get(summaryAPI.getAllSubcategories.url, {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await axios.get(
+          summaryAPI.admin.getAllSubcategories.url,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         setSubcategories(response.data.subcategories);
       } catch (err) {
         setError(err.message);
@@ -35,7 +38,7 @@ const SubCategoryList = () => {
     if (window.confirm("Are you sure you want to delete this subcategory?")) {
       try {
         await axios.delete(
-          `${summaryAPI.deleteSubcategory.url}/${subcategoryId}`,
+          `${summaryAPI.admin.deleteSubcategory.url}/${subcategoryId}`,
           {
             withCredentials: true,
             headers: {
@@ -73,7 +76,7 @@ const SubCategoryList = () => {
   }
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-3">
       <h1 className="text-3xl font-bold mb-6 text-center">Subcategories</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {subcategories.map((subcategory) => (

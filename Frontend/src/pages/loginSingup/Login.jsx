@@ -5,8 +5,11 @@ import loginIcon from "../../assets/signin.gif";
 import axios from "axios";
 import summaryAPI from "../../utils/summaryAPI";
 import { toast } from "react-toastify";
+import { setUserDetails } from "../../redux/slices/userSlice";
+import { useDispatch } from "react-redux";
 
 const Login = () => {
+  let dispatch = useDispatch();
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -32,18 +35,19 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(summaryAPI.logIn.url, formData, {
-        withCredentials: true, // Include credentials in the request
+      const response = await axios.post(summaryAPI.admin.logIn.url, formData, {
+        withCredentials: true,
         headers: {
           "Content-Type": "application/json",
         },
       });
+      const { data } = response.data;
+      dispatch(setUserDetails(data.user));
       toast.success("Login successful!");
       console.log(response);
       setError("");
       navigate("/");
     } catch (error) {
-      // Log the specific error details for debugging
       console.error("Axios request error:", error);
       setError(error.response?.data?.error || "An error occurred");
       toast.error(

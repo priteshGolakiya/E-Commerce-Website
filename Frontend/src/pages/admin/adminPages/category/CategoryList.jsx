@@ -13,7 +13,7 @@ const CategoryList = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(summaryAPI.getAllCategory.url, {
+        const response = await axios.get(summaryAPI.admin.getAllCategory.url, {
           withCredentials: true,
           headers: {
             "Content-Type": "application/json",
@@ -38,12 +38,15 @@ const CategoryList = () => {
       )
     ) {
       try {
-        await axios.delete(`${summaryAPI.deleteCategory.url}/${categoryId}`, {
-          withCredentials: true,
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        await axios.delete(
+          `${summaryAPI.admin.deleteCategory.url}/${categoryId}`,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
         setCategories((prevCategories) =>
           prevCategories.filter((category) => category._id !== categoryId)
         );
@@ -72,7 +75,7 @@ const CategoryList = () => {
   }
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-3">
       <h1 className="text-3xl font-bold mb-6 text-center">Categories</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {categories.map((category) => (
