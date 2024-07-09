@@ -8,6 +8,7 @@ const commonRoutes = require("./routes/common/common");
 const commonproductRoutes = require("./routes/common/productRoutes");
 const adminRoutes = require("./routes/admin/admin");
 const categoryRoutes = require("./routes/admin/categoryRoutes");
+const subCategoryRoutes = require("./routes/admin/subCategoryRoutes");
 const productRoutes = require("./routes/admin/productRoutes");
 const reviewRoutes = require("./routes/admin//reviewRoutes");
 const adminAuthMiddleware = require("./middleware/adminAuthMiddleware");
@@ -27,6 +28,7 @@ app.use("/api/admin", productRoutes);
 app.use("/api/admin", reviewRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/admin", categoryRoutes);
+app.use("/api/admin", subCategoryRoutes);
 
 // Common Routes
 app.use("/api", commonRoutes);

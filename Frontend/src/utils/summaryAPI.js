@@ -75,7 +75,7 @@ const summaryAPI = {
     ------ */
     createSubcategory: {
       method: "POST",
-      url: `${backendDomain}/admin/category`,
+      url: `${backendDomain}/admin/subcategory`,
     },
     getAllSubcategories: {
       method: "GET",

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const productSchema = new mongoose.Schema(
+const productSchema = new Schema(
   {
     name: { type: String, required: true },
     brand: { type: String, required: true },
@@ -24,8 +25,8 @@ const productSchema = new mongoose.Schema(
     deliveryOptions: String,
   },
   {
-    toJSON: { virtuals: true }, // Ensure virtuals are included in JSON output
-    toObject: { virtuals: true }, // Ensure virtuals are included in object output
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
 );
 
@@ -40,9 +41,5 @@ productSchema.virtual("reviews", {
   localField: "_id",
   foreignField: "product",
 });
-
-// productSchema.virtual("finalPrice").get(function () {
-//   return this.discountPrice ? this.price - this.discountPrice : this.price;
-// });
 
 module.exports = mongoose.model("Product", productSchema);
