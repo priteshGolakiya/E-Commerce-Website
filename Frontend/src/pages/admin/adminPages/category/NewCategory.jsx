@@ -3,6 +3,32 @@ import axios from "axios";
 import summaryAPI from "../../../../utils/summaryAPI";
 import { toast } from "react-toastify";
 
+// const categories = [
+//   "Apparel & Accessories",
+//   "Electronics",
+//   "Home & Garden",
+//   "Health & Beauty",
+//   "Toys & Games",
+//   "Books & Media",
+//   "Sports & Outdoors",
+//   "Automotive",
+//   "Baby & Kids",
+//   "Food & Grocery",
+//   "Pet Supplies",
+//   "Office Supplies",
+//   "Jewelry & Watches",
+//   "Crafts & DIY",
+//   "Art & Collectibles",
+//   "Travel & Luggage",
+//   "Fitness & Wellness",
+//   "Home Improvement",
+//   "Electronics Accessories",
+//   "Gifts & Occasions",
+//   "Music & Instruments",
+//   "Party Supplies",
+//   "Services",
+// ];
+
 const categories = [
   "Apparel & Accessories",
   "Electronics",
@@ -10,23 +36,13 @@ const categories = [
   "Health & Beauty",
   "Toys & Games",
   "Books & Media",
-  "Sports & Outdoors",
-  "Automotive",
   "Baby & Kids",
-  "Food & Grocery",
-  "Pet Supplies",
   "Office Supplies",
-  "Jewelry & Watches",
-  "Crafts & DIY",
-  "Art & Collectibles",
   "Travel & Luggage",
   "Fitness & Wellness",
   "Home Improvement",
   "Electronics Accessories",
-  "Gifts & Occasions",
   "Music & Instruments",
-  "Party Supplies",
-  "Services",
 ];
 
 const NewCategory = () => {

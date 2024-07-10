@@ -4,8 +4,15 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 import summaryAPI from "../../utils/summaryAPI";
-import { FreeMode, Pagination } from "swiper/modules";
+import {
+  FreeMode,
+  EffectFade,
+  Navigation,
+  Autoplay,
+  Pagination,
+} from "swiper/modules";
 import Preloader from "../Preloader";
+import { Link } from "react-router-dom";
 
 const ProductSlider = () => {
   const [subcategories, setSubcategories] = useState([]);
@@ -35,14 +42,18 @@ const ProductSlider = () => {
 
   if (loading) {
     return (
-      <p>
+      <div>
         <Preloader />
-      </p>
+      </div>
     );
   }
 
-  if (error) {
-    return <p>Error: {error}</p>;
+  if (error || subcategories.length === 0) {
+    return (
+      <div className="container mx-auto p-4">
+        <div className="text-red-500">{error || "No products found."}</div>
+      </div>
+    );
   }
 
   return (
@@ -53,7 +64,8 @@ const ProductSlider = () => {
         spaceBetween={30}
         freeMode={true}
         pagination={{ clickable: true }}
-        modules={[FreeMode, Pagination]}
+        modules={[EffectFade, Navigation, Pagination, Autoplay, FreeMode]}
+        autoplay={{ delay: 3000 }}
         className="mySwiper"
       >
         {subcategories.map((product) => (
@@ -61,11 +73,16 @@ const ProductSlider = () => {
             key={product._id}
             className="flex p-10 flex-col items-center"
           >
-            <img
-              src={product.images[0]}
-              alt={product.name}
+            <Link
+              to={`/category/${product.category._id}`}
               className="w-full h-52 object-contain mb-4 rounded-lg shadow-lg"
-            />
+            >
+              <img
+                src={product.images[0]}
+                alt={product.name}
+                className="w-full h-full object-contain mb-4 rounded-lg shadow-lg"
+              />
+            </Link>
             <p className="text-lg font-semibold text-center">{product.name}</p>
           </SwiperSlide>
         ))}

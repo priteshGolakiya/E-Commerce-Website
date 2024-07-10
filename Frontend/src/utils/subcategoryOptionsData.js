@@ -1,5 +1,5 @@
 // subcategoryOptions.js
-const subcategoryOptionsData = {
+const subcategoryOptionsDataOrignale = {
   "Apparel & Accessories": [
     "Men's Clothing",
     "Women's Clothing",
@@ -615,4 +615,4 @@ const subcategoryOptionsData = {
   ],
 };
 
-export default subcategoryOptionsData;
+export default subcategoryOptionsDataOrignale;

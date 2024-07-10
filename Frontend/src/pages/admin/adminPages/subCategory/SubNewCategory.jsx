@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import summaryAPI from "../../../../utils/summaryAPI";
-import subcategoryOptionsData from "../../../../utils/subcategoryOptionsData";
+import subcategoryOptionsDataOrignale from "../../../../utils/subcategoryOptionsData";
 
 // Move the subcategoryOptionsData object outside the component
 
@@ -42,7 +42,8 @@ const SubNewCategory = () => {
       (category) => category._id === selectedCategoryId
     );
     const selectedCategoryName = selectedCategory?.name;
-    const subcategories = subcategoryOptionsData[selectedCategoryName] || [];
+    const subcategories =
+      subcategoryOptionsDataOrignale[selectedCategoryName] || [];
 
     setSelectedCategory(selectedCategoryId);
     setSelectedSubcategory(subcategories[0] || "");
@@ -59,7 +60,7 @@ const SubNewCategory = () => {
     try {
       setLoading(true);
       const response = await axios.post(
-        `${summaryAPI.admin.createSubcategory.url}/${selectedCategory}/subcategory`,
+        `${summaryAPI.admin.createSubcategory.url}/${selectedCategory}/`,
         { name },
         {
           withCredentials: true,
@@ -109,7 +110,7 @@ const SubNewCategory = () => {
           </select>
         </div>
         {selectedCategory &&
-          subcategoryOptionsData[
+          subcategoryOptionsDataOrignale[
             categories.find((category) => category._id === selectedCategory)
               ?.name
           ]?.length > 0 && (
@@ -125,7 +126,7 @@ const SubNewCategory = () => {
                 required
               >
                 <option value="">Select a subcategory</option>
-                {subcategoryOptionsData[
+                {subcategoryOptionsDataOrignale[
                   categories.find(
                     (category) => category._id === selectedCategory
                   )?.name

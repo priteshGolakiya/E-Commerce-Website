@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
 
-const productSchema = new Schema(
+const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     brand: { type: String, required: true },
@@ -21,7 +20,7 @@ const productSchema = new Schema(
       required: true,
     },
     finalPrice: { type: String },
-    offers: [{ type: String }],
+    offers: { type: String },
     deliveryOptions: String,
   },
   {
@@ -40,6 +39,15 @@ productSchema.virtual("reviews", {
   ref: "Review",
   localField: "_id",
   foreignField: "product",
+  justOne: false,
+  populate: {
+    path: "user",
+    select: "email userName",
+    options: { lean: true },
+  },
+  virtuals: true,
 });
 
-module.exports = mongoose.model("Product", productSchema);
+const Product = mongoose.model("Product", productSchema);
+
+module.exports = Product;

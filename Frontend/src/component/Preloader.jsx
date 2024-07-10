@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import "tailwindcss/tailwind.css";
+// import "tailwindcss/tailwind.css";
 
 const Preloader = () => {
   const [letters, setLetters] = useState([]);
-  
+
   useEffect(() => {
     const text = "Loading...";
     setLetters(text.split(""));

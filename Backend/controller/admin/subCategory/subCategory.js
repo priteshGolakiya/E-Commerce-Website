@@ -77,13 +77,11 @@ const getAllSubcategories = asyncHandler(async (req, res) => {
     }
 
     // Return the array of subcategories with related products and images
-    res
-      .status(200)
-      .json({
-        error: false,
-        success: true,
-        subcategories: subcategoriesWithProducts,
-      });
+    res.status(200).json({
+      error: false,
+      success: true,
+      subcategories: subcategoriesWithProducts,
+    });
   } catch (err) {
     // Handle any errors that occur during the query or population
     res.status(500).json({ error: true, success: false, error: err.message });
@@ -178,10 +176,60 @@ const deleteSubcategory = asyncHandler(async (req, res) => {
   }
 });
 
+const createAllSubcategories = asyncHandler(async (req, res) => {
+  try {
+    const { categoryId, names } = req.body;
+
+    // Check if the category exists
+    const category = await Category.findById(categoryId);
+    if (!category) {
+      return res.status(404).json({ error: true, success: false, message: "Category not found" });
+    }
+
+    // Prepare an array to store created subcategories
+    const createdSubcategories = [];
+
+    // Iterate through each name and create a subcategory
+    for (let i = 0; i < names.length; i++) {
+      const name = names[i];
+
+      // Check if the subcategory already exists
+      const existingSubcategory = await Subcategory.findOne({ name, category: categoryId });
+      if (existingSubcategory) {
+        continue; // Skip creation if subcategory already exists
+      }
+
+      // Create and save the new subcategory
+      const subcategory = new Subcategory({ name, category: categoryId });
+      await subcategory.save();
+
+      // Update the parent category to include the new subcategory
+      category.subcategories.push(subcategory._id);
+      await category.save();
+
+      // Push the created subcategory to the response array
+      createdSubcategories.push(subcategory);
+    }
+
+    // Send success response
+    res.status(201).json({
+      error: false,
+      success: true,
+      message: "Subcategories created successfully",
+      subcategories: createdSubcategories,
+    });
+  } catch (err) {
+    // Send error response
+    res.status(500).json({ error: true, success: false, message: err.message });
+  }
+});
+
+
 module.exports = {
   createSubcategory,
   getAllSubcategories,
   getSubcategoryById,
   updateSubcategory,
   deleteSubcategory,
+  createAllSubcategories,
 };

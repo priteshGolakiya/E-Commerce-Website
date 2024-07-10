@@ -4,6 +4,7 @@ import summaryAPI from "../../utils/summaryAPI";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 import Preloader from "../../component/Preloader";
+import { Link } from "react-router-dom";
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
@@ -35,10 +36,10 @@ const AllProducts = () => {
     );
   }
 
-  if (error) {
+  if (error || products.length === 0) {
     return (
       <div className="container mx-auto p-4">
-        <div className="text-red-500">{error}</div>
+        <div className="text-red-500">{error || "No products found."}</div>
       </div>
     );
   }
@@ -66,6 +67,14 @@ const AllProducts = () => {
                   <h2 className="text-xl font-semibold mb-2">{product.name}</h2>
                   <p className="text-gray-700 mb-1">Brand: {product.brand}</p>
                   <p className="text-gray-700 mb-1">Price: ₹{product.price}</p>
+                  <Link
+                    key={product._id}
+                    to={`/products/${product._id}`}
+                    className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center text-sm"
+                  >
+                    View Product
+                  </Link>
+
                   <div className="flex mt-2 cursor-pointer">
                     {product.images.length > 1 && (
                       <PhotoView src={product.images[1]}>

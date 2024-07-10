@@ -5,7 +5,7 @@ import Login from "./pages/loginSingup/Login.jsx";
 import Signup from "./pages/loginSingup/Signup.jsx";
 import AdminPanel from "./pages/admin/AdminPanel.jsx";
 import AdminHome from "./pages/admin/AdminHome.jsx";
-import AllUser from "./pages/admin/adminPages//users/AllUser.jsx";
+import AllUser from "./pages/admin/adminPages/users/AllUser.jsx";
 import AllProducts from "./pages/admin/adminPages/product/AllProducts.jsx";
 import AddProduct from "./pages/admin/adminPages/product/AddProduct.jsx";
 import CategoryList from "./pages/admin/adminPages/category/CategoryList.jsx";
@@ -19,6 +19,9 @@ import NewUser from "./pages/admin/adminPages/users/NewUser.jsx";
 import ForgotPassword from "./pages/loginSingup/ForgotPasswod.jsx";
 import AdminRoute from "./AdminRoute.jsx";
 import Review from "./pages/admin/adminPages/review/Review.jsx";
+import CategoryListPage from "./pages/common/CategoryListPage.jsx";
+import SubCategoryListPage from "./pages/common/SubCategoryListPage.jsx";
+import ProductsDetailsPage from "./pages/common/ProductsDetailsPage.jsx";
 
 const App = () => {
   return (
@@ -28,6 +31,12 @@ const App = () => {
         <Route path="login" element={<Login />} />
         <Route path="signup" element={<Signup />} />
         <Route path="forgot-password" element={<ForgotPassword />} />
+
+        {/* Common routes accessible from any part of the application */}
+        <Route path="category/:id" element={<CategoryListPage />} />
+        <Route path="subcategory/:id" element={<SubCategoryListPage />} />
+        <Route path="products/:id" element={<ProductsDetailsPage />} />
+
         <Route element={<AdminRoute />}>
           <Route path="admin-panel" element={<AdminPanel />}>
             <Route index element={<AdminHome />} />

@@ -71,8 +71,15 @@ const NewUser = () => {
     }
 
     try {
-      const response = await axios.post(summaryAPI.admin.signUP.url, formData);
+      const response = await axios.post(summaryAPI.common.signUP.url, formData);
       toast.success(response.data.message);
+      setFormData({
+        userName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        profilePic: "",
+      });
       setError("");
     } catch (error) {
       setError(error.response?.data?.error || "An error occurred");

@@ -7,6 +7,7 @@ const errorHandler = require("./middleware/errorHandler");
 const commonRoutes = require("./routes/common/common");
 const commonproductRoutes = require("./routes/common/productRoutes");
 const commonCategoryRoutes = require("./routes/common/commonCategoryRoutes");
+const commonSubCategoryRoutes = require("./routes/common/commonSubCategoryRoutes.js");
 const adminRoutes = require("./routes/admin/admin");
 const categoryRoutes = require("./routes/admin/categoryRoutes");
 const subCategoryRoutes = require("./routes/admin/subCategoryRoutes");
@@ -35,6 +36,7 @@ app.use("/api/admin", subCategoryRoutes);
 app.use("/api", commonRoutes);
 app.use("/api/product", commonproductRoutes);
 app.use("/api/category", commonCategoryRoutes);
+app.use("/api/subcategory", commonSubCategoryRoutes);
 
 // Error Handler Middleware
 app.use(errorHandler);

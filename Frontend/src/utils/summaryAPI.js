@@ -27,13 +27,21 @@ const summaryAPI = {
       method: "GET",
       url: `${backendDomain}/product`,
     },
-    createCategory: {
-      method: "POST",
-      url: `${backendDomain}/category`,
-    },
     getAllCategory: {
       method: "GET",
       url: `${backendDomain}/category`,
+    },
+    getAllCategoryById: {
+      method: "GET",
+      url: `${backendDomain}/category`,
+    },
+    getAllSubcategories: {
+      method: "GET",
+      url: `${backendDomain}/subcategory`,
+    },
+    getSubcategoryById: {
+      method: "GET",
+      url: `${backendDomain}/subcategory`,
     },
   },
   admin: {

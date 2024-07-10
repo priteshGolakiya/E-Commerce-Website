@@ -120,10 +120,52 @@ const deleteCategory = asyncHandler(async (req, res) => {
   }
 });
 
+const createAllCategories = asyncHandler(async (req, res) => {
+  try {
+    const { categoryNames } = req.body;
+
+    if (!categoryNames || !Array.isArray(categoryNames)) {
+      return res.status(400).json({
+        error: true,
+        success: false,
+        message: "categoryNames should be an array of category names",
+      });
+    }
+
+    const existingCategories = await Category.find({
+      name: { $in: categoryNames },
+    });
+    if (existingCategories.length === categoryNames.length) {
+      return res.status(400).json({
+        error: true,
+        success: false,
+        message: "All categories already exist",
+      });
+    }
+
+    const categoriesToCreate = categoryNames.filter(
+      (name) => !existingCategories.find((cat) => cat.name === name)
+    );
+    const createdCategories = await Category.insertMany(
+      categoriesToCreate.map((name) => ({ name }))
+    );
+
+    res.status(201).json({
+      error: false,
+      success: true,
+      message: "Categories created successfully",
+      categories: createdCategories,
+    });
+  } catch (err) {
+    res.status(500).json({ error: true, success: false, message: err.message });
+  }
+});
+
 module.exports = {
   createCategory,
   getAllCategories,
   getCategoryById,
   updateCategory,
   deleteCategory,
+  createAllCategories,
 };

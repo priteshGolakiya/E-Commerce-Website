@@ -8,7 +8,7 @@ const Home = () => {
       <div className="mb-8">
         <ProductSlider />
       </div>
-      <div className="w-full md:w-5/6 lg:w-2/3 mx-auto">
+      <div className="w-full md:w-full lg:w-full">
         <BannerCarousel />
       </div>
       <div className="mt-8">
