@@ -3,7 +3,7 @@ import "tailwindcss/tailwind.css";
 
 const Preloader = () => {
   const [letters, setLetters] = useState([]);
-
+  
   useEffect(() => {
     const text = "Loading...";
     setLetters(text.split(""));

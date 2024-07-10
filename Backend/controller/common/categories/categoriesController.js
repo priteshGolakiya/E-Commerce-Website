@@ -4,7 +4,7 @@ const Subcategory = require("../../../models/subCategoryModel");
 const Product = require("../../../models/productModel");
 
 // Get all categories with subcategories and products
-const getAllProducts = asyncHandler(async (req, res) => {
+const getAllCategories = asyncHandler(async (req, res) => {
   try {
     const products = await Product.find()
       .populate("category")

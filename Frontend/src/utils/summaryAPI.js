@@ -27,6 +27,14 @@ const summaryAPI = {
       method: "GET",
       url: `${backendDomain}/product`,
     },
+    createCategory: {
+      method: "POST",
+      url: `${backendDomain}/category`,
+    },
+    getAllCategory: {
+      method: "GET",
+      url: `${backendDomain}/category`,
+    },
   },
   admin: {
     /*------Admin Routes------ */

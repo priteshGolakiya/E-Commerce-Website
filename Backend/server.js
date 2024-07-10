@@ -6,6 +6,7 @@ const connectDB = require("./db/connection");
 const errorHandler = require("./middleware/errorHandler");
 const commonRoutes = require("./routes/common/common");
 const commonproductRoutes = require("./routes/common/productRoutes");
+const commonCategoryRoutes = require("./routes/common/commonCategoryRoutes");
 const adminRoutes = require("./routes/admin/admin");
 const categoryRoutes = require("./routes/admin/categoryRoutes");
 const subCategoryRoutes = require("./routes/admin/subCategoryRoutes");
@@ -33,6 +34,7 @@ app.use("/api/admin", subCategoryRoutes);
 // Common Routes
 app.use("/api", commonRoutes);
 app.use("/api/product", commonproductRoutes);
+app.use("/api/category", commonCategoryRoutes);
 
 // Error Handler Middleware
 app.use(errorHandler);
