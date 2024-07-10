@@ -11,7 +11,6 @@ const Home = () => {
         <h2 className="text-xl font-semibold mb-4">All Products</h2>
         <AllProducts />
       </div>
-      {/* </div> */}
     </div>
   );
 };
