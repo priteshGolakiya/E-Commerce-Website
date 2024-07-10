@@ -1,68 +1,49 @@
 import { useState } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
 import {
   FaBars,
-  FaUser,
   FaBoxOpen,
-  FaShoppingCart,
   FaChartBar,
-  FaCogs,
-  FaTimes,
   FaChevronDown,
   FaChevronUp,
-  FaUsers,
-  FaList,
-  FaPlus,
-  FaUserPlus,
+  FaCogs,
   FaInfo,
+  FaList,
   FaMapMarkerAlt,
-  FaTags,
-  FaUserShield,
+  FaPlus,
+  FaShoppingCart,
   FaStar,
+  FaTags,
+  FaTimes,
+  FaUser,
+  FaUserShield,
 } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import defaultImg from "../../default.jpg";
 
 const AdminPanel = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
-  const [isCategoriesDropdownOpen, setIsCategoriesDropdownOpen] =
-    useState(false);
-  const [isOrdersDropdownOpen, setIsOrdersDropdownOpen] = useState(false);
-  const [isUsersDropdownOpen, setIsUsersDropdownOpen] = useState(false);
-  const [isSubCategoriesDropdownOpen, setIsSubCategoriesDropdownOpen] =
-    useState(false);
+  const [dropdowns, setDropdowns] = useState({
+    products: false,
+    categories: false,
+    users: false,
+    orders: false,
+    subcategories: false,
+    // Add more dropdowns as needed
+  });
 
   const user = useSelector((state) => state.user.user);
   const location = useLocation();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
-    if (!isSidebarOpen) {
-      setIsProductsDropdownOpen(false);
-      setIsCategoriesDropdownOpen(false);
-      setIsOrdersDropdownOpen(false);
-      setIsUsersDropdownOpen(false);
-    }
   };
 
-  const toggleProductsDropdown = () => {
-    setIsProductsDropdownOpen(!isProductsDropdownOpen);
-  };
-
-  const toggleCategoriesDropdown = () => {
-    setIsCategoriesDropdownOpen(!isCategoriesDropdownOpen);
-  };
-  const toggleSubCategoriesDropdown = () => {
-    setIsSubCategoriesDropdownOpen(!isSubCategoriesDropdownOpen);
-  };
-
-  const toggleOrdersDropdown = () => {
-    setIsOrdersDropdownOpen(!isOrdersDropdownOpen);
-  };
-
-  const toggleUsersDropdown = () => {
-    setIsUsersDropdownOpen(!isUsersDropdownOpen);
+  const toggleDropdown = (key) => {
+    setDropdowns((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
   };
 
   const getLinkClass = (path) => {
@@ -72,10 +53,10 @@ const AdminPanel = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-100">
+    <div className="min-h-screen  flex bg-gray-100">
       {/* Sidebar */}
       <aside
-        className={`bg-slate-800 text-gray-300 ${
+        className={`bg-gray-800 text-gray-300 ${
           isSidebarOpen ? "w-64" : "w-20"
         } transition-all duration-300`}
         aria-expanded={isSidebarOpen}
@@ -97,7 +78,6 @@ const AdminPanel = () => {
           )}
         </div>
         <div className="overflow-y-auto h-[calc(100vh-50px)] scrollbar-hidden">
-          {/* Apply scrollable styles */}
           <nav className="mt-4">
             <ul>
               <li className="mb-2">
@@ -109,34 +89,29 @@ const AdminPanel = () => {
                   {isSidebarOpen && "Dashboard"}
                 </Link>
               </li>
-              {/* ----------------------------------------------------------------- */}
               <li className="mb-2">
                 <div
                   className="flex items-center p-2 rounded cursor-pointer hover:bg-blue-600 hover:text-white transition-colors duration-300"
-                  onClick={isSidebarOpen ? toggleUsersDropdown : undefined}
+                  onClick={() => toggleDropdown("users")}
                   aria-haspopup="true"
-                  aria-expanded={isUsersDropdownOpen}
+                  aria-expanded={dropdowns.users}
                 >
                   <FaUser className="mr-2" />
-                  {isSidebarOpen && <span>User</span>}
+                  {isSidebarOpen && <span>Users</span>}
                   {isSidebarOpen && (
                     <span className="ml-auto">
-                      {isUsersDropdownOpen ? (
-                        <FaChevronUp />
-                      ) : (
-                        <FaChevronDown />
-                      )}
+                      {dropdowns.users ? <FaChevronUp /> : <FaChevronDown />}
                     </span>
                   )}
                 </div>
-                {(isUsersDropdownOpen || !isSidebarOpen) && (
+                {dropdowns.users && (
                   <ul className={`${isSidebarOpen ? "ml-4" : "ml-0"}`}>
                     <li>
                       <Link
                         to="/admin-panel/users/all-users"
                         className={getLinkClass("/admin-panel/users/all-users")}
                       >
-                        <FaUsers className="mr-2" />
+                        <FaList className="mr-2" />
                         {isSidebarOpen && "Users List"}
                       </Link>
                     </li>
@@ -145,34 +120,29 @@ const AdminPanel = () => {
                         to="/admin-panel/users/new"
                         className={getLinkClass("/admin-panel/users/new")}
                       >
-                        <FaUserPlus className="mr-2" />
+                        <FaPlus className="mr-2" />
                         {isSidebarOpen && "Add New User"}
                       </Link>
                     </li>
                   </ul>
                 )}
               </li>
-              {/* ----------------------------------------------------------------- */}
               <li className="mb-2">
                 <div
                   className="flex items-center p-2 rounded cursor-pointer hover:bg-blue-600 hover:text-white transition-colors duration-300"
-                  onClick={isSidebarOpen ? toggleProductsDropdown : undefined}
+                  onClick={() => toggleDropdown("products")}
                   aria-haspopup="true"
-                  aria-expanded={isProductsDropdownOpen}
+                  aria-expanded={dropdowns.products}
                 >
                   <FaBoxOpen className="mr-2" />
                   {isSidebarOpen && <span>Products</span>}
                   {isSidebarOpen && (
                     <span className="ml-auto">
-                      {isProductsDropdownOpen ? (
-                        <FaChevronUp />
-                      ) : (
-                        <FaChevronDown />
-                      )}
+                      {dropdowns.products ? <FaChevronUp /> : <FaChevronDown />}
                     </span>
                   )}
                 </div>
-                {(isProductsDropdownOpen || !isSidebarOpen) && (
+                {dropdowns.products && (
                   <ul className={`${isSidebarOpen ? "ml-4" : "ml-0"}`}>
                     <li>
                       <Link
@@ -197,19 +167,18 @@ const AdminPanel = () => {
                   </ul>
                 )}
               </li>
-              {/* ----------------------------------------------------------------- */}
               <li className="mb-2">
                 <div
                   className="flex items-center p-2 rounded cursor-pointer hover:bg-blue-600 hover:text-white transition-colors duration-300"
-                  onClick={isSidebarOpen ? toggleCategoriesDropdown : undefined}
+                  onClick={() => toggleDropdown("categories")}
                   aria-haspopup="true"
-                  aria-expanded={isCategoriesDropdownOpen}
+                  aria-expanded={dropdowns.categories}
                 >
                   <FaTags className="mr-2" />
-                  {isSidebarOpen && <span>Category</span>}
+                  {isSidebarOpen && <span>Categories</span>}
                   {isSidebarOpen && (
                     <span className="ml-auto">
-                      {isCategoriesDropdownOpen ? (
+                      {dropdowns.categories ? (
                         <FaChevronUp />
                       ) : (
                         <FaChevronDown />
@@ -217,7 +186,7 @@ const AdminPanel = () => {
                     </span>
                   )}
                 </div>
-                {(isCategoriesDropdownOpen || !isSidebarOpen) && (
+                {dropdowns.categories && (
                   <ul className={`${isSidebarOpen ? "ml-4" : "ml-0"}`}>
                     <li>
                       <Link
@@ -240,22 +209,18 @@ const AdminPanel = () => {
                   </ul>
                 )}
               </li>
-              {/* ----------------------------------------------------------------- */}
               <li className="mb-2">
-                {/* Subcategory dropdown */}
                 <div
                   className="flex items-center p-2 rounded cursor-pointer hover:bg-blue-600 hover:text-white transition-colors duration-300"
-                  onClick={
-                    isSidebarOpen ? toggleSubCategoriesDropdown : undefined
-                  }
+                  onClick={() => toggleDropdown("subcategories")}
                   aria-haspopup="true"
-                  aria-expanded={isSubCategoriesDropdownOpen}
+                  aria-expanded={dropdowns.subcategories}
                 >
                   <FaTags className="mr-2" />
-                  {isSidebarOpen && <span>Sub Category</span>}
+                  {isSidebarOpen && <span>Sub Categories</span>}
                   {isSidebarOpen && (
                     <span className="ml-auto">
-                      {isSubCategoriesDropdownOpen ? (
+                      {dropdowns.subcategories ? (
                         <FaChevronUp />
                       ) : (
                         <FaChevronDown />
@@ -263,7 +228,7 @@ const AdminPanel = () => {
                     </span>
                   )}
                 </div>
-                {(isSubCategoriesDropdownOpen || !isSidebarOpen) && (
+                {dropdowns.subcategories && (
                   <ul className={`${isSidebarOpen ? "ml-4" : "ml-0"}`}>
                     <li>
                       <Link
@@ -290,27 +255,22 @@ const AdminPanel = () => {
                   </ul>
                 )}
               </li>
-              {/* ----------------------------------------------------------------- */}
               <li className="mb-2">
                 <div
                   className="flex items-center p-2 rounded cursor-pointer hover:bg-blue-600 hover:text-white transition-colors duration-300"
-                  onClick={isSidebarOpen ? toggleOrdersDropdown : undefined}
+                  onClick={() => toggleDropdown("orders")}
                   aria-haspopup="true"
-                  aria-expanded={isOrdersDropdownOpen}
+                  aria-expanded={dropdowns.orders}
                 >
                   <FaShoppingCart className="mr-2" />
-                  {isSidebarOpen && <span>Order</span>}
+                  {isSidebarOpen && <span>Orders</span>}
                   {isSidebarOpen && (
                     <span className="ml-auto">
-                      {isOrdersDropdownOpen ? (
-                        <FaChevronUp />
-                      ) : (
-                        <FaChevronDown />
-                      )}
+                      {dropdowns.orders ? <FaChevronUp /> : <FaChevronDown />}
                     </span>
                   )}
                 </div>
-                {(isOrdersDropdownOpen || !isSidebarOpen) && (
+                {dropdowns.orders && (
                   <ul className={`${isSidebarOpen ? "ml-4" : "ml-0"}`}>
                     <li>
                       <Link
@@ -342,17 +302,15 @@ const AdminPanel = () => {
                   </ul>
                 )}
               </li>
-              {/* ----------------------------------------------------------------- */}
               <li className="mb-2">
                 <Link
                   to="/admin-panel/review"
                   className={getLinkClass("/admin-panel/review")}
                 >
                   <FaStar className="mr-2" />
-                  {isSidebarOpen && "review"}
+                  {isSidebarOpen && "Reviews"}
                 </Link>
               </li>
-              {/* ----------------------------------------------------------------- */}
               <li className="mb-2">
                 <Link
                   to="/admin-panel/reports"
@@ -362,7 +320,6 @@ const AdminPanel = () => {
                   {isSidebarOpen && "Reports"}
                 </Link>
               </li>
-              {/* ----------------------------------------------------------------- */}
               <li className="mb-2">
                 <Link
                   to="/admin-panel/settings"
@@ -377,7 +334,7 @@ const AdminPanel = () => {
         </div>
       </aside>
       {/* Main content */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col overflow-y-hidden">
         <header className="bg-white shadow p-4 flex justify-between items-center">
           <h1 className="text-2xl font-semibold">Admin Panel</h1>
           <div className="flex items-center space-x-4">
@@ -395,7 +352,7 @@ const AdminPanel = () => {
             )}
           </div>
         </header>
-        <main className="flex-1 p-6">
+        <main className="flex-1 overflow-y-auto p-6">
           <Outlet />
         </main>
       </div>

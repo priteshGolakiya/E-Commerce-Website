@@ -13,51 +13,55 @@ const AdminHome = () => {
   });
   const [loading, setLoading] = useState(true);
 
+  const fetchStats = async () => {
+    try {
+      const [usersResponse, categoriesResponse, subcategoriesResponse] =
+        await Promise.all([
+          axios.get(summaryAPI.admin.getAllUser.url, {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }),
+          axios.get(summaryAPI.admin.getAllCategory.url, {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }),
+          axios.get(summaryAPI.admin.getAllSubcategories.url, {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }),
+        ]);
+
+      const usersCount = usersResponse.data.data.length;
+      const categoriesCount = categoriesResponse.data.categories.length;
+      const subcategoriesCount =
+        subcategoriesResponse.data.subcategories.length;
+
+      setStats({
+        users: usersCount,
+        categories: categoriesCount,
+        subcategories: subcategoriesCount,
+      });
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching statistics:", error);
+      toast.error(`Error: ${error.message}`);
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const [usersResponse, categoriesResponse, subcategoriesResponse] =
-          await Promise.all([
-            axios.get(summaryAPI.admin.getAllUser.url, {
-              withCredentials: true,
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }),
-            axios.get(summaryAPI.admin.getAllCategory.url, {
-              withCredentials: true,
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }),
-            axios.get(summaryAPI.admin.getAllSubcategories.url, {
-              withCredentials: true,
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }),
-          ]);
-
-        const usersCount = usersResponse.data.data.length;
-        const categoriesCount = categoriesResponse.data.categories.length;
-        const subcategoriesCount =
-          subcategoriesResponse.data.subcategories.length;
-
-        setStats({
-          users: usersCount,
-          categories: categoriesCount,
-          subcategories: subcategoriesCount,
-        });
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching statistics:", error);
-        toast.error(`Error: ${error.message}`);
-        setLoading(false);
-      }
-    };
-
     fetchStats();
   }, []);
+
+  const handleRefresh = () => {
+    setLoading(true);
+    fetchStats();
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -71,7 +75,7 @@ const AdminHome = () => {
           <>
             <div className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg hover:scale-105 transform transition-transform duration-300">
               <h2 className="text-xl font-semibold mb-2">Number of Users</h2>
-              <p className="text-4xl font-bold">{stats.users - 1}</p>
+              <p className="text-4xl font-bold">{stats.users}</p>
             </div>
             <div className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg hover:scale-105 transform transition-transform duration-300">
               <h2 className="text-xl font-semibold mb-2">
@@ -85,6 +89,12 @@ const AdminHome = () => {
               </h2>
               <p className="text-4xl font-bold">{stats.subcategories}</p>
             </div>
+            <button
+              onClick={handleRefresh}
+              className="col-span-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg mt-4 focus:outline-none"
+            >
+              Refresh Statistics
+            </button>
           </>
         )}
       </div>
