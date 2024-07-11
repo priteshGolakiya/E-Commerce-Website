@@ -99,7 +99,7 @@ const ProductSlider = () => {
               <img
                 src={product.images[0]}
                 alt={product.category.name}
-                className="w-full h-full object-contain mb-4 rounded-lg shadow-lg"
+                className="w-full h-full object-contain mb-4 rounded-lg shadow-lg mix-blend-multiply"
               />
             </Link>
             <p className="text-lg font-semibold text-center">

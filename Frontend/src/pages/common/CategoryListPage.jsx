@@ -84,7 +84,7 @@ const CategoryListPage = () => {
                     <img
                       src={subcategory.products[0].image}
                       alt={`Image of ${subcategory.products[0].name}`}
-                      className="w-full h-48 object-contain rounded"
+                      className="w-full h-48 object-contain rounded mix-blend-multiply"
                     />
                     {subcategory.products[0].price && (
                       <p className="text-gray-600">

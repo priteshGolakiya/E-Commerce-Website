@@ -18,10 +18,45 @@ const ProductModal = ({ isOpen, onClose, product, refreshProducts }) => {
     subcategory: "",
     deliveryOptions: "",
     images: [],
+    offers: "",
   });
 
   const [imagePreviews, setImagePreviews] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
+
+  useEffect(() => {
+    // Fetch all categories
+    const fetchCategories = async () => {
+      try {
+        const response = await axios.get(summaryAPI.admin.getAllCategory.url, {
+          withCredentials: true,
+        });
+        setCategories(response.data.categories);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    // Fetch all subcategories
+    const fetchSubcategories = async () => {
+      try {
+        const response = await axios.get(
+          summaryAPI.admin.getAllSubcategories.url,
+          {
+            withCredentials: true,
+          }
+        );
+        setSubcategories(response.data.subcategories);
+      } catch (error) {
+        console.error("Error fetching subcategories:", error);
+      }
+    };
+
+    fetchCategories();
+    fetchSubcategories();
+  }, []);
 
   useEffect(() => {
     if (product) {
@@ -36,6 +71,7 @@ const ProductModal = ({ isOpen, onClose, product, refreshProducts }) => {
         subcategory: product.subcategory ? product.subcategory._id : "",
         deliveryOptions: product.deliveryOptions,
         images: product.images || [],
+        offers: product.offers || "",
       });
 
       // Previews of existing image URLs
@@ -52,6 +88,7 @@ const ProductModal = ({ isOpen, onClose, product, refreshProducts }) => {
         subcategory: "",
         deliveryOptions: "",
         images: [],
+        offers: "",
       });
       setImagePreviews([]);
     }
@@ -112,9 +149,6 @@ const ProductModal = ({ isOpen, onClose, product, refreshProducts }) => {
       const payload = {
         ...formData,
         images: imageURLs,
-        offers: formData.offers
-          ? formData.offers.split(",").map((offer) => offer.trim())
-          : [],
         subcategory: formData.subcategory || null,
       };
 
@@ -215,7 +249,7 @@ const ProductModal = ({ isOpen, onClose, product, refreshProducts }) => {
             placeholder="Enter stock quantity"
           />
         </div>
-        <div className="mb-6">
+        <div className="mb-4">
           <label className="block text-gray-700 mb-1">Images</label>
           <input
             type="file"
@@ -246,26 +280,36 @@ const ProductModal = ({ isOpen, onClose, product, refreshProducts }) => {
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 mb-1">Category</label>
-          <input
-            type="text"
+          <select
             name="category"
             value={formData.category}
             onChange={handleInputChange}
             required
             className="w-full p-3 border border-gray-300 rounded"
-            placeholder="Enter category"
-          />
+          >
+            <option value="">Select category</option>
+            {categories.map((category) => (
+              <option key={category._id} value={category._id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 mb-1">Subcategory</label>
-          <input
-            type="text"
+          <select
             name="subcategory"
             value={formData.subcategory}
             onChange={handleInputChange}
             className="w-full p-3 border border-gray-300 rounded"
-            placeholder="Enter subcategory"
-          />
+          >
+            <option value="">Select subcategory</option>
+            {subcategories.map((subcategory) => (
+              <option key={subcategory._id} value={subcategory._id}>
+                {subcategory.name}
+              </option>
+            ))}
+          </select>
         </div>
         <div className="mb-4">
           <label className="block text-gray-700 mb-1">Delivery Options</label>
@@ -276,6 +320,16 @@ const ProductModal = ({ isOpen, onClose, product, refreshProducts }) => {
             onChange={handleInputChange}
             className="w-full p-3 border border-gray-300 rounded"
             placeholder="Enter delivery options"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 mb-1">Offers</label>
+          <textarea
+            name="offers"
+            value={formData.offers}
+            onChange={handleInputChange}
+            className="w-full p-3 border border-gray-300 rounded"
+            placeholder="Enter product offers"
           />
         </div>
         <div className="flex justify-end">

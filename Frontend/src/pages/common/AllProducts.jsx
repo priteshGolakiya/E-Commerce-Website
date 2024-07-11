@@ -60,7 +60,7 @@ const AllProducts = () => {
                   <img
                     src={product.images[0]}
                     alt={product.name}
-                    className="w-full h-48 object-contain cursor-pointer"
+                    className="w-full h-48 object-contain cursor-pointer mix-blend-multiply"
                   />
                 </PhotoView>
                 <div className="p-4">

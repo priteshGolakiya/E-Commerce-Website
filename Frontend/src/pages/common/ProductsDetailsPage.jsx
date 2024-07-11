@@ -10,12 +10,19 @@ const ProductsDetailsPage = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(
-          `${summaryAPI.common.getProductById.url}/${id}`
+          `${summaryAPI.common.getProductById.url}/${id}`,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
         );
         if (response.data) {
           setProduct(response.data);
@@ -66,93 +73,105 @@ const ProductsDetailsPage = () => {
 
   return (
     <div className="container mx-auto p-4 bg-gray-100 min-h-screen">
-      <div className="bg-white p-8 rounded-xl shadow-lg hover:shadow-xl transition duration-300">
+      <div className="bg-white p-4 rounded-lg shadow-md">
         <div className="flex flex-col md:flex-row">
-          <div className="md:w-1/2 mb-6 md:mb-0 md:pr-8">
-            {images && images.length > 0 && (
-              <PhotoProvider>
-                <div className="grid grid-cols-2 gap-4">
-                  <PhotoView src={images[0]}>
-                    <img
-                      src={images[0]}
-                      alt={`${name} - Main Image`}
-                      className="w-full h-64 object-contain rounded-lg cursor-pointer"
-                    />
-                  </PhotoView>
-                  <div className="grid grid-cols-2 gap-2">
-                    {images.slice(1, 5).map((image, index) => (
-                      <PhotoView key={index} src={image}>
-                        <img
-                          src={image}
-                          alt={`${name} - Image ${index + 2}`}
-                          className="w-full h-28 object-contain rounded-lg cursor-pointer"
-                        />
-                      </PhotoView>
-                    ))}
-                  </div>
-                  {images.slice(5).map((image, index) => (
-                    <PhotoView key={index + 5} src={image} />
-                  ))}
-                </div>
-              </PhotoProvider>
-            )}
+          {/* Left Column - Images */}
+          <div className="md:w-2/5 mb-6 md:mb-0 md:pr-8">
+            <PhotoProvider>
+              <div className="mb-4">
+                <PhotoView src={images[selectedImage]}>
+                  <img
+                    src={images[selectedImage]}
+                    alt={`${name} - Main Image`}
+                    className="w-full h-96 object-contain cursor-zoom-in"
+                  />
+                </PhotoView>
+              </div>
+              <div className="flex space-x-2 overflow-x-auto">
+                {images.map((image, index) => (
+                  <img
+                    key={index}
+                    src={image}
+                    alt={`${name} - Thumbnail ${index + 1}`}
+                    className={`w-16 h-16 object-contain cursor-pointer border-2 ${
+                      selectedImage === index
+                        ? "border-blue-500"
+                        : "border-gray-200"
+                    }`}
+                    onClick={() => setSelectedImage(index)}
+                  />
+                ))}
+              </div>
+            </PhotoProvider>
+            <div className="mt-4 flex space-x-2">
+              <button className="flex-1 bg-orange-500 text-white py-3 px-6 rounded-sm hover:bg-orange-600 transition duration-300">
+                ADD TO CART
+              </button>
+              <button className="flex-1 bg-orange-600 text-white py-3 px-6 rounded-sm hover:bg-orange-700 transition duration-300">
+                BUY NOW
+              </button>
+            </div>
           </div>
-          <div className="md:w-1/2">
-            <h1 className="text-3xl font-bold mb-4">{name}</h1>
-            <p className="text-gray-600 mb-4">{description}</p>
+
+          {/* Right Column - Product Details */}
+          <div className="md:w-3/5">
+            <h1 className="text-xl font-medium mb-2">{name}</h1>
             <div className="flex items-center mb-4">
-              <span className="text-2xl font-bold text-blue-600">
-                ₹{finalPrice}
+              <span className="bg-green-500 text-white text-xs px-2 py-0.5 rounded">
+                {discountPercentage}% off
               </span>
+              <span className="text-green-600 ml-2 text-sm">Special price</span>
+            </div>
+            <div className="flex items-center mb-4">
+              <span className="text-3xl font-medium">₹{finalPrice}</span>
               {price && price !== finalPrice && (
                 <>
-                  <span className="ml-2 text-lg text-gray-500 line-through">
+                  <span className="ml-2 text-gray-500 line-through">
                     ₹{price}
                   </span>
-                  <span className="ml-2 text-sm font-semibold text-green-600">
-                    Save {discountPercentage}%
+                  <span className="ml-2 text-green-600 text-sm">
+                    ₹{discountPrice} off
                   </span>
                 </>
               )}
             </div>
-            {discountPrice > 0 && (
-              <div className="mb-4 p-2 bg-yellow-100 rounded-lg">
-                <p className="text-sm font-semibold text-yellow-800">
-                  Additional discount: ₹{discountPrice}
-                </p>
-              </div>
-            )}
+            <div className="mb-4">
+              <h2 className="font-medium mb-2">Available offers</h2>
+              <ul className="text-sm">
+                {offers.split("\n").map((offer, index) => (
+                  <li key={index} className="flex items-center mb-1">
+                    <span className="text-green-600 mr-2">✓</span>
+                    {offer}
+                  </li>
+                ))}
+              </ul>
+            </div>
             <div className="grid grid-cols-2 gap-4 mb-6">
               <div>
-                <p className="font-semibold">Brand</p>
-                <p className="text-gray-600">{brand}</p>
+                <p className="text-gray-500">Brand</p>
+                <p>{brand}</p>
               </div>
               <div>
-                <p className="font-semibold">Stock</p>
-                <p className="text-gray-600">{stock} available</p>
+                <p className="text-gray-500">Category</p>
+                <p>{category && category.name}</p>
               </div>
               <div>
-                <p className="font-semibold">Category</p>
-                <p className="text-gray-600">{category && category.name}</p>
+                <p className="text-gray-500">Subcategory</p>
+                <p>{subcategory && subcategory.name}</p>
               </div>
               <div>
-                <p className="font-semibold">Subcategory</p>
-                <p className="text-gray-600">
-                  {subcategory && subcategory.name}
-                </p>
+                <p className="text-gray-500">Stock</p>
+                <p>{stock > 0 ? `${stock} available` : "Out of stock"}</p>
               </div>
             </div>
             <div className="mb-6">
-              <p className="font-semibold mb-2">Offers :</p>
-              <p className="text-gray-600">{offers}</p>
+              <h2 className="font-medium mb-2">Delivery Options</h2>
+              <p className="text-sm">{deliveryOptions}</p>
             </div>
             <div className="mb-6">
-              <p className="font-semibold mb-2">Delivery Options</p>
-              <p className="text-gray-600">{deliveryOptions}</p>
+              <h2 className="font-medium mb-2">Description</h2>
+              <p className="text-sm">{description}</p>
             </div>
-            <button className="bg-blue-600 text-white py-2 px-6 rounded-full hover:bg-blue-700 transition duration-300">
-              Add to Cart
-            </button>
           </div>
         </div>
       </div>

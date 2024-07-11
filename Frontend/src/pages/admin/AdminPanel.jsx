@@ -56,7 +56,7 @@ const AdminPanel = () => {
     <div className="min-h-screen h-[calc(100vh-200px)] overflow-hidden flex bg-gray-100">
       {/* Sidebar */}
       <aside
-        className={`bg-gray-800 text-gray-300 ${
+        className={`bg-gray-800  text-gray-300 ${
           isSidebarOpen ? "w-64" : "w-20"
         } transition-all duration-300`}
         aria-expanded={isSidebarOpen}

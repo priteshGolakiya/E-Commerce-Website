@@ -15,7 +15,7 @@ const ProductTable = ({ products, onEdit, onDelete }) => {
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">{product.name}</h2>
             <div className="text-lg font-bold text-blue-600">
-              ${product.finalPrice}
+              ₹{product.finalPrice}
             </div>
           </div>
           <div className="mb-4 cursor-pointer">
@@ -48,11 +48,11 @@ const ProductTable = ({ products, onEdit, onDelete }) => {
               <span className="font-semibold">Brand:</span> {product.brand}
             </p>
             <p>
-              <span className="font-semibold">Price:</span> ${product.price}
+              <span className="font-semibold">Price:</span> ₹{product.price}
             </p>
             {product.discountPrice && (
               <p className="text-green-600">
-                <span className="font-semibold">Discount Price:</span> $
+                <span className="font-semibold">Discount Price:</span> ₹
                 {product.discountPrice}
               </p>
             )}

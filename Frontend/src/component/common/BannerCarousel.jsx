@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 // import summaryAPI from "../../utils/summaryAPI";
-import { Pagination, EffectFade, Navigation ,Autoplay} from "swiper/modules";
+import { Pagination, EffectFade, Navigation, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-fade";
 import "swiper/css/navigation";
@@ -90,7 +90,7 @@ const BannerCarousel = () => {
       pagination={{ clickable: true }}
       className="mySwiper"
       navigation={true}
-      modules={[EffectFade, Navigation, Pagination, Autoplay]} 
+      modules={[EffectFade, Navigation, Pagination, Autoplay]}
       autoplay={{ delay: 3000 }} // Set autoplay delay to 3000ms (3 seconds)
       style={{ width: "100%" }}
     >
@@ -100,7 +100,7 @@ const BannerCarousel = () => {
             <img
               src={category.images}
               alt={category.name}
-              className="h-96 object-cover mb-8 w-full"
+              className="h-96 object-cover mb-8 w-full mix-blend-multiply"
             />
           </div>
         </SwiperSlide>

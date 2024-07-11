@@ -9,6 +9,7 @@ import "react-photo-view/dist/react-photo-view.css";
 const SubCategoryListPage = () => {
   const { id } = useParams();
   const [data, setData] = useState([]);
+  const [subcategory, setSubcategory] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -16,15 +17,17 @@ const SubCategoryListPage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${summaryAPI.common.getSubcategoryById.url}/${id}`
+          `${summaryAPI.common.getSubcategoryById.url}/${id}`,
+          {
+            withCredentials: true,
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
         );
         if (response.data.success) {
-          // Check if there are products available
-          if (response.data.products && response.data.products.length > 0) {
-            setData(response.data.products);
-          } else {
-            setError("No products found for this subcategory.");
-          }
+          setData(response.data.products);
+          setSubcategory(response.data.subcategory);
         } else {
           setError("Failed to fetch products.");
         }
@@ -51,57 +54,77 @@ const SubCategoryListPage = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto mt-5 p-4">
+      <h1 className="text-2xl font-bold mb-4">{subcategory?.name}</h1>
       {data.length === 0 ? (
         <div className="text-gray-500">
           No products available in this subcategory.
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {data.map((product) => (
-            <Link
-              key={product._id}
-              to={`/products/${product._id}`}
-              className="text-black text-decoration-none"
-            >
-              <div className="bg-white p-4 shadow rounded-lg transform hover:scale-105 hover:drop-shadow-xl transition-transform duration-300">
-                <div className="mb-4 cursor-pointer">
-                  {product.images && product.images.length > 0 && (
-                    <PhotoProvider>
-                      <div className="flex flex-wrap gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {/* Filters Column */}
+          <div className="hidden md:block">
+            <div className="bg-white p-4 rounded-lg shadow">
+              <h2 className="text-lg font-semibold mb-4">Filters</h2>
+              {/* Add filter options here */}
+            </div>
+          </div>
+
+          {/* Products Column */}
+          <div className="md:col-span-3">
+            {data.map((product) => (
+              <Link
+                key={product._id}
+                to={`/products/${product._id}`}
+                className="block mb-4 bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow duration-300"
+              >
+                <div className="flex">
+                  <div className="w-40 h-40 mr-4 flex-shrink-0">
+                    {product.images && product.images.length > 0 && (
+                      <PhotoProvider>
                         <PhotoView src={product.images[0]}>
                           <img
                             src={product.images[0]}
-                            alt={`Product Image 1`}
-                            className="w-16 h-16 object-cover rounded"
+                            alt={product.name}
+                            className="w-full h-full object-contain mix-blend-multiply"
                           />
                         </PhotoView>
-                        {product.images.length > 1 && (
-                          <PhotoView src={product.images[1]}>
-                            <div className="w-16 h-16 flex items-center justify-center bg-gray-200 rounded text-gray-600">
-                              +{product.images.length - 1}
-                            </div>
-                          </PhotoView>
+                      </PhotoProvider>
+                    )}
+                  </div>
+                  <div className="flex-grow">
+                    <h3 className="text-lg font-medium mb-2">{product.name}</h3>
+                    <div className="flex items-center mb-2">
+                      <span className="text-sm bg-green-500 text-white px-1.5 py-0.5 rounded">
+                        4.3 ★
+                      </span>
+                      <span className="text-sm text-gray-500 ml-2">
+                        (1,234 ratings)
+                      </span>
+                    </div>
+                    <ul className="list-disc list-inside text-sm text-gray-600 mb-2">
+                      <li>{product.brand}</li>
+                    </ul>
+                    <div className="flex items-center">
+                      <span className="text-xl font-bold">
+                        ₹{product.price - product.discountPrice}
+                      </span>
+                      <span className="text-sm text-gray-500 line-through ml-2">
+                        ₹{product.price}
+                      </span>
+                      <span className="text-sm text-green-600 ml-2">
+                        {Math.round(
+                          (product.discountPrice / product.price) * 100
                         )}
-                      </div>
-                      {product.images.slice(2).map((image, index) => (
-                        <PhotoView key={index + 1} src={image} />
-                      ))}
-                    </PhotoProvider>
-                  )}
+                        % off
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-1">Free delivery</p>
+                  </div>
                 </div>
-                <div className="mb-4">
-                  <p>
-                    <span className="font-semibold">Brand:</span> {product.name}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Price:</span> $
-                    {product.price}
-                  </p>
-                </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))}
+          </div>
         </div>
       )}
     </div>

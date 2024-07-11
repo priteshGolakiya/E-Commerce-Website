@@ -24,13 +24,15 @@ const getAllSubcategories = asyncHandler(async (req, res) => {
         _id: product._id,
         name: product.name,
         price: product.price,
-        images: product.images.slice(0, 3), // Adjust number of images as needed
+        discountPrice: product.discountPrice,
+        images: product.images.slice(0, 3),
       }));
 
       // Create an object with subcategory details and related products
       const subcategoryWithProducts = {
         _id: subcategory._id,
         name: subcategory.name,
+        brand: subcategory.brand,
         category: subcategory.category,
         products: productsMapped,
       };
@@ -76,10 +78,12 @@ const getSubcategoryById = asyncHandler(async (req, res) => {
     const productsMapped = products.map((product) => ({
       _id: product._id,
       name: product.name,
+      brand: product.brand,
       price: product.price,
+      discountPrice: product.discountPrice,
+      category: product.category,
       images: product.images.slice(0, 3), // Adjust number of images as needed
     }));
-
     res.status(200).json({
       error: false,
       success: true,
