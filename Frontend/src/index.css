@@ -18,7 +18,3 @@
 .scrollbar-hidden::-webkit-scrollbar {
   display: none;
 }
-
-.hideScrollBar::-webkit-scrollbar {
-  display: none;
-}

@@ -53,7 +53,7 @@ const AdminPanel = () => {
   };
 
   return (
-    <div className="min-h-screen  flex bg-gray-100">
+    <div className="min-h-screen h-[calc(100vh-200px)] overflow-hidden flex bg-gray-100">
       {/* Sidebar */}
       <aside
         className={`bg-gray-800 text-gray-300 ${
@@ -334,7 +334,7 @@ const AdminPanel = () => {
         </div>
       </aside>
       {/* Main content */}
-      <div className="flex-1 flex flex-col overflow-y-hidden">
+      <div className="flex-1 flex  flex-col">
         <header className="bg-white shadow p-4 flex justify-between items-center">
           <h1 className="text-2xl font-semibold">Admin Panel</h1>
           <div className="flex items-center space-x-4">
@@ -352,7 +352,7 @@ const AdminPanel = () => {
             )}
           </div>
         </header>
-        <main className="flex-1 overflow-y-auto p-6">
+        <main className="flex-1 h-[calc(100vh-200px)] overflow-y-scroll scrollbar-hidden m-5 p-6">
           <Outlet />
         </main>
       </div>

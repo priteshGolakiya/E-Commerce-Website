@@ -119,7 +119,7 @@ const AdminPanelold = () => {
             <span className="text-xl font-semibold">Admin Panel</span>
           )}
         </div>
-        <div className="overflow-y-auto h-[calc(100vh-50px)] scrollbar-hidden">
+        <div className="overflow-y-auto h-[calc(100vh-100px)] scrollbar-hidden">
           <nav className="mt-4">
             <ul>
               <SidebarLink
@@ -259,7 +259,7 @@ const AdminPanelold = () => {
             )}
           </div>
         </header>
-        <main className="flex-1 p-6">
+        <main className="flex-1  p-6">
           <Outlet />
         </main>
       </div>

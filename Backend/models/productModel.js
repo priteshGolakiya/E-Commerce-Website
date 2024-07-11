@@ -20,7 +20,7 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     finalPrice: { type: String },
-    offers: { type: String },
+    offers: { type: String }, // Keep as a string
     deliveryOptions: String,
   },
   {

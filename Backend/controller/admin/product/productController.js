@@ -55,7 +55,7 @@ const createProduct = async (req, res) => {
     images,
     category,
     subcategory,
-    offers,
+    offers, // Keep offers as a string
     deliveryOptions,
   } = req.body;
 
@@ -80,7 +80,7 @@ const createProduct = async (req, res) => {
       images,
       category,
       subcategory,
-      offers,
+      offers, // Keep as a string
       deliveryOptions,
       finalPrice,
     });
@@ -95,7 +95,6 @@ const createProduct = async (req, res) => {
 
 // Update an existing product
 const updateProduct = async (req, res) => {
-  console.log("Update Proudect accessed");
   const { id } = req.params;
   const {
     name,
@@ -107,7 +106,7 @@ const updateProduct = async (req, res) => {
     images,
     category,
     subcategory,
-    offers,
+    offers, // Keep offers as a string
     deliveryOptions,
   } = req.body;
 
@@ -125,7 +124,7 @@ const updateProduct = async (req, res) => {
           images,
           category,
           subcategory,
-          offers,
+          offers, // Keep as a string
           deliveryOptions,
           finalPrice: discountPrice ? price - discountPrice : price,
         },

@@ -19,9 +19,14 @@ const SubCategoryListPage = () => {
           `${summaryAPI.common.getSubcategoryById.url}/${id}`
         );
         if (response.data.success) {
-          setData(response.data.products);
+          // Check if there are products available
+          if (response.data.products && response.data.products.length > 0) {
+            setData(response.data.products);
+          } else {
+            setError("No products found for this subcategory.");
+          }
         } else {
-          setError("Failed to fetch products");
+          setError("Failed to fetch products.");
         }
       } catch (error) {
         setError("Error fetching products: " + error.message);
@@ -37,62 +42,68 @@ const SubCategoryListPage = () => {
     return <Preloader />;
   }
 
-  if (error || data.length === 0) {
+  if (error) {
     return (
       <div className="container mx-auto p-4">
-        <div className="text-red-500">{error || "No products found."}</div>
+        <div className="text-red-500">{error}</div>
       </div>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {data.map((product) => (
-        <Link
-          key={product._id}
-          to={`/products/${product._id}`}
-          className="text-black text-decoration-none"
-        >
-          <div
-            key={product._id}
-            className="bg-white p-4 shadow rounded-lg transform hover:scale-105 hover:drop-shadow-xl transition-transform duration-300"
-          >
-            <div className="mb-4 cursor-pointer">
-              {product.images && product.images.length > 0 && (
-                <PhotoProvider>
-                  <div className="flex flex-wrap gap-2">
-                    <PhotoView src={product.images[0]}>
-                      <img
-                        src={product.images[0]}
-                        alt={`Product Image 1`}
-                        className="w-16 h-16 object-cover rounded"
-                      />
-                    </PhotoView>
-                    {product.images.length > 1 && (
-                      <PhotoView src={product.images[1]}>
-                        <div className="w-16 h-16 flex items-center justify-center bg-gray-200 rounded text-gray-600">
-                          +{product.images.length - 1}
-                        </div>
-                      </PhotoView>
-                    )}
-                  </div>
-                  {product.images.slice(2).map((image, index) => (
-                    <PhotoView key={index + 1} src={image} />
-                  ))}
-                </PhotoProvider>
-              )}
-            </div>
-            <div className="mb-4">
-              <p>
-                <span className="font-semibold">Brand:</span> {product.name}
-              </p>
-              <p>
-                <span className="font-semibold">Price:</span> ${product.price}
-              </p>
-            </div>
-          </div>
-        </Link>
-      ))}
+    <div className="container mx-auto p-4">
+      {data.length === 0 ? (
+        <div className="text-gray-500">
+          No products available in this subcategory.
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {data.map((product) => (
+            <Link
+              key={product._id}
+              to={`/products/${product._id}`}
+              className="text-black text-decoration-none"
+            >
+              <div className="bg-white p-4 shadow rounded-lg transform hover:scale-105 hover:drop-shadow-xl transition-transform duration-300">
+                <div className="mb-4 cursor-pointer">
+                  {product.images && product.images.length > 0 && (
+                    <PhotoProvider>
+                      <div className="flex flex-wrap gap-2">
+                        <PhotoView src={product.images[0]}>
+                          <img
+                            src={product.images[0]}
+                            alt={`Product Image 1`}
+                            className="w-16 h-16 object-cover rounded"
+                          />
+                        </PhotoView>
+                        {product.images.length > 1 && (
+                          <PhotoView src={product.images[1]}>
+                            <div className="w-16 h-16 flex items-center justify-center bg-gray-200 rounded text-gray-600">
+                              +{product.images.length - 1}
+                            </div>
+                          </PhotoView>
+                        )}
+                      </div>
+                      {product.images.slice(2).map((image, index) => (
+                        <PhotoView key={index + 1} src={image} />
+                      ))}
+                    </PhotoProvider>
+                  )}
+                </div>
+                <div className="mb-4">
+                  <p>
+                    <span className="font-semibold">Brand:</span> {product.name}
+                  </p>
+                  <p>
+                    <span className="font-semibold">Price:</span> $
+                    {product.price}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

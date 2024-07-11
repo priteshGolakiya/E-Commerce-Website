@@ -58,6 +58,7 @@ const ProductsDetailsPage = () => {
     category,
     subcategory,
     deliveryOptions,
+    offers,
   } = product;
 
   const discountPercentage =
@@ -140,6 +141,10 @@ const ProductsDetailsPage = () => {
                   {subcategory && subcategory.name}
                 </p>
               </div>
+            </div>
+            <div className="mb-6">
+              <p className="font-semibold mb-2">Offers :</p>
+              <p className="text-gray-600">{offers}</p>
             </div>
             <div className="mb-6">
               <p className="font-semibold mb-2">Delivery Options</p>

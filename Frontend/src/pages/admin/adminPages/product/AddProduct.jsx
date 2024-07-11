@@ -16,7 +16,7 @@ const AddProduct = () => {
     category: "",
     subcategory: "",
     features: "",
-    offers: [],
+    offers: "",
     deliveryOptions: "",
     finalPrice: 0,
   });
@@ -111,6 +111,7 @@ const AddProduct = () => {
     if (!productData.price) errors.price = "Price is required";
     if (!productData.stock) errors.stock = "Stock is required";
     if (!productData.category) errors.category = "Category is required";
+    if (!productData.offers) errors.offers = "Offers are required";
     setErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -127,7 +128,7 @@ const AddProduct = () => {
       category: "",
       subcategory: "",
       features: "",
-      offers: [],
+      offers: "",
       deliveryOptions: "",
       finalPrice: 0,
     });
@@ -147,10 +148,13 @@ const AddProduct = () => {
 
       const imageURLs = uploadedImages.map((response) => response.secure_url);
 
+      // Convert offers to a comma-separated string
+      const offersString = productData.offers.split(",").map((offer) => offer.trim()).join(", ");
+
       const payload = {
         ...productData,
         images: imageURLs,
-        offers: productData.offers.split(",").map((offer) => offer.trim()),
+        offers: offersString,  // Convert offers array to string
         subcategory: productData.subcategory || null,
       };
 
@@ -240,7 +244,7 @@ const AddProduct = () => {
             className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
             multiple
           />
-          <div className="mt-2 grid grid-cols-3 gap-2 ">
+          <div className="mt-2 grid grid-cols-3 gap-2">
             {imagePreviews.map((src, index) => (
               <div
                 key={productData.images[index].id}
@@ -256,7 +260,7 @@ const AddProduct = () => {
                   onClick={() =>
                     handleRemoveImage(productData.images[index].id)
                   }
-                  className="absolute top-2 right-16 bg-red-600 cursor-pointer bg-opacity-70 text-white p-1 rounded-full focus:outline-none transition-opacity duration-300 ease-in-out opacity-0 group-hover:opacity-100"
+                  className="absolute top-2 right-2 bg-red-600 cursor-pointer bg-opacity-70 text-white p-1 rounded-full focus:outline-none transition-opacity duration-300 ease-in-out opacity-0 group-hover:opacity-100"
                   title="Remove image"
                 >
                   <i className="fa-solid fa-trash text-sm"></i>
@@ -276,45 +280,55 @@ const AddProduct = () => {
             }`}
           >
             <option value="">Select a category</option>
-            {loading ? (
-              <option disabled>Loading categories...</option>
-            ) : (
-              categories.map((category) => (
-                <option key={category._id} value={category._id}>
-                  {category.name}
-                </option>
-              ))
-            )}
+            {categories.map((category) => (
+              <option key={category._id} value={category._id}>
+                {category.name}
+              </option>
+            ))}
           </select>
           {errors.category && (
             <span className="text-red-500 text-sm">{errors.category}</span>
           )}
         </div>
-        {productData.category && subcategories.length > 0 && (
-          <div className="mb-6">
-            <label className="block text-gray-700 mb-1">Subcategory</label>
-            <select
-              name="subcategory"
-              value={productData.subcategory}
-              onChange={handleSubcategoryChange}
-              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              <option value="">Select a subcategory</option>
-              {subcategories.map((subcategory) => (
-                <option key={subcategory._id} value={subcategory._id}>
-                  {subcategory.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        )}
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition duration-300"
-          disabled={loading}
-        >
-          {loading ? "Adding Product..." : "Add Product"}
-        </button>
+        <div className="mb-6">
+          <label className="block text-gray-700 mb-1">Subcategory</label>
+          <select
+            name="subcategory"
+            value={productData.subcategory}
+            onChange={handleSubcategoryChange}
+            className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+              errors.subcategory ? "border-red-500" : ""
+            }`}
+          >
+            <option value="">Select a subcategory</option>
+            {subcategories.map((subcategory) => (
+              <option key={subcategory._id} value={subcategory._id}>
+                {subcategory.name}
+              </option>
+            ))}
+          </select>
+          {errors.subcategory && (
+            <span className="text-red-500 text-sm">{errors.subcategory}</span>
+          )}
+        </div>
+        <div className="flex items-center gap-4 mb-6">
+          <button
+            type="submit"
+            className={`px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md focus:outline-none ${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            disabled={loading}
+          >
+            {loading ? "Adding..." : "Add Product"}
+          </button>
+          {/* <button
+            type="button"
+            onClick={resetForm}
+            className="px-4 py-2 bg-gray-400 text-white rounded-lg shadow-md focus:outline-none"
+          >
+            Reset Form
+          </button> */}
+        </div>
       </form>
     </div>
   );
