@@ -13,6 +13,7 @@ const ProductsDetailsPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -36,6 +37,30 @@ const ProductsDetailsPage = () => {
 
     fetchProduct();
   }, [id]);
+
+  const addToCart = async () => {
+    try {
+      const response = await axios.post(
+        `${summaryAPI.common.addToCart.url}`,
+        {
+          productId: id,
+          quantity: quantity,
+        },
+        { withCredentials: true }
+      );
+      console.log(response.data);
+      // You might want to show a success message to the user here
+    } catch (err) {
+      setError("Error adding product to cart: " + err.message);
+    }
+  };
+
+  const handleQuantityChange = (e) => {
+    const value = parseInt(e.target.value);
+    if (value > 0 && value <= product.stock) {
+      setQuantity(value);
+    }
+  };
 
   if (loading) {
     return <Preloader />;
@@ -101,8 +126,25 @@ const ProductsDetailsPage = () => {
                 ))}
               </div>
             </PhotoProvider>
+            <div className="mt-4 flex items-center space-x-2">
+              <label htmlFor="quantity" className="text-sm font-medium">
+                Quantity:
+              </label>
+              <input
+                type="number"
+                id="quantity"
+                value={quantity}
+                onChange={handleQuantityChange}
+                min="1"
+                max={stock}
+                className="w-16 p-1 border rounded"
+              />
+            </div>
             <div className="mt-4 flex space-x-2">
-              <button className="flex-1 bg-orange-500 text-white py-3 px-6 rounded-sm hover:bg-orange-600 transition duration-300">
+              <button
+                onClick={addToCart}
+                className="flex-1 bg-orange-500 text-white py-3 px-6 rounded-sm hover:bg-orange-600 transition duration-300"
+              >
                 ADD TO CART
               </button>
               <button className="flex-1 bg-orange-600 text-white py-3 px-6 rounded-sm hover:bg-orange-700 transition duration-300">

@@ -43,9 +43,29 @@ const summaryAPI = {
       method: "GET",
       url: `${backendDomain}/subcategory`,
     },
+    getUserCart: {
+      method: "GET",
+      url: `${backendDomain}/cart`,
+    },
+    addToCart: {
+      method: "POST",
+      url: `${backendDomain}/cart/add`,
+    },
+    updateCartItem: {
+      method: "PUT",
+      url: `${backendDomain}/cart/update`,
+    },
+    removeFromCart: {
+      method: "DELETE",
+      url: `${backendDomain}/cart/remove`,
+    },
+    clearCart: {
+      method: "DELETE",
+      url: `${backendDomain}/cart/clear`,
+    },
   },
   admin: {
-    /*------Admin Routes------ */
+    /*------Admin------ */
 
     getAllUser: {
       method: "GET",
@@ -60,10 +80,7 @@ const summaryAPI = {
       url: `${backendDomain}/admin/delete-user`,
     },
 
-    /*------
-    Admin Routes
-    Category
-    ------ */
+    /*------Admin Category------ */
     createCategory: {
       method: "POST",
       url: `${backendDomain}/admin/category`,
@@ -85,10 +102,7 @@ const summaryAPI = {
       url: `${backendDomain}/admin/category`,
     },
 
-    /*------
-    Admin Routes
-    Sub Category
-    ------ */
+    /*------Admin Sub Category------ */
     createSubcategory: {
       method: "POST",
       url: `${backendDomain}/admin/subcategory`,
@@ -110,10 +124,7 @@ const summaryAPI = {
       url: `${backendDomain}/admin/Subcategory`,
     },
 
-    /*------
-    Admin Routes
-    products
-    ------ */
+    /*------Admin products------ */
     getAllProducts: {
       method: "GET",
       url: `${backendDomain}/admin/product`,
@@ -155,6 +166,27 @@ const summaryAPI = {
     deleteReview: {
       method: "DELETE",
       url: `${backendDomain}/admin/reviews/:reviewId`,
+    },
+    /*------Cart Routes------ */
+    getAllCarts: {
+      method: "GET",
+      url: `${backendDomain}/admin/cart`,
+    },
+    getCartById: {
+      method: "GET",
+      url: `${backendDomain}/admin/cart`,
+    },
+    updateCart: {
+      method: "PUT",
+      url: `${backendDomain}/admin/cart`,
+    },
+    deleteCart: {
+      method: "DELETE",
+      url: `${backendDomain}/admin/cart`,
+    },
+    getCartStats: {
+      method: "GET",
+      url: `${backendDomain}/admin/cart/stats`,
     },
   },
 };

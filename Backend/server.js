@@ -8,12 +8,15 @@ const commonRoutes = require("./routes/common/common");
 const commonproductRoutes = require("./routes/common/productRoutes");
 const commonCategoryRoutes = require("./routes/common/commonCategoryRoutes");
 const commonSubCategoryRoutes = require("./routes/common/commonSubCategoryRoutes.js");
+const commonCartRoutes = require("./routes/common/cartRoutes.js");
 const adminRoutes = require("./routes/admin/admin");
+const adminCartRouter = require("./routes/admin/cartRoutes.js");
 const categoryRoutes = require("./routes/admin/categoryRoutes");
 const subCategoryRoutes = require("./routes/admin/subCategoryRoutes");
 const productRoutes = require("./routes/admin/productRoutes");
-const reviewRoutes = require("./routes/admin//reviewRoutes");
+const reviewRoutes = require("./routes/admin/reviewRoutes");
 const adminAuthMiddleware = require("./middleware/adminAuthMiddleware");
+const checkToken = require("./middleware/authToken");
 
 const app = express();
 
@@ -31,12 +34,14 @@ app.use("/api/admin", reviewRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/admin", categoryRoutes);
 app.use("/api/admin", subCategoryRoutes);
+app.use("/api/admin/cart", adminCartRouter);
 
 // Common Routes
 app.use("/api", commonRoutes);
 app.use("/api/product", commonproductRoutes);
 app.use("/api/category", commonCategoryRoutes);
 app.use("/api/subcategory", commonSubCategoryRoutes);
+app.use("/api/cart", checkToken,commonCartRoutes);
 
 // Error Handler Middleware
 app.use(errorHandler);
