@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-
 import summaryAPI from "../utils/summaryAPI";
 import defaultImg from "../default.jpg";
 import {
@@ -14,6 +13,7 @@ import {
 
 const Navbar = () => {
   const user = useSelector((state) => state.user.user);
+  const [cartData, setCartData] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
@@ -33,7 +33,7 @@ const Navbar = () => {
     };
 
     fetchUserDetails();
-  }, [dispatch]);
+  }, []);
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
@@ -49,6 +49,21 @@ const Navbar = () => {
       toast.error("Logout failed. Please try again.");
     }
   };
+
+  const fetchCartData = async () => {
+    try {
+      const response = await axios.get(summaryAPI.common.getUserCart.url, {
+        withCredentials: true,
+      });
+      setCartData(response.data);
+    } catch (err) {
+      dispatch(setError("Error fetching cart details"));
+    }
+  };
+
+  useEffect(() => {
+    fetchCartData();
+  }, []);
 
   return (
     <header>
@@ -90,13 +105,12 @@ const Navbar = () => {
               className="relative flex items-center cursor-pointer"
             >
               <i className="fas fa-shopping-cart text-gray-600"></i>
-              {user?.orderCount > 0 && (
+              {cartData.items && cartData.items.length > 0 && (
                 <span className="bg-red-500 text-white rounded-full px-2 py-1 text-xs absolute -top-4 -right-3">
-                  {user.orderCount}
+                  {cartData.items.length}
                 </span>
               )}
             </Link>
-
             <div className="relative flex items-center cursor-pointer">
               {user ? (
                 <div onClick={toggleDropdown} className="relative">

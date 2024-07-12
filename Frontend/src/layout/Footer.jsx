@@ -12,12 +12,12 @@ const Footer = () => {
             <h5 className="text-lg font-semibold mb-4">Shop by Category</h5>
             <ul className="list-none">
               <li className="mb-2">
-                <Link to="/category/electronics" className="hover:text-white">
+                <Link to="/category/668e1fedfeb40b90c20532f2" className="hover:text-white">
                   Electronics
                 </Link>
               </li>
               <li className="mb-2">
-                <Link to="/category/clothing" className="hover:text-white">
+                <Link to="/category/668e1feafeb40b90c20532ef" className="hover:text-white">
                   Clothing
                 </Link>
               </li>
@@ -43,11 +43,7 @@ const Footer = () => {
                   FAQ
                 </Link>
               </li>
-              <li className="mb-2">
-                <Link to="/returns" className="hover:text-white">
-                  Returns
-                </Link>
-              </li>
+              
               <li className="mb-2">
                 <Link to="/shipping" className="hover:text-white">
                   Shipping Information

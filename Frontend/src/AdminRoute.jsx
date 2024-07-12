@@ -6,7 +6,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 const AdminRoute = () => {
   const user = useSelector((state) => state.user.user);
-  console.log(user);
 
   useEffect(() => {
     if (!user) {
