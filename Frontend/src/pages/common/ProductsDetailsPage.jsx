@@ -4,6 +4,8 @@ import axios from "axios";
 import Preloader from "../../component/Preloader";
 import summaryAPI from "../../utils/summaryAPI";
 import { PhotoProvider, PhotoView } from "react-photo-view";
+import ProductRecommendationSlider from "../../component/common/ProductRecommendationSlider";
+import ProductRecommendationByCategorySlider from "../../component/common/ProductRecommendationByCategorySlider";
 
 const ProductsDetailsPage = () => {
   const { id } = useParams();
@@ -24,13 +26,9 @@ const ProductsDetailsPage = () => {
             },
           }
         );
-        if (response.data) {
-          setProduct(response.data);
-        } else {
-          setError("Failed to fetch product data");
-        }
-      } catch (error) {
-        setError("Error fetching product data: " + error.message);
+        setProduct(response.data);
+      } catch (err) {
+        setError("Error fetching product data: " + err.message);
       } finally {
         setLoading(false);
       }
@@ -83,7 +81,7 @@ const ProductsDetailsPage = () => {
                   <img
                     src={images[selectedImage]}
                     alt={`${name} - Main Image`}
-                    className="w-full h-96 object-contain cursor-zoom-in"
+                    className="w-full h-96 object-contain cursor-pointer"
                   />
                 </PhotoView>
               </div>
@@ -175,6 +173,15 @@ const ProductsDetailsPage = () => {
           </div>
         </div>
       </div>
+      {product && product.subcategory && (
+        <ProductRecommendationSlider subcategoryId={product.subcategory._id} />
+      )}
+      {product && product.category && (
+        <ProductRecommendationByCategorySlider
+          categoryId={category._id}
+          subcategoryId={subcategory._id}
+        />
+      )}
     </div>
   );
 };

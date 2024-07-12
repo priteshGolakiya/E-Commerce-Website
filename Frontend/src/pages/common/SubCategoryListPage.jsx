@@ -5,6 +5,7 @@ import summaryAPI from "../../utils/summaryAPI";
 import Preloader from "../../component/Preloader";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
+import Filters from "../../component/common/Filters";
 
 const SubCategoryListPage = () => {
   const { id } = useParams();
@@ -66,12 +67,12 @@ const SubCategoryListPage = () => {
           <div className="hidden md:block">
             <div className="bg-white p-4 rounded-lg shadow">
               <h2 className="text-lg font-semibold mb-4">Filters</h2>
-              {/* Add filter options here */}
+              <Filters />
             </div>
           </div>
 
           {/* Products Column */}
-          <div className="md:col-span-3">
+          <div className="md:col-span-3 h- h-[calc(100vh-200px)] overflow-y-scroll scrollbar-hidden">
             {data.map((product) => (
               <Link
                 key={product._id}
