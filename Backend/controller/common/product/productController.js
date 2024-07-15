@@ -43,7 +43,84 @@ const getProductById = async (req, res) => {
   }
 };
 
+const searchProducts = async (req, res) => {
+  console.log("req.query", req.query);
+  try {
+    const {
+      q,
+      page = 1,
+      limit = 10,
+      category,
+      subcategory,
+      minPrice,
+      maxPrice,
+      sort = "createdAt",
+    } = req.query;
+
+    const skip = (page - 1) * limit;
+
+    let searchCriteria = {};
+    if (q) {
+      searchCriteria.$or = [
+        { name: { $regex: q, $options: "i" } },
+        { description: { $regex: q, $options: "i" } },
+        { "category.name": { $regex: q, $options: "i" } },
+        { "subcategory.name": { $regex: q, $options: "i" } },
+        { brand: { $regex: q, $options: "i" } },
+        { tags: { $regex: q, $options: "i" } },
+      ];
+    }
+
+    if (category) {
+      searchCriteria["category.name"] = { $regex: category, $options: "i" };
+    }
+
+    if (subcategory) {
+      searchCriteria["subcategory.name"] = {
+        $regex: subcategory,
+        $options: "i",
+      };
+    }
+
+    if (minPrice || maxPrice) {
+      searchCriteria.price = {};
+      if (minPrice) searchCriteria.price.$gte = Number(minPrice);
+      if (maxPrice) searchCriteria.price.$lte = Number(maxPrice);
+    }
+
+    const sortOptions = {};
+    if (sort) {
+      if (sort.startsWith("-")) {
+        sortOptions[sort.substring(1)] = -1;
+      } else {
+        sortOptions[sort] = 1;
+      }
+    }
+
+    const products = await Product.find(searchCriteria)
+      .populate("category", "name")
+      .populate("subcategory", "name")
+      .sort(sortOptions)
+      .skip(skip)
+      .limit(Number(limit))
+      .lean();
+
+    const total = await Product.countDocuments(searchCriteria);
+
+    res.status(200).json({
+      products,
+      totalPages: Math.ceil(total / limit),
+      currentPage: Number(page),
+      totalProducts: total,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   getAllProducts,
   getProductById,
+  searchProducts,
 };

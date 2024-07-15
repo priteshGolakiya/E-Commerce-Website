@@ -22,7 +22,21 @@ const app = express();
 
 // Middleware
 app.use(cookieParser());
-app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+// app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }));
+const allowedOrigins = [process.env.FRONTEND_URL, process.env.FRONTEND_URL2];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (allowedOrigins.includes(origin) || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 app.use(express.json({ limit: "50mb" }));
 
 // Apply adminAuthMiddleware to all /api/admin routes
@@ -41,7 +55,7 @@ app.use("/api", commonRoutes);
 app.use("/api/product", commonproductRoutes);
 app.use("/api/category", commonCategoryRoutes);
 app.use("/api/subcategory", commonSubCategoryRoutes);
-app.use("/api/cart", checkToken,commonCartRoutes);
+app.use("/api/cart", checkToken, commonCartRoutes);
 
 // Error Handler Middleware
 app.use(errorHandler);

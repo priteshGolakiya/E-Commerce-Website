@@ -3,13 +3,19 @@ import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import summaryAPI from "../../utils/summaryAPI";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clearCart,
+  removeItem,
+  setCartData,
+} from "../../redux/slices/cartSlice";
 
 const Cart = () => {
   const user = useSelector((state) => state.user.user);
   const [cart, setCart] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchCart = async () => {
@@ -17,6 +23,7 @@ const Cart = () => {
         const response = await axios.get(summaryAPI.common.getUserCart.url, {
           withCredentials: true,
         });
+        dispatch(setCartData(response?.data));
         setCart(response.data);
       } catch (err) {
         setError(err.message);
@@ -26,7 +33,7 @@ const Cart = () => {
     };
 
     fetchCart();
-  }, []);
+  }, [dispatch]);
 
   const handleUpdateCartItem = useCallback(async (productId, quantity) => {
     try {
@@ -48,31 +55,38 @@ const Cart = () => {
     }
   }, []);
 
-  const handleRemoveFromCart = useCallback(async (productId) => {
-    try {
-      await axios.delete(
-        `${summaryAPI.common.removeFromCart.url}/${productId}`,
-        { withCredentials: true }
-      );
-      setCart((prevCart) => ({
-        ...prevCart,
-        items: prevCart.items.filter((item) => item.product._id !== productId),
-      }));
-    } catch (err) {
-      setError(err.message);
-    }
-  }, []);
+  const handleRemoveFromCart = useCallback(
+    async (productId) => {
+      try {
+        await axios.delete(
+          `${summaryAPI.common.removeFromCart.url}/${productId}`,
+          { withCredentials: true }
+        );
+
+        const updatedCart = cart.items.filter(
+          (item) => item.product._id !== productId
+        );
+        setCart({ ...cart, items: updatedCart });
+
+        dispatch(removeItem(productId));
+      } catch (err) {
+        setError(err.message);
+      }
+    },
+    [cart, dispatch]
+  );
 
   const handleClearCart = useCallback(async () => {
     try {
       await axios.delete(summaryAPI.common.clearCart.url, {
         withCredentials: true,
       });
+      dispatch(clearCart());
       setCart(null);
     } catch (err) {
       setError(err.message);
     }
-  }, []);
+  }, [dispatch]);
 
   const calculateTotalPrice = () => {
     if (!cart || !cart.items) return 0;

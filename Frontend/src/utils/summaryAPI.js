@@ -27,6 +27,10 @@ const summaryAPI = {
       method: "GET",
       url: `${backendDomain}/product`,
     },
+    searchProduct: {
+      method: "GET",
+      url: `${backendDomain}/product/search`,
+    },
     getAllCategory: {
       method: "GET",
       url: `${backendDomain}/category`,

@@ -6,6 +6,8 @@ import summaryAPI from "../../utils/summaryAPI";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import ProductRecommendationSlider from "../../component/common/ProductRecommendationSlider";
 import ProductRecommendationByCategorySlider from "../../component/common/ProductRecommendationByCategorySlider";
+import { useDispatch } from "react-redux";
+import { setCartData } from "../../redux/slices/cartSlice";
 
 const ProductsDetailsPage = () => {
   const { id } = useParams();
@@ -14,6 +16,7 @@ const ProductsDetailsPage = () => {
   const [error, setError] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -48,8 +51,7 @@ const ProductsDetailsPage = () => {
         },
         { withCredentials: true }
       );
-      console.log(response.data);
-      // You might want to show a success message to the user here
+      dispatch(setCartData(response.data));
     } catch (err) {
       setError("Error adding product to cart: " + err.message);
     }

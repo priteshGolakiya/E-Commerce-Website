@@ -23,6 +23,7 @@ import CategoryListPage from "./pages/common/CategoryListPage.jsx";
 import SubCategoryListPage from "./pages/common/SubCategoryListPage.jsx";
 import ProductsDetailsPage from "./pages/common/ProductsDetailsPage.jsx";
 import Cart from "./pages/common/Cart.jsx";
+import ProductSearch from "./pages/common/ProductSearch.jsx";
 
 const App = () => {
   return (
@@ -38,6 +39,7 @@ const App = () => {
         <Route path="subcategory/:id" element={<SubCategoryListPage />} />
         <Route path="products/:id" element={<ProductsDetailsPage />} />
         <Route path="cart" element={<Cart />} />
+        <Route path="search" element={<ProductSearch />} />
 
         <Route element={<AdminRoute />}>
           <Route path="admin-panel" element={<AdminPanel />}>

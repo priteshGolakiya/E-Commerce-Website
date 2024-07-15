@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -10,14 +10,15 @@ import {
   setError,
   clearUserDetails,
 } from "../redux/slices/userSlice";
+import { setCartData } from "../redux/slices/cartSlice";
 
 const Navbar = () => {
   const user = useSelector((state) => state.user.user);
-  const [cartData, setCartData] = useState([]);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const cart = useSelector((state) => state.cart);
   const [isOpen, setIsOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -33,7 +34,22 @@ const Navbar = () => {
     };
 
     fetchUserDetails();
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    const fetchCartData = async () => {
+      try {
+        const response = await axios.get(summaryAPI.common.getUserCart.url, {
+          withCredentials: true,
+        });
+        dispatch(setCartData(response?.data));
+      } catch (err) {
+        dispatch(setError("Error fetching cart details"));
+      }
+    };
+
+    fetchCartData();
+  }, [dispatch]);
 
   const toggleMenu = () => setIsOpen(!isOpen);
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
@@ -50,21 +66,32 @@ const Navbar = () => {
     }
   };
 
-  const fetchCartData = async () => {
-    try {
-      const response = await axios.get(summaryAPI.common.getUserCart.url, {
-        withCredentials: true,
-      });
-      setCartData(response.data);
-    } catch (err) {
-      dispatch(setError("Error fetching cart details"));
-    }
-  };
+  // const searchHendlear = (e) => {
+  //   const { value } = e.target;
+  //   if (value) {
+  //     navigate(`/search?q=${value}`);
+  //   } else {
+  //     navigate(`/search`);
+  //   }
+  // };
+
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
-    fetchCartData();
-  }, []);
+    const timeoutId = setTimeout(() => {
+      if (searchTerm) {
+        navigate(`/search?q=${searchTerm}`);
+      }
+      setSearchTerm("");
+    }, 1000);
 
+    return () => clearTimeout(timeoutId);
+  }, [navigate, searchTerm]);
+
+  const handleInputChange = (e) => {
+    const { value } = e.target;
+    setSearchTerm(value);
+  };
   return (
     <header>
       <nav className="navbar-container bg-white fixed shadow-lg w-full z-50">
@@ -88,9 +115,17 @@ const Navbar = () => {
             } w-full md:w-auto`}
           >
             <div className="relative mx-4 my-2 md:my-0">
+              {/* <input
+                type="text"
+                placeholder="Search"
+                onChange={searchHendlear}
+                className="w-full pl-8 pr-4 py-2 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+              /> */}
               <input
                 type="text"
                 placeholder="Search"
+                value={searchTerm}
+                onChange={handleInputChange}
                 className="w-full pl-8 pr-4 py-2 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
               />
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center">
@@ -105,9 +140,9 @@ const Navbar = () => {
               className="relative flex items-center cursor-pointer"
             >
               <i className="fas fa-shopping-cart text-gray-600"></i>
-              {cartData.items && cartData.items.length > 0 && (
+              {cart.items.length > 0 && (
                 <span className="bg-red-500 text-white rounded-full px-2 py-1 text-xs absolute -top-4 -right-3">
-                  {cartData.items.length}
+                  {cart.totalQuantity}
                 </span>
               )}
             </Link>
