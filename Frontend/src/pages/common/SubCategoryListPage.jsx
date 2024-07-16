@@ -14,6 +14,11 @@ const SubCategoryListPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [sortOrder, setSortOrder] = useState("");
+  const [priceRange, setPriceRange] = useState({ min: "", max: "" });
+  const [ratingFilter, setRatingFilter] = useState("");
+  const [discountFilter, setDiscountFilter] = useState("");
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -42,6 +47,44 @@ const SubCategoryListPage = () => {
     fetchData();
   }, [id]);
 
+  const applyFilters = (products) => {
+    let filteredProducts = [...products];
+
+    if (priceRange.min !== "" && priceRange.max !== "") {
+      filteredProducts = filteredProducts.filter(
+        (product) =>
+          product.price - product.discountPrice >= Number(priceRange.min) &&
+          product.price - product.discountPrice <= Number(priceRange.max)
+      );
+    }
+
+    if (ratingFilter !== "") {
+      filteredProducts = filteredProducts.filter(
+        (product) => product.averageRating >= Number(ratingFilter)
+      );
+    }
+
+    if (discountFilter !== "") {
+      filteredProducts = filteredProducts.filter(
+        (product) =>
+          (product.discountPrice / product.price) * 100 >=
+          Number(discountFilter)
+      );
+    }
+
+    if (sortOrder === "lowToHigh") {
+      filteredProducts.sort(
+        (a, b) => a.price - a.discountPrice - (b.price - b.discountPrice)
+      );
+    } else if (sortOrder === "highToLow") {
+      filteredProducts.sort(
+        (a, b) => b.price - b.discountPrice - (a.price - a.discountPrice)
+      );
+    }
+
+    return filteredProducts;
+  };
+
   if (loading) {
     return <Preloader />;
   }
@@ -54,6 +97,14 @@ const SubCategoryListPage = () => {
     );
   }
 
+  const filteredProducts = applyFilters(data);
+
+  const clearFilter = () => {
+    setSortOrder("");
+    setPriceRange({ min: "", max: "" });
+    setRatingFilter("");
+    setDiscountFilter("");
+  };
   return (
     <div className="container mx-auto mt-5 p-4">
       <h1 className="text-2xl font-bold mb-4">{subcategory?.name}</h1>
@@ -63,17 +114,25 @@ const SubCategoryListPage = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {/* Filters Column */}
           <div className="hidden md:block">
             <div className="bg-white p-4 rounded-lg shadow">
               <h2 className="text-lg font-semibold mb-4">Filters</h2>
-              <Filters />
+              <Filters
+                sortOrder={sortOrder}
+                setSortOrder={setSortOrder}
+                priceRange={priceRange}
+                setPriceRange={setPriceRange}
+                ratingFilter={ratingFilter}
+                setRatingFilter={setRatingFilter}
+                discountFilter={discountFilter}
+                setDiscountFilter={setDiscountFilter}
+                clearFilter={clearFilter}
+              />
             </div>
           </div>
 
-          {/* Products Column */}
-          <div className="md:col-span-3 h- h-[calc(100vh-200px)] overflow-y-scroll scrollbar-hidden">
-            {data.map((product) => (
+          <div className="md:col-span-3 h-[calc(100vh-200px)] overflow-y-scroll scrollbar-hidden">
+            {filteredProducts.map((product) => (
               <Link
                 key={product._id}
                 to={`/products/${product._id}`}
