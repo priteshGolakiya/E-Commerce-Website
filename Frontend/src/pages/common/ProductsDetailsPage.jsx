@@ -8,6 +8,8 @@ import ProductRecommendationSlider from "../../component/common/ProductRecommend
 import ProductRecommendationByCategorySlider from "../../component/common/ProductRecommendationByCategorySlider";
 import { useDispatch } from "react-redux";
 import { setCartData } from "../../redux/slices/cartSlice";
+import ReviewComponent from "./ReviewComponent";
+import { toast } from "react-toastify";
 
 const ProductsDetailsPage = () => {
   const { id } = useParams();
@@ -25,9 +27,6 @@ const ProductsDetailsPage = () => {
           `${summaryAPI.common.getProductById.url}/${id}`,
           {
             withCredentials: true,
-            headers: {
-              "Content-Type": "application/json",
-            },
           }
         );
         setProduct(response.data);
@@ -142,6 +141,7 @@ const ProductsDetailsPage = () => {
                 className="w-16 p-1 border rounded"
               />
             </div>
+
             <div className="mt-4 flex space-x-2">
               <button
                 onClick={addToCart}
@@ -176,6 +176,14 @@ const ProductsDetailsPage = () => {
                   </span>
                 </>
               )}
+            </div>
+            <div className="flex items-center mb-2">
+              <span className="text-sm bg-green-500 text-white px-1.5 py-0.5 rounded">
+                {product.averageRating} ★
+              </span>
+              <span className="text-sm text-gray-500 ml-2">
+                ({product.reviews.length} ratings)
+              </span>
             </div>
             <div className="mb-4">
               <h2 className="font-medium mb-2">Available offers</h2>
@@ -217,6 +225,15 @@ const ProductsDetailsPage = () => {
           </div>
         </div>
       </div>
+      {/* <ReviewComponent reviews={product.reviews} /> */}
+      <ReviewComponent
+        reviews={product.reviews}
+        productId={product && product._id}
+        onSubmitReview={(newReview) => {
+          toast.success(newReview);
+        }}
+      />
+
       {product && product.subcategory && (
         <ProductRecommendationSlider subcategoryId={product.subcategory._id} />
       )}

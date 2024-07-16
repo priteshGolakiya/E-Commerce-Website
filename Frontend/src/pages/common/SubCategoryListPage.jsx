@@ -97,10 +97,10 @@ const SubCategoryListPage = () => {
                     <h3 className="text-lg font-medium mb-2">{product.name}</h3>
                     <div className="flex items-center mb-2">
                       <span className="text-sm bg-green-500 text-white px-1.5 py-0.5 rounded">
-                        4.3 ★
+                        {product.averageRating} ★
                       </span>
                       <span className="text-sm text-gray-500 ml-2">
-                        (1,234 ratings)
+                        ({product.numberOfRatings} ratings)
                       </span>
                     </div>
                     <ul className="list-disc list-inside text-sm text-gray-600 mb-2">

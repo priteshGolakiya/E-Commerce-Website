@@ -20,11 +20,9 @@ const getCategoryById = asyncHandler(async (req, res) => {
   const id = req.params.id;
 
   try {
-    console.log("Fetching category with ID:", id);
     const category = await Category.findById(id);
 
     if (!category) {
-      console.log("Category not found");
       return res.status(404).json({
         error: true,
         success: false,
@@ -32,25 +30,18 @@ const getCategoryById = asyncHandler(async (req, res) => {
       });
     }
 
-    console.log("Category found:", category.name);
-
     const subcategories = await Subcategory.find({ category: id });
-    console.log("Subcategories found:", subcategories.length);
 
     const subcategoryIds = subcategories.map((sub) => sub._id);
-    console.log("Subcategory IDs:", subcategoryIds);
 
     const products = await Product.find({
       subcategory: { $in: subcategoryIds },
     }).select("name images subcategory finalPrice");
-    console.log("Total products found:", products.length);
 
     if (products.length === 0) {
-      console.log("No products found. Trying a broader search...");
       const allProducts = await Product.find().select(
         "name images subcategory finalPrice"
       );
-      console.log("All products in database:", allProducts.length);
     }
 
     const formattedCategory = {
@@ -63,22 +54,13 @@ const getCategoryById = asyncHandler(async (req, res) => {
               product.subcategory &&
               product.subcategory.toString() === subcategory._id.toString()
           );
-          console.log(
-            `Products for subcategory ${subcategory.name}:`,
-            subcategoryProducts.length
-          );
 
           // If no products found, try direct query
           if (subcategoryProducts.length === 0) {
-            console.log(
-              `No products found for ${subcategory.name}. Trying direct query...`
-            );
             const directProducts = await Product.find({
               subcategory: subcategory._id,
             }).select("name images subcategory finalPrice");
-            console.log(
-              `Direct query found ${directProducts.length} products for ${subcategory.name}`
-            );
+
             subcategoryProducts.push(...directProducts);
           }
 
@@ -95,11 +77,6 @@ const getCategoryById = asyncHandler(async (req, res) => {
         })
       ),
     };
-
-    console.log(
-      "Formatted category:",
-      JSON.stringify(formattedCategory, null, 2)
-    );
 
     res.status(200).json({
       error: false,

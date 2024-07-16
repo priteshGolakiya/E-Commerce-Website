@@ -2,7 +2,16 @@ const Product = require("../../../models/productModel");
 
 // Utility function to populate product fields
 const populateProduct = (query) => {
-  return query.populate("category").populate("subcategory").populate("reviews");
+  return query
+    .populate("category")
+    .populate("subcategory")
+    .populate({
+      path: "reviews",
+      populate: {
+        path: "user",
+        select: "name email profilePic",
+      },
+    });
 };
 
 // Get all products
@@ -14,6 +23,14 @@ const getAllProducts = async (req, res) => {
       return {
         ...productObj,
         averageRating: product.averageRating,
+        reviews: productObj.reviews.map((review) => ({
+          ...review,
+          user: {
+            name: review.user.name,
+            email: review.user.email,
+            image: review.user.profilePic,
+          },
+        })),
       };
     });
     res.status(200).json(productsWithAverageRating);
@@ -36,6 +53,14 @@ const getProductById = async (req, res) => {
     res.status(200).json({
       ...productObj,
       averageRating: product.averageRating,
+      reviews: productObj.reviews.map((review) => ({
+        ...review,
+        user: {
+          name: review.user.name,
+          email: review.user.email,
+          image: review.user.profilePic,
+        },
+      })),
     });
   } catch (error) {
     console.error(`Error fetching product by ID: ${error.message}`);
@@ -44,7 +69,6 @@ const getProductById = async (req, res) => {
 };
 
 const searchProducts = async (req, res) => {
-  console.log("req.query", req.query);
   try {
     const {
       q,

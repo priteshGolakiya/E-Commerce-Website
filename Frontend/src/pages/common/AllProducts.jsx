@@ -5,6 +5,7 @@ import { PhotoProvider, PhotoView } from "react-photo-view";
 import "react-photo-view/dist/react-photo-view.css";
 import Preloader from "../../component/Preloader";
 import { Link } from "react-router-dom";
+import scrollTop from "../../utils/scrollTop";
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
@@ -70,6 +71,7 @@ const AllProducts = () => {
                   <Link
                     key={product._id}
                     to={`/products/${product._id}`}
+                    onClick={scrollTop}
                     className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center text-sm"
                   >
                     View Product

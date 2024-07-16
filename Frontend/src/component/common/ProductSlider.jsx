@@ -13,6 +13,7 @@ import {
 } from "swiper/modules";
 import Preloader from "../Preloader";
 import { Link } from "react-router-dom";
+import scrollTop from "../../utils/scrollTop";
 
 const ProductSlider = () => {
   const [categories, setCategories] = useState([]);
@@ -94,6 +95,7 @@ const ProductSlider = () => {
           >
             <Link
               to={`/category/${product.category._id}`}
+              onClick={scrollTop}
               className="w-full h-52 object-contain mb-4 rounded-lg shadow-lg"
             >
               <img

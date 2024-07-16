@@ -67,10 +67,21 @@ const summaryAPI = {
       method: "DELETE",
       url: `${backendDomain}/cart/clear`,
     },
+    createReview: {
+      method: "POST",
+      url: `${backendDomain}/reviews`,
+    },
+    getAllReviews: {
+      method: "GET",
+      url: `${backendDomain}/reviews`,
+    },
+    getReviewsforProduct: {
+      method: "GET",
+      url: `${backendDomain}/reviews`,
+    },
   },
   admin: {
     /*------Admin------ */
-
     getAllUser: {
       method: "GET",
       url: `${backendDomain}/admin/all-users`,

@@ -13,6 +13,7 @@ import {
 } from "swiper/modules";
 import Preloader from "../Preloader";
 import { Link } from "react-router-dom";
+import scrollTop from "../../utils/scrollTop";
 
 // eslint-disable-next-line react/prop-types
 const ProductRecommendationSlider = ({ subcategoryId }) => {
@@ -84,7 +85,7 @@ const ProductRecommendationSlider = ({ subcategoryId }) => {
             key={product._id}
             className="flex p-10 flex-col items-center"
           >
-            <Link to={`/products/${product._id}`} className="w-full h-52 mb-4">
+            <Link to={`/products/${product._id}`} className="w-full h-52 mb-4" onClick={scrollTop}>
               <img
                 src={product.images[0]}
                 alt={product.name}

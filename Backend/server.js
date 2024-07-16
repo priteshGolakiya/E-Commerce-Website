@@ -9,6 +9,7 @@ const commonproductRoutes = require("./routes/common/productRoutes");
 const commonCategoryRoutes = require("./routes/common/commonCategoryRoutes");
 const commonSubCategoryRoutes = require("./routes/common/commonSubCategoryRoutes.js");
 const commonCartRoutes = require("./routes/common/cartRoutes.js");
+const commonReviewsRoutes = require("./routes/common/commonReviewsRoutes.js");
 const adminRoutes = require("./routes/admin/admin");
 const adminCartRouter = require("./routes/admin/cartRoutes.js");
 const categoryRoutes = require("./routes/admin/categoryRoutes");
@@ -56,6 +57,7 @@ app.use("/api/product", commonproductRoutes);
 app.use("/api/category", commonCategoryRoutes);
 app.use("/api/subcategory", commonSubCategoryRoutes);
 app.use("/api/cart", checkToken, commonCartRoutes);
+app.use("/api", commonReviewsRoutes);
 
 // Error Handler Middleware
 app.use(errorHandler);

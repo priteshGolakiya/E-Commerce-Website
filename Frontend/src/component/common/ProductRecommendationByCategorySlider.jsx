@@ -14,6 +14,7 @@ import {
 } from "swiper/modules";
 import Preloader from "../Preloader";
 import { Link } from "react-router-dom";
+import scrollTop from "../../utils/scrollTop";
 
 const ProductRecommendationByCategorySlider = ({
   categoryId,
@@ -100,6 +101,7 @@ const ProductRecommendationByCategorySlider = ({
           >
             <Link
               to={`/subcategory/${product.subcategoryId}`}
+              onClick={scrollTop}
               className="w-full h-52 mb-4"
             >
               <img
