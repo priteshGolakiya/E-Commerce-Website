@@ -3,6 +3,7 @@ import summaryAPI from "../../utils/summaryAPI";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { PhotoProvider, PhotoView } from "react-photo-view";
+import scrollTop from "../../utils/scrollTop";
 
 const ProductSearch = () => {
   const location = useLocation();
@@ -80,6 +81,7 @@ const ProductSearch = () => {
                     </p>
                     <Link
                       to={`/products/${product._id}`}
+                      onClick={scrollTop}
                       className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300"
                     >
                       View Product

@@ -83,7 +83,7 @@ const Navbar = () => {
         navigate(`/search?q=${searchTerm}`);
       }
       setSearchTerm("");
-    }, 1000);
+    }, 700);
 
     return () => clearTimeout(timeoutId);
   }, [navigate, searchTerm]);

@@ -9,7 +9,7 @@ function Layout() {
     <>
       <ToastContainer />
       <Navbar />
-      <main className="min-h-[calc(100vh-120px)] pt-24">
+      <main className="min-h-[calc(100vh-120px)] pt-20">
         <Outlet />
       </main>
       <Footer />

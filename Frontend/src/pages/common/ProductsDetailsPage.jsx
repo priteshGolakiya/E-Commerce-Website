@@ -50,8 +50,10 @@ const ProductsDetailsPage = () => {
         },
         { withCredentials: true }
       );
+      toast.success("Prodect added to cart");
       dispatch(setCartData(response.data));
     } catch (err) {
+      toast.error(err.message);
       setError("Error adding product to cart: " + err.message);
     }
   };

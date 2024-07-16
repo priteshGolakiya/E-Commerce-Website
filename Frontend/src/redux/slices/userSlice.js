@@ -1,16 +1,10 @@
 // slices/userSlice.js
 import { createSlice } from "@reduxjs/toolkit";
-import Cookies from "js-cookie";
-
-// Example token retrieval function from cookies
-const getTokenFromCookies = () => {
-  return Cookies.get("token");
-};
 
 const initialState = {
   user: null,
   error: null,
-  token: getTokenFromCookies() || null,
+  token: null,
   isAuthenticated: false,
 };
 
