@@ -30,6 +30,7 @@ const login = asyncHandler(async (req, res, next) => {
     name: foundUser.userName,
     email: foundUser.email,
     role: foundUser.role,
+    profilePic: foundUser.profilePic,
   };
 
   const token = jwt.sign(user, process.env.JWT_SECRET, {

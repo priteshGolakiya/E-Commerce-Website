@@ -1,13 +1,24 @@
 import { Outlet } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Navbar from "./Navbar.jsx";
 import Footer from "./Footer.jsx";
+import Navbar from "./Navbar.jsx";
 
 function Layout() {
   return (
     <>
-      <ToastContainer />
+      <ToastContainer
+        autoClose={2000}
+        position="top-right"
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <Navbar />
       <main className="min-h-[calc(100vh-120px)] pt-20">
         <Outlet />

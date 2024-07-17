@@ -75,7 +75,7 @@ const AdminHome = () => {
           <>
             <div className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg hover:scale-105 transform transition-transform duration-300">
               <h2 className="text-xl font-semibold mb-2">Number of Users</h2>
-              <p className="text-4xl font-bold">{stats.users}</p>
+              <p className="text-4xl font-bold">{stats.users - 1}</p>
             </div>
             <div className="bg-white shadow-md rounded-lg p-6 hover:shadow-lg hover:scale-105 transform transition-transform duration-300">
               <h2 className="text-xl font-semibold mb-2">

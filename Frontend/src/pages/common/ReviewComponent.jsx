@@ -33,8 +33,6 @@ const ReviewComponent = ({ onSubmitReview, productId }) => {
     }
   };
 
-
-
   useEffect(() => {
     fetchReviewsforProduct();
   }, [productId]);
@@ -46,35 +44,38 @@ const ReviewComponent = ({ onSubmitReview, productId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (user) {
+      try {
+        const response = await axios.post(
+          summaryAPI.common.createReview.url,
+          {
+            productId,
+            userId: user.id,
+            rating: newReview.rating,
+            review: newReview.review,
+          },
+          {
+            withCredentials: true,
+          }
+        );
 
-    try {
-      const response = await axios.post(
-        summaryAPI.common.createReview.url,
-        {
-          productId,
-          userId: user.id,
-          rating: newReview.rating,
-          review: newReview.review,
-        },
-        {
-          withCredentials: true,
+        if (response.data.success) {
+          toast.success("Review submitted successfully!");
+          onSubmitReview(response.data.review);
+          setData(response.data.success);
+          setNewReview({ rating: 5, review: "" });
+        } else {
+          toast.error("Failed to submit review. Please try again.");
         }
-      );
-
-      if (response.data.success) {
-        toast.success("Review submitted successfully!");
-        onSubmitReview(response.data.review);
-        setData(response.data.success);
-        setNewReview({ rating: 5, review: "" });
-      } else {
-        toast.error("Failed to submit review. Please try again.");
+      } catch (error) {
+        console.error("Error submitting review:", error);
+        toast.error(
+          error.response?.data?.message ||
+            "An error occurred while submitting the review"
+        );
       }
-    } catch (error) {
-      console.error("Error submitting review:", error);
-      toast.error(
-        error.response?.data?.message ||
-          "An error occurred while submitting the review"
-      );
+    } else {
+      toast.error("Please login to submit a review");
     }
   };
 

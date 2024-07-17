@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-gray-300">
+    <footer className="bg-gray-800 text-gray-300 text-center">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Column 1: Shop by Category */}
@@ -12,12 +12,18 @@ const Footer = () => {
             <h5 className="text-lg font-semibold mb-4">Shop by Category</h5>
             <ul className="list-none">
               <li className="mb-2">
-                <Link to="/category/668e1fedfeb40b90c20532f2" className="hover:text-white">
+                <Link
+                  to="/category/668e1fedfeb40b90c20532f2"
+                  className="hover:text-white"
+                >
                   Electronics
                 </Link>
               </li>
               <li className="mb-2">
-                <Link to="/category/668e1feafeb40b90c20532ef" className="hover:text-white">
+                <Link
+                  to="/category/668e1feafeb40b90c20532ef"
+                  className="hover:text-white"
+                >
                   Clothing
                 </Link>
               </li>
@@ -43,7 +49,7 @@ const Footer = () => {
                   FAQ
                 </Link>
               </li>
-              
+
               <li className="mb-2">
                 <Link to="/shipping" className="hover:text-white">
                   Shipping Information
@@ -82,18 +88,13 @@ const Footer = () => {
           {/* Column 4: Stay Connected */}
           <div>
             <h5 className="text-lg font-semibold mb-4">Stay Connected</h5>
-            <div className="flex space-x-4">
+            <div className="flex justify-center space-x-4">
               <Link
-                to="#"
+                to="https://www.linkedin.com/in/pritesh-golakiya-91b861270/"
+                target="_blank"
                 className="w-8 h-8 bg-gray-700 flex items-center justify-center rounded-full text-white hover:bg-gray-600"
               >
-                <i className="fab fa-facebook"></i>
-              </Link>
-              <Link
-                to="#"
-                className="w-8 h-8 bg-gray-700 flex items-center justify-center rounded-full text-white hover:bg-gray-600"
-              >
-                <i className="fab fa-twitter"></i>
+                <i className="fab fa-linkedin"></i>
               </Link>
               <Link
                 to="#"
@@ -105,11 +106,15 @@ const Footer = () => {
                 to="#"
                 className="w-8 h-8 bg-gray-700 flex items-center justify-center rounded-full text-white hover:bg-gray-600"
               >
-                <i className="fab fa-pinterest"></i>
+                <i className="fab fa-twitter"></i>
               </Link>
             </div>
           </div>
         </div>
+      </div>
+
+      <div className=" text-xl text-gray-100 pb-5">
+        Created By Pritesh Golakiya
       </div>
     </footer>
   );

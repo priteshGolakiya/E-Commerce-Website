@@ -1,12 +1,11 @@
 /* eslint-disable react/no-unescaped-entities */
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast } from "react-toastify";
-import { setUserDetails } from "../../redux/slices/userSlice";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
-import Cookies from "js-cookie";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import loginIcon from "../../assets/signin.gif";
+import { setToken, setUserDetails } from "../../redux/slices/userSlice";
 import summaryAPI from "../../utils/summaryAPI";
 
 const Login = () => {
@@ -42,14 +41,12 @@ const Login = () => {
           "Content-Type": "application/json",
         },
       });
-      const { data } = response.data;
+      const { data, token } = response.data;
       dispatch(setUserDetails(data.user));
+      dispatch(setToken(token));
       toast.success("Login successful!");
       setError("");
-      // Optionally, store token in cookies or localStorage for persistence
-      if (formData.rememberMe) {
-        Cookies.set("token", data.token); // Adjust based on your storage mechanism
-      }
+
       navigate("/");
     } catch (error) {
       console.error("Axios request error:", error);

@@ -6,7 +6,7 @@ import summaryAPI from "../../utils/summaryAPI";
 import { PhotoProvider, PhotoView } from "react-photo-view";
 import ProductRecommendationSlider from "../../component/common/ProductRecommendationSlider";
 import ProductRecommendationByCategorySlider from "../../component/common/ProductRecommendationByCategorySlider";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCartData } from "../../redux/slices/cartSlice";
 import ReviewComponent from "./ReviewComponent";
 import { toast } from "react-toastify";
@@ -19,6 +19,7 @@ const ProductsDetailsPage = () => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -41,20 +42,24 @@ const ProductsDetailsPage = () => {
   }, [id]);
 
   const addToCart = async () => {
-    try {
-      const response = await axios.post(
-        `${summaryAPI.common.addToCart.url}`,
-        {
-          productId: id,
-          quantity: quantity,
-        },
-        { withCredentials: true }
-      );
-      toast.success("Prodect added to cart");
-      dispatch(setCartData(response.data));
-    } catch (err) {
-      toast.error(err.message);
-      setError("Error adding product to cart: " + err.message);
+    if (user) {
+      try {
+        const response = await axios.post(
+          `${summaryAPI.common.addToCart.url}`,
+          {
+            productId: id,
+            quantity: quantity,
+          },
+          { withCredentials: true }
+        );
+        toast.success("Prodect added to cart");
+        dispatch(setCartData(response.data));
+      } catch (err) {
+        toast.error(err.message);
+        setError("Error adding product to cart: " + err.message);
+      }
+    } else {
+      toast.error("Please login to add product to cart");
     }
   };
 
