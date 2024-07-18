@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const {getAllProducts,
-    getProductById,
-    createProduct,
-    updateProduct,
-    deleteProduct} = require("../../controller/admin/product/productController");
+const {
+  getAllProducts,
+  getProductById,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} = require("../../controller/admin/product/productController");
 
 // Public routes
 router.get("/product/", getAllProducts);

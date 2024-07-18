@@ -10,7 +10,7 @@ import {
   setError,
   clearUserDetails,
 } from "../redux/slices/userSlice";
-import { setCartData } from "../redux/slices/cartSlice";
+import { clearCart, setCartData } from "../redux/slices/cartSlice";
 
 const Navbar = () => {
   const user = useSelector((state) => state.user.user);
@@ -58,6 +58,7 @@ const Navbar = () => {
     try {
       await axios.get(summaryAPI.common.logout.url, { withCredentials: true });
       dispatch(clearUserDetails());
+      dispatch(clearCart());
       toast.success("Logged out successfully");
       navigate("/login");
     } catch (error) {

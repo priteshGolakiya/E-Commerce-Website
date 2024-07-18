@@ -212,9 +212,12 @@ const Cart = () => {
                 >
                   Clear Cart
                 </button>
-                <button className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition duration-200">
+                <Link
+                  to={`/addressList`}
+                  className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition duration-200"
+                >
                   Proceed to Checkout
-                </button>
+                </Link>
               </div>
             </div>
           </div>

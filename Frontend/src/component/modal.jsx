@@ -12,7 +12,7 @@ const Modal = ({ isOpen, onClose, children }) => {
     setIsAnimating(false);
     setTimeout(() => onClose(), 300);
   };
-
+  
   return (
     <>
       {isOpen && (

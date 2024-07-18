@@ -15,6 +15,10 @@ const summaryAPI = {
       method: "GET",
       url: `${backendDomain}/user-details`,
     },
+    updateUser: {
+      method: "PUT",
+      url: `${backendDomain}/update-user`,
+    },
     logout: {
       method: "GET",
       url: `${backendDomain}/logout`,
@@ -78,6 +82,42 @@ const summaryAPI = {
     getReviewsforProduct: {
       method: "GET",
       url: `${backendDomain}/reviews`,
+    },
+    createAddress: {
+      method: "POST",
+      url: `${backendDomain}/address`,
+    },
+    getAllAddresses: {
+      method: "GET",
+      url: `${backendDomain}/address`,
+    },
+    getAddressesByUserId: {
+      method: "GET",
+      url: `${backendDomain}/address`,
+    },
+    updateAddress: {
+      method: "PUT",
+      url: `${backendDomain}/address`,
+    },
+    deleteAddress: {
+      method: "DELETE",
+      url: `${backendDomain}/address`,
+    },
+    createOrder: {
+      method: "POST",
+      url: `${backendDomain}/order/create`,
+    },
+    getAllOrders: {
+      method: "GET",
+      url: `${backendDomain}/order`,
+    },
+    getOrderDetails: {
+      method: "GET",
+      url: `${backendDomain}/order`,
+    },
+    cancelOrder: {
+      method: "PUT",
+      url: `${backendDomain}/order`,
     },
   },
   admin: {
@@ -202,6 +242,23 @@ const summaryAPI = {
     getCartStats: {
       method: "GET",
       url: `${backendDomain}/admin/cart/stats`,
+    },
+    /*------Order Routes------ */
+    getAllOrders: {
+      method: "GET",
+      url: `${backendDomain}/admin/order`,
+    },
+    getOrderStats: {
+      method: "GET",
+      url: `${backendDomain}/admin/order/stats`,
+    },
+    getOrderDetails: {
+      method: "GET",
+      url: `${backendDomain}/admin/order`,
+    },
+    updateOrderStatus: {
+      method: "PUT",
+      url: `${backendDomain}/admin/order`,
     },
   },
 };

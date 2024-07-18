@@ -13,7 +13,11 @@ const login = asyncHandler(async (req, res, next) => {
     return;
   }
 
-  const foundUser = await User.findOne({ email });
+  const foundUser = await User.findOne({ email }).populate({
+    path: "addresses",
+    select: "street city state country zipCode",
+  });
+
   if (!foundUser) {
     res.status(401).json({ error: "User not found!" });
     return;
@@ -42,7 +46,7 @@ const login = asyncHandler(async (req, res, next) => {
   };
 
   res.cookie("token", token, tokenOption).status(200).json({
-    message: "Login successfully",
+    message: "Login successful",
     data: { user, token },
     success: true,
     error: false,
@@ -99,7 +103,15 @@ const signup = asyncHandler(async (req, res, next) => {
 
 const userDetails = asyncHandler(async (req, res) => {
   try {
-    const user = await User.findById(req.userId);
+    const user = await User.findById(req.userId).populate("addresses").lean(); // Using .lean() for performance if you don't need Mongoose documents
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        error: true,
+        success: false,
+      });
+    }
 
     const userData = {
       id: user._id,
@@ -107,17 +119,19 @@ const userDetails = asyncHandler(async (req, res) => {
       email: user.email,
       role: user.role,
       profilePic: user.profilePic,
+      addresses: user.addresses, // Include addresses in response if needed
     };
 
     res.status(200).json({
       data: userData,
       error: false,
       success: true,
-      message: "User details",
+      message: "User details retrieved successfully",
     });
   } catch (err) {
-    res.status(400).json({
-      message: err.message || err,
+    console.error("Error fetching user details:", err);
+    res.status(500).json({
+      message: "Internal Server Error",
       error: true,
       success: false,
     });
@@ -126,17 +140,12 @@ const userDetails = asyncHandler(async (req, res) => {
 
 const logout = asyncHandler(async (req, res, next) => {
   try {
-    // Clear the token cookie
     res.clearCookie("token");
 
-    // Optionally, perform any other logout logic such as removing tokens from the database
-
-    // Send a response indicating successful logout
     res.status(200).json({
       success: true,
       message: "Logged out successfully",
-      error: false, // Keep consistent with success response
-      // data: [], // Omit this line if no specific data is needed
+      error: false,
     });
   } catch (error) {
     res.status(500).json({
@@ -147,6 +156,52 @@ const logout = asyncHandler(async (req, res, next) => {
   }
 });
 
-module.exports = logout;
+const updateUser = async (req, res) => {
+  try {
+    const { username, email, password } = req.body;
+    const userId = req.userId; // Assuming you have middleware that sets userId from the token
 
-module.exports = { login, signup, userDetails, logout };
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update fields if provided
+    if (username) user.userName = username;
+    if (email) user.email = email;
+
+    // If password is provided, hash it before saving
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+    }
+
+    await user.save();
+
+    // Return updated user data (excluding password)
+    const updatedUserData = {
+      id: user._id,
+      username: user.userName,
+      email: user.email,
+      role: user.role,
+      profilePic: user.profilePic,
+    };
+
+    res.status(200).json({
+      message: "User updated successfully",
+      data: updatedUserData,
+      success: true,
+      error: false,
+    });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({
+      message: "Internal server error",
+      error: true,
+      success: false,
+    });
+  }
+};
+
+module.exports = { login, signup, userDetails, logout, updateUser };

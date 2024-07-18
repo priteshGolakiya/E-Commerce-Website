@@ -33,4 +33,13 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+// Virtual field to reference addresses
+userSchema.virtual("addresses", {
+  ref: "Address",
+  localField: "_id",
+  foreignField: "user",
+  justOne: false,
+  options: { lean: true },
+});
+
 module.exports = mongoose.model("User", userSchema);

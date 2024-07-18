@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import loginIcon from "../../assets/signin.gif";
 import { setToken, setUserDetails } from "../../redux/slices/userSlice";
 import summaryAPI from "../../utils/summaryAPI";
+import { setCartData } from "../../redux/slices/cartSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -35,18 +36,36 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(summaryAPI.common.logIn.url, formData, {
-        withCredentials: true,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const { data, token } = response.data;
+      const loginResponse = await axios.post(
+        summaryAPI.common.logIn.url,
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const { data, token } = loginResponse.data;
       dispatch(setUserDetails(data.user));
       dispatch(setToken(token));
+
+      try {
+        const cartResponse = await axios.get(
+          summaryAPI.common.getUserCart.url,
+          {
+            withCredentials: true,
+          }
+        );
+        dispatch(setCartData(cartResponse.data));
+      } catch (cartError) {
+        console.error("Error fetching cart data:", cartError);
+        toast.warn("Failed to fetch cart data. Please try refreshing.");
+      }
+
       toast.success("Login successful!");
       setError("");
-
       navigate("/");
     } catch (error) {
       console.error("Axios request error:", error);

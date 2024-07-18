@@ -2,13 +2,11 @@ import { useState } from "react";
 import {
   FaBars,
   FaBoxOpen,
-  FaChartBar,
   FaChevronDown,
   FaChevronUp,
-  FaCogs,
-  FaInfo,
+  // FaInfo,
   FaList,
-  FaMapMarkerAlt,
+  // FaMapMarkerAlt,
   FaPlus,
   FaShoppingCart,
   FaStar,
@@ -29,7 +27,6 @@ const AdminPanel = () => {
     users: false,
     orders: false,
     subcategories: false,
-    // Add more dropdowns as needed
   });
 
   const user = useSelector((state) => state.user.user);
@@ -281,7 +278,7 @@ const AdminPanel = () => {
                         {isSidebarOpen && "Order List"}
                       </Link>
                     </li>
-                    <li>
+                    {/* <li>
                       <Link
                         to="/admin-panel/orders/detail"
                         className={getLinkClass("/admin-panel/orders/detail")}
@@ -298,7 +295,7 @@ const AdminPanel = () => {
                         <FaMapMarkerAlt className="mr-2" />
                         {isSidebarOpen && "Order Tracking"}
                       </Link>
-                    </li>
+                    </li> */}
                   </ul>
                 )}
               </li>
@@ -309,24 +306,6 @@ const AdminPanel = () => {
                 >
                   <FaStar className="mr-2" />
                   {isSidebarOpen && "Reviews"}
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link
-                  to="/admin-panel/reports"
-                  className={getLinkClass("/admin-panel/reports")}
-                >
-                  <FaChartBar className="mr-2" />
-                  {isSidebarOpen && "Reports"}
-                </Link>
-              </li>
-              <li className="mb-2">
-                <Link
-                  to="/admin-panel/settings"
-                  className={getLinkClass("/admin-panel/settings")}
-                >
-                  <FaCogs className="mr-2" />
-                  {isSidebarOpen && "Settings"}
                 </Link>
               </li>
             </ul>

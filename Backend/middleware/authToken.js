@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 
 // Middleware to check if user has a valid token
 const checkToken = (req, res, next) => {
-  // Check if token exists in cookies
+
   const token = req.cookies.token;
 
   if (!token) {

@@ -9,7 +9,7 @@ const adminAuthMiddleware = asyncHandler(async (req, res, next) => {
     res.status(401);
     throw new Error("Unauthorized: Token missing");
   }
-
+  
   try {
     // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
