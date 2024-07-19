@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
-import Modal from "../../../../component/modal";
+import Modal from "../../../../component/Modal";
 import { toast } from "react-toastify";
 import axios from "axios";
 import summaryAPI from "../../../../utils/summaryAPI";

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import moment from "moment";
-import Modal from "../../../../component/modal";
+import Modal from "../../../../component/Modal";
 import summaryAPI from "../../../../utils/summaryAPI";
 import defaultImg from "../../../../default.jpg";
 import Preloader from "../../../../component/Preloader";

@@ -1,35 +1,80 @@
-import { useState, useEffect } from "react";
 import axios from "axios";
-import summaryAPI from "../../utils/summaryAPI";
-import { PhotoProvider, PhotoView } from "react-photo-view";
+import { useCallback, useEffect, useRef, useState } from "react";
 import "react-photo-view/dist/react-photo-view.css";
 import Preloader from "../../component/Preloader";
-import { Link } from "react-router-dom";
-import scrollTop from "../../utils/scrollTop";
+import summaryAPI from "../../utils/summaryAPI";
+import MemoizedProductList from "./MemoizedProductList";
+import SkeletonLoader from "../../component/SkeletonLoader";
+
+const useInfiniteScroll = (callback) => {
+  const observer = useRef();
+
+  useEffect(() => {
+    const options = {
+      root: null,
+      rootMargin: "20px",
+      threshold: 1.0,
+    };
+
+    observer.current = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        callback();
+      }
+    }, options);
+
+    return () => observer.current.disconnect();
+  }, [callback]);
+
+  const lastElementRef = useCallback((node) => {
+    if (observer.current) observer.current.disconnect();
+    if (node) observer.current.observe(node);
+  }, []);
+
+  return lastElementRef;
+};
 
 const AllProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [fetching, setFetching] = useState(false);
 
   const fetchProducts = async () => {
     try {
+      setFetching(true);
       const response = await axios.get(summaryAPI.common.getAllProducts.url, {
-        withCredentials: true,
+        params: { page: page, limit: 50 },
       });
-      setProducts(response.data);
+
+      const newProducts = response.data || [];
+      if (!Array.isArray(newProducts)) {
+        console.error("Received non-array products:", newProducts);
+        setError("Unexpected data format received from server.");
+        return;
+      }
+      setProducts(newProducts);
+      setHasMore(newProducts.length > 0);
     } catch (err) {
+      console.error("Error fetching products:", err);
       setError("Failed to fetch products. Please try again later.");
     } finally {
       setLoading(false);
+      setFetching(false);
     }
   };
-
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [page]);
 
-  if (loading) {
+  const lastProductRef = useInfiniteScroll(() => {
+    if (!fetching && hasMore) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  });
+
+  if (loading && products.length === 0) {
     return (
       <div className="container mx-auto p-4">
         <Preloader />
@@ -37,64 +82,36 @@ const AllProducts = () => {
     );
   }
 
-  if (error || products.length === 0) {
+  if (error) {
     return (
       <div className="container mx-auto p-4">
-        <div className="text-red-500">{error || "No products found."}</div>
+        <div className="text-red-500">{error}</div>
+      </div>
+    );
+  }
+
+  if (products.length === 0 && !fetching) {
+    return (
+      <div className="container mx-auto p-4">
+        <div className="text-gray-500">No products found.</div>
       </div>
     );
   }
 
   return (
     <div className="container mx-auto p-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {products.length === 0 ? (
-          <h1 className="col-span-3 text-center">No Products Found</h1>
-        ) : (
-          products.map((product) => (
-            <div
-              key={product._id}
-              className="border border-gray-200 rounded-lg overflow-hidden shadow-lg"
-            >
-              <PhotoProvider>
-                <PhotoView src={product.images[0]}>
-                  <img
-                    src={product.images[0]}
-                    alt={product.name}
-                    className="w-full h-48 object-contain cursor-pointer mix-blend-multiply"
-                  />
-                </PhotoView>
-                <div className="p-4">
-                  <h2 className="text-xl font-semibold mb-2">{product.name}</h2>
-                  <p className="text-gray-700 mb-1">Brand: {product.brand}</p>
-                  <p className="text-gray-700 mb-1">Price: ₹{product.price}</p>
-                  <Link
-                    key={product._id}
-                    to={`/products/${product._id}`}
-                    onClick={scrollTop}
-                    className="inline-block bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center text-sm"
-                  >
-                    View Product
-                  </Link>
-
-                  <div className="flex mt-2 cursor-pointer">
-                    {product.images.length > 1 && (
-                      <PhotoView src={product.images[1]}>
-                        <div className="w-16 h-16 flex items-center justify-center bg-gray-200 rounded text-gray-600">
-                          +{product.images.length - 1}
-                        </div>
-                      </PhotoView>
-                    )}
-                    {product.images.slice(2).map((image, index) => (
-                      <PhotoView key={index + 1} src={image} />
-                    ))}
-                  </div>
-                </div>
-              </PhotoProvider>
-            </div>
-          ))
-        )}
-      </div>
+      <MemoizedProductList
+        products={products}
+        lastProductRef={lastProductRef}
+      />
+      {fetching && (
+        <div className="text-center py-4">
+          <SkeletonLoader />
+        </div>
+      )}
+      {!hasMore && (
+        <p className="text-center mt-4">No more products to load.</p>
+      )}
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import summaryAPI from "../../utils/summaryAPI";
 import { useDispatch } from "react-redux";
 import { clearCart, setCartData } from "../../redux/slices/cartSlice";
+import { useNavigate } from "react-router-dom";
 const OrdersPage = () => {
   const [orders, setOrders] = useState([]);
   const [carts, setCarts] = useState([]);
@@ -13,6 +14,7 @@ const OrdersPage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
@@ -119,6 +121,7 @@ const OrdersPage = () => {
       fetchOrders();
       setSelectedCart("");
       setSelectedAddress("");
+      navigate("/");
     } catch (error) {
       console.error("Error creating order:", error);
       const errorMessage =

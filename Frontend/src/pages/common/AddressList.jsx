@@ -46,7 +46,10 @@ const AddressList = () => {
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Your Addresses</h1>
-      <Link to={`/order`} className="text-2xl font-bold mb-4">
+      <Link
+        to={`/order`}
+        className="bg-blue-500 text-white m-4 px-6 py-2 rounded hover:bg-blue-600 transition duration-200"
+      >
         Proced To Place Order
       </Link>
 
@@ -55,7 +58,7 @@ const AddressList = () => {
       ) : error ? (
         <p className="text-red-500">{error}</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 m-3 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {addresses.map((address) => (
             <div key={address._id} className="border p-4 rounded shadow">
               <p>

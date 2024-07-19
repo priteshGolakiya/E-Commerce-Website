@@ -14,6 +14,44 @@ const populateProduct = (query) => {
     });
 };
 
+// Get paginated products without reviews
+const getPaginatedProducts = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, sort = "createdAt" } = req.query;
+
+    const skip = (page - 1) * limit;
+
+    let searchCriteria = {};
+
+    const sortOptions = {};
+    if (sort) {
+      if (sort.startsWith("-")) {
+        sortOptions[sort.substring(1)] = -1;
+      } else {
+        sortOptions[sort] = 1;
+      }
+    }
+
+    const products = await Product.find(searchCriteria)
+      .sort(sortOptions)
+      .skip(skip)
+      .limit(Number(limit))
+      .lean();
+
+    const total = await Product.countDocuments(searchCriteria);
+
+    res.status(200).json({
+      products,
+      totalPages: Math.ceil(total / limit),
+      currentPage: Number(page),
+      totalProducts: total,
+    });
+  } catch (error) {
+    console.error(`Error fetching paginated products: ${error.message}`);
+    res.status(500).json({ message: "Failed to fetch paginated products." });
+  }
+};
+
 // Get all products
 const getAllProducts = async (req, res) => {
   try {
@@ -72,14 +110,14 @@ const searchProducts = async (req, res) => {
   try {
     const {
       q,
-      page = 1,
-      limit = 10,
       category,
       subcategory,
       minPrice,
       maxPrice,
       sort = "createdAt",
     } = req.query;
+    const page = req.query.page || 1;
+    const limit = req.query.limit || 10;
 
     const skip = (page - 1) * limit;
 
@@ -147,4 +185,5 @@ module.exports = {
   getAllProducts,
   getProductById,
   searchProducts,
+  getPaginatedProducts,
 };

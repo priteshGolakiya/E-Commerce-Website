@@ -3,6 +3,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Footer from "./Footer.jsx";
 import Navbar from "./Navbar.jsx";
+import ScrollToTop from "../component/common/ScrollToTop.jsx";
 
 function Layout() {
   return (
@@ -19,6 +20,8 @@ function Layout() {
         pauseOnHover
         theme="colored"
       />
+      <ScrollToTop />
+
       <Navbar />
       <main className="min-h-[calc(100vh-120px)] pt-20">
         <Outlet />

@@ -19,7 +19,7 @@ const productSchema = new mongoose.Schema(
       ref: "Subcategory",
       required: true,
     },
-    finalPrice: { type: String },
+    finalPrice: { type: Number },
     offers: { type: String }, // Keep as a string
     deliveryOptions: String,
   },

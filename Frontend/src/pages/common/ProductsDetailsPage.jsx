@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import Preloader from "../../component/Preloader";
 import summaryAPI from "../../utils/summaryAPI";
@@ -156,9 +156,13 @@ const ProductsDetailsPage = () => {
               >
                 ADD TO CART
               </button>
-              <button className="flex-1 bg-orange-600 text-white py-3 px-6 rounded-sm hover:bg-orange-700 transition duration-300">
+              <Link
+                to={`/addressList`}
+                onClick={addToCart}
+                className="flex-1 text-center bg-orange-600 text-white py-3 px-6 rounded-sm hover:bg-orange-700 transition duration-300"
+              >
                 BUY NOW
-              </button>
+              </Link>
             </div>
           </div>
 

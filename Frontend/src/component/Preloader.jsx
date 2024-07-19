@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-// import "tailwindcss/tailwind.css";
 
 const Preloader = () => {
   const [letters, setLetters] = useState([]);

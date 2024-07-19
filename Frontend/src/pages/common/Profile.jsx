@@ -112,153 +112,172 @@ const Profile = () => {
   };
 
   if (!userData) {
-    return <div className="text-center py-10">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-        <div className="p-6 sm:p-8">
-          <div className="flex flex-col sm:flex-row items-center justify-between mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4 sm:mb-0">
-              My Profile
-            </h1>
-            <button
-              onClick={handleEdit}
-              className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition duration-300 shadow-md"
-            >
-              Edit Profile
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8">
-            <div className="col-span-1">
-              <div className="mb-6 text-center">
-                <img
-                  src={userData.profilePic || "https://via.placeholder.com/150"}
-                  alt="Profile"
-                  className="w-40 h-40 rounded-full mx-auto shadow-lg"
-                />
-              </div>
-              <div className="space-y-4 bg-gray-50 p-4 rounded-lg">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Username
-                  </label>
-                  <p className="mt-1 text-lg font-semibold text-gray-900">
-                    {userData.username}
-                  </p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Email
-                  </label>
-                  <p className="mt-1 text-lg font-semibold text-gray-900">
-                    {userData.email}
-                  </p>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700">
-                    Role
-                  </label>
-                  <p className="mt-1 text-lg font-semibold text-gray-900 capitalize">
-                    {userData.role}
-                  </p>
-                </div>
-              </div>
+    <div className="bg-gray-100 min-h-screen">
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-6xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
+          <div className="p-6 sm:p-10">
+            <div className="flex flex-col sm:flex-row items-center justify-between mb-10">
+              <h1 className="text-4xl font-bold text-gray-900 mb-4 sm:mb-0">
+                My Profile
+              </h1>
+              <button
+                onClick={handleEdit}
+                className="px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition duration-300 shadow-md text-lg font-semibold"
+              >
+                Edit Profile
+              </button>
             </div>
 
-            <div className="col-span-2">
-              <h2 className="text-2xl font-semibold text-gray-900 mb-4">
-                Addresses
-              </h2>
-              {userData.addresses && userData.addresses.length > 0 ? (
-                <div className="space-y-4">
-                  {userData.addresses.map((address, index) => (
-                    <div
-                      key={index}
-                      className="bg-gray-50 p-4 rounded-lg shadow"
-                    >
-                      <p className="font-medium text-gray-800">
-                        Address {index + 1}
-                      </p>
-                      <p className="text-gray-600">
-                        {address.street}, {address.city}, {address.state},{" "}
-                        {address.country} - {address.zipCode}
-                      </p>
-                    </div>
-                  ))}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+              <div className="col-span-1">
+                <div className="mb-8 text-center">
+                  <img
+                    src={
+                      userData.profilePic || "https://via.placeholder.com/150"
+                    }
+                    alt="Profile"
+                    className="w-48 h-48 rounded-full mx-auto shadow-lg border-4 border-white"
+                  />
                 </div>
-              ) : (
-                <p className="text-gray-500">No addresses added yet.</p>
-              )}
+                <div className="space-y-6 bg-gray-50 p-6 rounded-lg shadow-md">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-600">
+                      Username
+                    </label>
+                    <p className="mt-1 text-xl font-semibold text-gray-900">
+                      {userData.username}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-600">
+                      Email
+                    </label>
+                    <p className="mt-1 text-xl font-semibold text-gray-900">
+                      {userData.email}
+                    </p>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-600">
+                      Role
+                    </label>
+                    <p className="mt-1 text-xl font-semibold text-gray-900 capitalize">
+                      {userData.role}
+                    </p>
+                  </div>
+                </div>
+              </div>
 
-              <h2 className="text-2xl font-semibold mb-4">Your Orders</h2>
-              <div className="space-y-6">
-                {orders.length === 0 ? (
-                  <p className="text-center text-gray-500">No orders found.</p>
+              <div className="col-span-2 h-100vh">
+                <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+                  Addresses
+                </h2>
+                {userData.addresses && userData.addresses.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {userData.addresses.map((address, index) => (
+                      <div
+                        key={index}
+                        className="bg-white p-6 rounded-lg shadow-md border border-gray-200"
+                      >
+                        <p className="font-semibold text-lg text-gray-800 mb-2">
+                          Address {index + 1}
+                        </p>
+                        <p className="text-gray-600">{address.street}</p>
+                        <p className="text-gray-600">
+                          {address.city}, {address.state}
+                        </p>
+                        <p className="text-gray-600">
+                          {address.country} - {address.zipCode}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
                 ) : (
-                  orders.map((order) => (
-                    <div
-                      key={order._id}
-                      className="bg-white shadow-md rounded-lg p-6"
-                    >
-                      <div className="flex justify-between items-center mb-4">
-                        <h3 className="text-lg font-semibold">
-                          Order #{order._id}
-                        </h3>
-                        {renderStatusBadge(order.status)}
-                      </div>
-                      <p className="text-gray-600 mb-2">
-                        Total: ${order.totalAmount.toFixed(2)}
-                      </p>
-                      <p className="text-gray-600 mb-4">
-                        Created:{" "}
-                        {new Date(order.createdAt).toLocaleDateString()}
-                      </p>
-                      <div className="mt-4">
-                        <h4 className="text-sm font-semibold mb-2">
-                          Order Items:
-                        </h4>
-                        <ul className="space-y-2">
-                          {order.items && order.items.length > 0 ? (
-                            order.items.map((item) => (
-                              <li
-                                key={item._id}
-                                className="flex items-center space-x-2"
-                              >
-                                <img
-                                  src={item.product?.images[0] || ""}
-                                  alt={item.product?.name || "Product"}
-                                  className="w-12 h-12 object-cover rounded"
-                                />
-                                <div>
-                                  <p className="text-sm font-medium">
-                                    {item.product?.name || "Unknown Product"}
-                                  </p>
-                                  <p className="text-xs text-gray-500">
-                                    Quantity: {item.quantity || 0} | Price: $
-                                    {(item.price || 0).toFixed(2)}
-                                  </p>
-                                </div>
-                              </li>
-                            ))
-                          ) : (
-                            <li>No items in this order.</li>
-                          )}
-                        </ul>
-                      </div>
-                      {order.status === "pending" && (
-                        <button
-                          onClick={() => handleCancelOrder(order._id)}
-                          className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300"
-                        >
-                          Cancel Order
-                        </button>
-                      )}
-                    </div>
-                  ))
+                  <p className="text-gray-500 bg-gray-50 p-4 rounded-lg">
+                    No addresses added yet.
+                  </p>
                 )}
+
+                <h2 className="text-2xl font-semibold mb-6 mt-12">
+                  Your Orders
+                </h2>
+                <div className="space-y-8 h-[calc(100vh-200px)] overflow-scroll scrollbar-hidden">
+                  {orders.length === 0 ? (
+                    <p className="text-center text-gray-500 bg-gray-50 p-4 rounded-lg">
+                      No orders found.
+                    </p>
+                  ) : (
+                    orders.map((order) => (
+                      <div
+                        key={order._id}
+                        className="bg-white shadow-lg rounded-lg p-6 border border-gray-200"
+                      >
+                        <div className="flex justify-between items-center mb-4">
+                          <h3 className="text-xl font-semibold text-gray-800">
+                            Order #{order._id}
+                          </h3>
+                          {renderStatusBadge(order.status)}
+                        </div>
+                        <p className="text-gray-600 mb-2 text-lg">
+                          Total: ₹{order.totalAmount.toFixed(2)}
+                        </p>
+                        <p className="text-gray-600 mb-4">
+                          Created:{" "}
+                          {new Date(order.createdAt).toLocaleDateString()}
+                        </p>
+                        <div className="mt-6">
+                          <h4 className="text-lg font-semibold mb-4">
+                            Order Items:
+                          </h4>
+                          <ul className="space-y-4">
+                            {order.orderItems && order.orderItems.length > 0 ? (
+                              order.orderItems.map((item) => (
+                                <li
+                                  key={item._id}
+                                  className="flex items-center space-x-4 bg-gray-50 p-4 rounded-lg"
+                                >
+                                  <img
+                                    src={item.product?.images[0] || ""}
+                                    alt={item.product?.name || "Product"}
+                                    className="w-20 h-20 object-cover rounded-md"
+                                  />
+                                  <div>
+                                    <p className="text-lg font-medium text-gray-800">
+                                      {item.product?.name || "Unknown Product"}
+                                    </p>
+                                    <p className="text-sm text-gray-600">
+                                      Quantity: {item.quantity || 0} | Price: $
+                                      {(item.price || 0).toFixed(2)}
+                                    </p>
+                                  </div>
+                                </li>
+                              ))
+                            ) : (
+                              <li className="text-gray-500">
+                                No items in this order.
+                              </li>
+                            )}
+                          </ul>
+                        </div>
+                        {order.status === "pending" && (
+                          <button
+                            onClick={() => handleCancelOrder(order._id)}
+                            className="mt-6 px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition duration-300 text-lg font-semibold"
+                          >
+                            Cancel Order
+                          </button>
+                        )}
+                      </div>
+                    ))
+                  )}
+                </div>
               </div>
             </div>
           </div>

@@ -27,6 +27,10 @@ const summaryAPI = {
       method: "GET",
       url: `${backendDomain}/product`,
     },
+    getPaginatedProducts: {
+      method: "GET",
+      url: `${backendDomain}/product/products`,
+    },
     getProductById: {
       method: "GET",
       url: `${backendDomain}/product`,

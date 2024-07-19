@@ -88,10 +88,18 @@ const Cart = () => {
     }
   }, [dispatch]);
 
+  const formatPrice = (price) => {
+    return typeof price === "number" ? price.toFixed(2) : "N/A";
+  };
+
   const calculateTotalPrice = () => {
     if (!cart || !cart.items) return 0;
     return cart.items.reduce((total, item) => {
-      return total + item.product.price * item.quantity;
+      const price =
+        typeof item.product.finalPrice === "number"
+          ? item.product.finalPrice
+          : 0;
+      return total + price * item.quantity;
     }, 0);
   };
 
@@ -128,7 +136,7 @@ const Cart = () => {
         <h1 className="text-3xl font-bold mb-8 text-center">
           Your Shopping Cart
         </h1>
-        {cart && cart.items.length > 0 ? (
+        {cart && cart.items && cart.items.length > 0 ? (
           <div className="bg-white shadow-md rounded-lg overflow-hidden">
             <div className="px-6 py-4 bg-gray-100 border-b border-gray-200">
               <h2 className="text-xl font-semibold">Items in Your Cart</h2>
@@ -147,7 +155,7 @@ const Cart = () => {
                         {item.product.name}
                       </h3>
                       <p className="text-sm text-gray-500">
-                        ₹{item.product.price.toFixed(2)}
+                        ₹{formatPrice(item.product.finalPrice)}
                       </p>
                       <div className="mt-2 flex items-center">
                         <button
@@ -179,7 +187,7 @@ const Cart = () => {
                     </div>
                     <div className="text-right flex flex-col items-end">
                       <p className="text-lg font-medium text-gray-900">
-                        ₹{(item.product.price * item.quantity).toFixed(2)}
+                        ₹{formatPrice(item.product.finalPrice * item.quantity)}
                       </p>
                       <button
                         className="mt-2 text-sm text-red-600 hover:text-red-800 transition duration-150 ease-in-out"
@@ -202,7 +210,7 @@ const Cart = () => {
               <div className="flex justify-between items-center">
                 <h2 className="text-xl font-bold">Total</h2>
                 <p className="text-2xl font-bold">
-                  ₹{calculateTotalPrice().toFixed(2)}
+                  ₹{formatPrice(calculateTotalPrice())}
                 </p>
               </div>
               <div className="mt-6 flex justify-between">
@@ -213,7 +221,7 @@ const Cart = () => {
                   Clear Cart
                 </button>
                 <Link
-                  to={`/addressList`}
+                  to="/addressList"
                   className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 transition duration-200"
                 >
                   Proceed to Checkout
