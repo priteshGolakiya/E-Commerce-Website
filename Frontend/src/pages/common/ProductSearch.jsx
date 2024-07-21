@@ -69,7 +69,7 @@ const ProductSearch = () => {
                     <img
                       src={product.images[0]}
                       alt={product.name}
-                      className="w-full h-64 object-cover cursor-zoom-in"
+                      className="w-full h-64 object-contain cursor-zoom-in"
                     />
                   </PhotoView>
                   <div className="p-6">
@@ -94,7 +94,7 @@ const ProductSearch = () => {
                           <img
                             src={image}
                             alt={`${product.name} - Image ${index + 2}`}
-                            className="w-16 h-16 object-cover rounded-md cursor-zoom-in"
+                            className="w-16 h-16 object-contain rounded-md cursor-zoom-in"
                           />
                         </PhotoView>
                       ))}

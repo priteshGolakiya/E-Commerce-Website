@@ -69,7 +69,9 @@ const ProductsDetailsPage = () => {
       setQuantity(value);
     }
   };
-
+  const formatPrice = (price) => {
+    return typeof price === "number" ? price.toFixed(2) : "N/A";
+  };
   if (loading) {
     return <Preloader />;
   }
@@ -176,21 +178,23 @@ const ProductsDetailsPage = () => {
               <span className="text-green-600 ml-2 text-sm">Special price</span>
             </div>
             <div className="flex items-center mb-4">
-              <span className="text-3xl font-medium">₹{finalPrice}</span>
+              <span className="text-3xl font-medium">
+                ₹{formatPrice(finalPrice)}
+              </span>
               {price && price !== finalPrice && (
                 <>
                   <span className="ml-2 text-gray-500 line-through">
-                    ₹{price}
+                    ₹{formatPrice(price)}
                   </span>
                   <span className="ml-2 text-green-600 text-sm">
-                    ₹{discountPrice} off
+                    ₹{formatPrice(discountPrice)} off
                   </span>
                 </>
               )}
             </div>
             <div className="flex items-center mb-2">
               <span className="text-sm bg-green-500 text-white px-1.5 py-0.5 rounded">
-                {product.averageRating} ★
+                {formatPrice(product.averageRating)} ★
               </span>
               <span className="text-sm text-gray-500 ml-2">
                 ({product.reviews.length} ratings)

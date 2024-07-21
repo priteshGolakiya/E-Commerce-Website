@@ -5,6 +5,10 @@ import { Link } from "react-router-dom";
 import scrollTop from "../../utils/scrollTop";
 import { memo } from "react";
 
+const formatPrice = (price) => {
+  return typeof price === "number" ? price.toFixed(2) : "N/A";
+};
+
 const MemoizedProductList = memo(({ products, lastProductRef }) => (
   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     {products.map((product, index) => (
@@ -24,7 +28,9 @@ const MemoizedProductList = memo(({ products, lastProductRef }) => (
           <div className="p-4">
             <h2 className="text-xl font-semibold mb-2">{product.name}</h2>
             <p className="text-gray-700 mb-1">Brand: {product.brand}</p>
-            <p className="text-gray-700 mb-1">Price: ₹{product.finalPrice}</p>
+            <p className="text-green-700 font-bold mb-1">
+              Price: ₹{formatPrice(product.finalPrice)}
+            </p>
             <Link
               to={`/products/${product._id}`}
               onClick={scrollTop}

@@ -47,6 +47,10 @@ const SubCategoryListPage = () => {
     fetchData();
   }, [id]);
 
+  const formatPrice = (price) => {
+    return typeof price === "number" ? price.toFixed(2) : "N/A";
+  };
+
   const applyFilters = (products) => {
     let filteredProducts = [...products];
 
@@ -156,7 +160,7 @@ const SubCategoryListPage = () => {
                     <h3 className="text-lg font-medium mb-2">{product.name}</h3>
                     <div className="flex items-center mb-2">
                       <span className="text-sm bg-green-500 text-white px-1.5 py-0.5 rounded">
-                        {product.averageRating} ★
+                        {formatPrice(product.averageRating)} ★
                       </span>
                       <span className="text-sm text-gray-500 ml-2">
                         ({product.numberOfRatings} ratings)
@@ -167,10 +171,10 @@ const SubCategoryListPage = () => {
                     </ul>
                     <div className="flex items-center">
                       <span className="text-xl font-bold">
-                        ₹{product.price - product.discountPrice}
+                        ₹{formatPrice(product.price - product.discountPrice)}
                       </span>
                       <span className="text-sm text-gray-500 line-through ml-2">
-                        ₹{product.price}
+                        ₹{formatPrice(product.price)}
                       </span>
                       <span className="text-sm text-green-600 ml-2">
                         {Math.round(

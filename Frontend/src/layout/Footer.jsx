@@ -45,18 +45,18 @@ const Footer = () => {
             <h5 className="text-lg font-semibold mb-4">Customer Service</h5>
             <ul className="list-none">
               <li className="mb-2">
-                <Link to="/faq" className="hover:text-white">
+                <Link  className="hover:text-white">
                   FAQ
                 </Link>
               </li>
 
               <li className="mb-2">
-                <Link to="/shipping" className="hover:text-white">
+                <Link  className="hover:text-white">
                   Shipping Information
                 </Link>
               </li>
               <li className="mb-2">
-                <Link to="/contact" className="hover:text-white">
+                <Link className="hover:text-white">
                   Contact Us
                 </Link>
               </li>
@@ -68,17 +68,17 @@ const Footer = () => {
             <h5 className="text-lg font-semibold mb-4">About Us</h5>
             <ul className="list-none">
               <li className="mb-2">
-                <Link to="/about" className="hover:text-white">
+                <Link className="hover:text-white">
                   Our Story
                 </Link>
               </li>
               <li className="mb-2">
-                <Link to="/team" className="hover:text-white">
+                <Link  className="hover:text-white">
                   Our Team
                 </Link>
               </li>
               <li className="mb-2">
-                <Link to="/careers" className="hover:text-white">
+                <Link className="hover:text-white">
                   Careers
                 </Link>
               </li>

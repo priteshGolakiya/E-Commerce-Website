@@ -3,6 +3,7 @@ import axios from "axios";
 import summaryAPI from "../../utils/summaryAPI";
 import Modal from "../../component/Modal";
 import { toast } from "react-toastify";
+import Preloader from "../../component/Preloader";
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
@@ -10,7 +11,9 @@ const Profile = () => {
   const [editedUser, setEditedUser] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [orders, setOrders] = useState([]);
-
+  const [addresses, setAddresses] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const handleTogglePassword = () => {
     setShowPassword((prevShow) => !prevShow);
   };
@@ -20,11 +23,14 @@ const Profile = () => {
       const response = await axios.get(summaryAPI.common.userDetails.url, {
         withCredentials: true,
       });
+
       setUserData(response.data.data);
-      setEditedUser(response.data.data); // Initialize editedUser here
+      setEditedUser(response.data.data);
     } catch (error) {
       console.error("Error fetching user data:", error);
       toast.error("Failed to load user data.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -36,6 +42,8 @@ const Profile = () => {
       setOrders(response.data || []);
     } catch (error) {
       toast.error("Failed to fetch orders");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -56,18 +64,19 @@ const Profile = () => {
         { withCredentials: true }
       );
       setUserData(response.data.data);
-      setEditedUser(response.data.data); // Update editedUser with the saved data
+      setEditedUser(response.data.data);
       setIsEditing(false);
       toast.success("Profile updated successfully!");
     } catch (error) {
       console.error("Error saving user data:", error);
       toast.error("Failed to save user data.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleChange = (e) => {
     if (editedUser) {
-      // Ensure editedUser is not null
       setEditedUser({ ...editedUser, [e.target.name]: e.target.value });
     }
   };
@@ -111,6 +120,22 @@ const Profile = () => {
     );
   };
 
+  const deleteAddress = async (addressId) => {
+    try {
+      await axios.delete(
+        `${summaryAPI.common.getAllAddresses.url}/${addressId}`,
+        {
+          withCredentials: true,
+        }
+      );
+      fetchData();
+      toast.success("Address deleted successfully");
+      setAddresses(addresses.filter((address) => address._id !== addressId));
+    } catch (error) {
+      setError(error.response.data.message || "Server Error");
+    }
+  };
+
   if (!userData) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -119,6 +144,21 @@ const Profile = () => {
     );
   }
 
+  if (loading && addresses.length === 0) {
+    return (
+      <div className="container mx-auto p-4">
+        <Preloader />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto p-4">
+        <div className="text-red-500">{error}</div>
+      </div>
+    );
+  }
   return (
     <div className="bg-gray-100 min-h-screen">
       <div className="container mx-auto px-4 py-8">
@@ -196,6 +236,12 @@ const Profile = () => {
                         <p className="text-gray-600">
                           {address.country} - {address.zipCode}
                         </p>
+                        <button
+                          onClick={() => deleteAddress(address._id)}
+                          className="mt-2 text-white bg-red-500 hover:bg-red-700 py-1 px-3 rounded"
+                        >
+                          Delete
+                        </button>
                       </div>
                     ))}
                   </div>

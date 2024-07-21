@@ -9,6 +9,9 @@ import {
   removeItem,
   setCartData,
 } from "../../redux/slices/cartSlice";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Preloader from "../../component/Preloader";
 
 const Cart = () => {
   const user = useSelector((state) => state.user.user);
@@ -27,6 +30,7 @@ const Cart = () => {
         setCart(response.data);
       } catch (err) {
         setError(err.message);
+        toast.error("Failed to load cart data");
       } finally {
         setLoading(false);
       }
@@ -50,8 +54,10 @@ const Cart = () => {
             : item
         ),
       }));
+      toast.success("Item quantity updated successfully");
     } catch (err) {
       setError(err.message);
+      toast.error("Failed to update item quantity");
     }
   }, []);
 
@@ -69,8 +75,10 @@ const Cart = () => {
         setCart({ ...cart, items: updatedCart });
 
         dispatch(removeItem(productId));
+        toast.success("Item removed from cart");
       } catch (err) {
         setError(err.message);
+        toast.error("Failed to remove item from cart");
       }
     },
     [cart, dispatch]
@@ -83,8 +91,10 @@ const Cart = () => {
       });
       dispatch(clearCart());
       setCart(null);
+      toast.success("Cart cleared successfully");
     } catch (err) {
       setError(err.message);
+      toast.error("Failed to clear cart");
     }
   }, [dispatch]);
 
@@ -126,7 +136,7 @@ const Cart = () => {
   if (loading)
     return (
       <div className="flex justify-center items-center h-screen">
-        Loading...
+        <Preloader />
       </div>
     );
 
